@@ -1,12 +1,14 @@
 \documentclass[9pt,twocolumn,twoside,lineno]{pnas-new}
 % Use the lineno option to display guide line numbers if required.
 
+\include{amsmath}
+
 \templatetype{pnasresearcharticle} % Choose template 
 % {pnasresearcharticle} = Template for a two-column research article
 % {pnasmathematics} %= Template for a one-column mathematics article
 % {pnasinvited} %= Template for a PNAS invited submission
 
-\title{The Geometry of Admixture}
+\title{F-stats vs PCA}
 
 % Use letters for affiliations, numbers to show equal authorship (if applicable) and to indicate the corresponding author
 \author[a,1]{Benjamin M Peter}
@@ -72,6 +74,20 @@ $$F_3(P_A, P_B; P_X) = E(p_a - p_x)(p_b - p_x)$$
 $$F_4(P_A, P_B, P_C, P_D) = E(p_a - p_b)(p_c - p_D)$$
 where $P_i, p_i$ are populations and corresponding allele frequencies, respectively. Here, we think of the expectation over all loci in the genome.
 
+$F_3$ and $F_4$ can be written as functions of $F_2$ \cite{peter2016}: 
+\begin{align}
+F_3(P_A, P_B; P_X) &= F_2(P_A, P_X) + F_2(P_B, P_X) - F_2(P_A, P_B)\\
+F_4(P_A, P_B; P_C, P_D) &= F_2(P_A, P_C) + F_2(P_B, P_D) - F_2(P_A, P_C) - F_2(P_B, P_C)
+\end{align}
+
+In many applications, we will have a large set of $n$ samples that we wish to analyze. One way to proceed is to calculate all $F_2$ statistics, which will be a sufficient summary to calculate all $F_3$ and $F_4$ statistics from this data. 
+
+$F_2$ can also be written as 
+$$\mathbb{E}F_2 \propto 2T_{12} - T_{11} - T_{22}$$
+
+Similarly, we may want to calculate a PCA: 
+
+
 Thus, for data from $n$ individuals and $L$ sites, a natural estimator for $F_3$ is
 \begin{equation}
     F_3(A, B, X) = \frac{1}{L}\sum_i^L (p_{ai} - p_{xi})(p_{bi} - p_{xi}) - \hat{h}_x
@@ -86,7 +102,7 @@ Now, imagine we have a matrix $X$ containing all the data, and that all individu
 
 Another common method to analyze population genetic data is PCA. Typically, \cite{mcvean2009} one constructs the row-normalized matrix $Y_i = X_i - \frac{1}{n}\sum_n X_i$, and performs a singular-value-decompositon, $X=UDV^T = UP$, where $P = DV^T$ is a $L \times n$ matrix of principal components, and $U$ is $L \times n$ matrix of loadings. 
 
-As $(X_{ai}-X_{xi})(X_{bi}-X_{xi}) = (X_{ai}+\mu_i -X_{xi} - \mu_i)(X_{bi} + \mu_i-X_{xi}_i-\mu_i) = (Y_{ai}-Y_{xi})(Y_{bi}-Y_{xi})$, we can rewrite $F_3$ as
+As $(X_{ai}-X_{xi})(X_{bi}-X_{xi}) = (X_{ai}+\mu_i -X_{xi} - \mu_i)(X_{bi} + \mu_i-X_{xi}-\mu_i) = (Y_{ai}-Y_{xi})(Y_{bi}-Y_{xi})$, we can rewrite $F_3$ as
 
 \begin{equation}
     F_3(A, B, X) = \frac{1}{2L}\sum_{k=1}^K (P_{ak}  - P_{xk})(P_{bk} - P_{xk}) - h_x.
@@ -103,7 +119,7 @@ As
 \begin{equation}
     2 F_3(A, B,X) = \nsq{A-X} + \nsq{B-X} - \nsq{A-B},
 \end{equation}
-it follows from the Pythagorean theorem that $F_3$ will be zero if  if $X$ lies on the $K$-dimensional sphere with diameter $$\norm{A,B}$, negative if it lies inside and positive outside (FIGURE). 
+it follows from the Pythagorean theorem that $F_3$ will be zero if  if $X$ lies on the $K$-dimensional sphere with diameter $\norm{A,B}$, negative if it lies inside and positive outside (FIGURE). 
 
 \subsection*{The geometry of $F_4$}
 Given three samples $A, B$ and $C$, for which sample $X$ will $F_4$ be zero?
