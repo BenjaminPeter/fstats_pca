@@ -41,40 +41,42 @@ Even though these two approaches are considered in almost every ancient DNA pape
 \subsection{Introduction to $F$-statistics}
 $F$-statistics have been primarily motivated by trees and admixture graphs \citep{patterson2012, peter2016}, but the calculations hold up in a much wider data space. In particular,  \cite{oteo-garcia2021} provides a thorough introduction to interpreting $F$-statistics in the \emph{data space} $\mathbb{R}^k$. Their work builds much of the foundation of this discussion, by demonstrating analogies to classical geometry. A brief summary of their key results: A population's allele frequencies can be thought of as vector in $\mathbb{R}^k$. Then, $F_2(X_1, X_2) = \normsq{X_1 - X_2}$ is the squared Euclidean distance between the populations with vectors $X_1$ and $X_2$, and $F_4(X_1, X_2 ; X_3, X_4) = \langle X_1 - X_2, X_3 - X_4 \rangle$ is the inner (scalar) product between these two vectors. Here, I will mainly use the $F$-statistic notation, but use the geometric notation where convenient.
 
-\subsection{Introduction to PCA}
-
-\subsection{Introduction to MDS}
 
 
 	
 \section{Relationship of PCA, $F_2$ and Outgroup-$F_3$}
-	Let us assume we have some genotype data $\MX$, which contains allele-frequency data from $n$ populations on the rows, and $k$ loci on columns. Each population may be represented by a single haploid, pseudo-haploid or diploid individual. Thus, a PCA where each row represents a single individual \cite{patterson2006} is included in this framework. 
+
+The goal of this section is to give a cursory introduction to $F$-statistics, PCA and MDS, and to define notation. More detailed introductions are given in XXXXX.
+
+\subsection{Introduction to PCA}
+	Let us assume we have some genotype data summarized in a matrix $\MX$. Each of the $k$ columns contains the allele-frequencies at a single SNP, and we have $n$ rows; one corresponding to either a population or individual, depending on the desired resolution of the analysis. As a population may be represented by just one (pseudo-)haploid or diploid individual, there is no conceptual difference between these cases, but I will refer to populations as unit for analysis, for simplicity. 
 	
-	The goal of a PCA is to find a low-dimensional representation of the data that explains most of the variance-structure in the data. For this purpose, we rotate the data matrix around its center point, such that the first axis aligns with the major axis of variation.
+	The goal of a PCA is to find a low-dimensional representation of the data that explains most of the variance-structure in the data (see Fig. \ref{fig:pca_explanation} for an intuitive explanation). 
 	
 	\begin{figure}
 		\includegraphics[width=\textwidth]{pca_explanation.png}
-		\caption{Basic Idea of PCA from 2D to 1D representation}
+		\caption{Basic Idea of PCA from 2D to 1D representation. A: Allele frequencies from different populations (blue dots) at two SNPs. A PCA is performed by centering the data (B), and rotating it (B) such that the first PC explains the majority of variation in the data, and the second PC is orthognal to the first, and explains the residual. A lower-dimensional approximation (in this case 1D) can be achieved by just keeping the first PC (E); which can be translated back to the original data space by inverting the rotation and centering (F).}
 		\label{fig:pca_explanation}
 	\end{figure}
 	
+	There are several algorithms that are used to calculate a PCA in practice, the most common one relies on a singular value decomposition. Formally, 
 	\begin{equation}
 	\MY = \MC\MX = \mathbf{U} \MSINGULAR \mathbf{V}^T = \MP\ML
 	\end{equation}
 	
-	Here, $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix and $\mathbf{I}, \mathbf{1}$ are the identity matrix and a matrix of ones, respectively. $\MP=\mathbf{U}\MSINGULAR$ is the matrix of principal components (PCs), and, $\ML=\mathbf{V}^T$ is the  matrix of loadings, respectively. Occasionally, SNPs are weighted by the square-root of their variance; for now we will assume the SNPs are unweighted, and defer discussion of weighting to a later section.
+	Here, $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix that subtracts row means, with $\mathbf{I}, \mathbf{1}$ denoting the identity matrix and a matrix of ones, respectively. The orthogonal matrix of principal components $\MP=\mathbf{U}\MSINGULAR$ has size $n \times n$ and is used to reveal population structure. The loadings $\ML=\mathbf{V}^T$ are an orthonormal matrix of size $n \times k$, its rows give the contribution of each SNP to each PC, it is often useful to look for outliers that might be indicative of selection \cite[e.g]{francois2010}.
 	
+	In many  implementations \citep[e.g]{patterson2006}, SNPs are weighted by the inverse of their standard deviation. As this weighting makes little difference in practice, I will for now assume that SNPs are unweighted, and defer discussion of weighting to a later section.
 	
-	 The principal components $\MP$ are an orthogonal matrix of size $n \times n$ that are useful for understanding population structure, the loadings are an $n \times k$ orthonormal matrix that give the contribution of each SNP along each PC, it is often useful to look for outliers that might be indicative of selection \cite[e.g]{francois2010}.
-	
-	Equivalently, we obtain the PCs by performing an eigendecomposition of the  covariance matrix of $\MY$, denoted as $\MK$:
+	Equivalently, we obtain the PCs by performing an eigendecomposition of the  covariance matrix denoted as $\MK$:
 	 \begin{equation}
  \MK = \MY \MY^T = \mathbf{U}\MEIGEN\mathbf{U}^T = \mathbf{U}\MSINGULAR^2\mathbf{U}^T =\MP\MP^T
-	\end{equation} where $\MEIGEN$ is the diagonal matrix of eigenvalues.  In cases we are interested in the loadings, they can be obtained as 
+	\end{equation} where $\MEIGEN$ is the diagonal matrix with the eigenvalues of $\MK$. 
+	This algorithm does not compute the SNP-loadings. However, the $i$-th row of $L$  can be obtained from $\MP$ and the original data, whenever the eigenvalue $\lambda_i \neq 0$:
 	\begin{equation}
-	\ML = \MEIGEN^{-1}\MP^T\MC\MX
+	\ML_i = \lambda_i^{-1}\MP^T\MC\MX \text{.}
 	\end{equation}
-
+	
 	
 	Let $y_{il}$ denote the genotype of the $i$-th individual at the $l$-th SNP.
 	
@@ -83,14 +85,19 @@ $F$-statistics have been primarily motivated by trees and admixture graphs \cite
 	\end{equation}
 	where $\mu_l$ is the mean genotype at the $l$-th locus.
 	
-	The entries of the covariance matrix $\MK$ are then
 	
-	\begin{equation}
-	k_{ij} = \sum_l y_{il} y_{jl} = \sum_l (x_{il} - \mu_l)(x_{yl} - \mu_l) = F_3(\MEAN; X_i, X_j)
-	\end{equation}
-	
+	\subsection{PCA, $F$-statistics and midpoint rooting.}
+    The construction of the PCs through the covariance matrix $\MK$ is computationally more intensive than SVD, but it yields a simple connection to $F_3$-statistics.
 
-	It is helpful to think of $\MEAN = (\mu_1, \dots \mu_k)$ as a ``fake''-individual whose allele frequency is the sample mean of the allele frequency space, it will always lie at the origin of the PC-space.
+	Notice that the entries of the covariance matrix $\MK$ are
+	\begin{equation}
+	k_{ij} = \sum_l y_{il} y_{jl} = \sum_l (x_{il} - \mu_l)(x_{yl} - \mu_l) = F_3(\MEAN; X_i, X_j)\text{,}
+	\end{equation}
+	where $\MEAN = (\mu_1, \dots \mu_k)$ is the vector of the mean allele frequency at each SNP. One interpretation is that $\MEAN$ denotes a ``pivot''-population whose allele frequency vector is the sample mean of the allele frequency space. Because of this, it will always lie at the origin of the PC-space, and performing a PCA is equal to a rotation around this ``pivot''-population.
+	
+	One implication of this is that $\MEAN$ strongly depends on sample composition. If we add many closely related populations (or, in an individual based framework, )This yields an (informal) analogy to the midpoint rooting of a tree in phylogenetics \citep[see e.g.][]{felsenstein2004}. In the absence of further information, a sensible choice for the root of a tree is the point that is furthest away from all the tips, 
+	
+	
 	
 	Thus, we can also think of a PCA as performing a decomposition of an Outgroup-$F_3$-matrix, where we set the output to the mean of all marker allele frequencies. This is good practice if we do not have any outgroups available. However, we often also have outgroup data; for example when studying early European variation, Africans are sometimes a suitable outgroup. In this case, it would be consequential to perform an eigendecomposition of a true outgroup $F_3$-matrix.
 	
