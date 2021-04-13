@@ -1,6 +1,6 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -28,15 +28,35 @@
 
 \newcommand{\MEAN}{\boldsymbol{\mu}} % Kernel
 \begin{document}
-\section{A geometric interpretation of $F$-statistics}
+\section{Introduction}
+Thanks to the widespread availability of cheap sequencing, genome-wide data sets now frequently incorporate tens of thousands of present-day individuals\cite{gnomad2020}. Furthermore, advances in ancient DNA techniques now allow large data sets. Using this data allows the inference of fine-scale population structure, but translating this wealth of data into meaningful and detailed models of population history is still a major challenge. 
+
+Particularly for the analysis of ancient DNA, two approaches have been proven to be particularly useful: one are global summary analyses, such as Structure \citep{pritchard2000, alexander2009} Principal Component Analysis (PCA) \citep{cavalli-sforza1994, reich2008, novembre2008, mcvean2009} and classical multidimensional scaling (MDS) \cite{fu2016, malaspinas_bammds}. Typically, these methods assume that population structure is \emph{sparse}, so that a low-rank approximation with few underlying ``components'' is sufficient to model population structure See e.g. \cite{engelhardt2010} for a useful perspective how these approaches are related.
+
+Facing a novel data set, PCA or MDS are often the first analyses (beyond quality controls) a researcher performs, in order to obtain insights in the general population structure they are faced with. In order to answer more specific questions and to test specific hypotheses, the $F$-statistic framework of \cite{patterson2012} has been proven particularly powerful (see also \cite{peter2016} for a more gentle introduction). In the $F$-statistic framework, usually only a small number of populations are used at once, to e.g. test for treeness and find closely related populations.
+
+Even though these two approaches are considered in almost every ancient DNA paper, links between the inferences made from them are usually only compared qualitatively. In this paper, our goal is to show that PCA and $F$-statistics are in fact closely related by construction, and use a very similar summary of the data. 
+
+
+\subsection{Introduction to $F$-statistics}
 $F$-statistics have been primarily motivated by trees and admixture graphs \citep{patterson2012, peter2016}, but the calculations hold up in a much wider data space. In particular,  \cite{oteo-garcia2021} provides a thorough introduction to interpreting $F$-statistics in the \emph{data space} $\mathbb{R}^k$. Their work builds much of the foundation of this discussion, by demonstrating analogies to classical geometry. A brief summary of their key results: A population's allele frequencies can be thought of as vector in $\mathbb{R}^k$. Then, $F_2(X_1, X_2) = \normsq{X_1 - X_2}$ is the squared Euclidean distance between the populations with vectors $X_1$ and $X_2$, and $F_4(X_1, X_2 ; X_3, X_4) = \langle X_1 - X_2, X_3 - X_4 \rangle$ is the inner (scalar) product between these two vectors. Here, I will mainly use the $F$-statistic notation, but use the geometric notation where convenient.
 
-In this paper, the main focus is to use this interpretation of $F$-statistics in the context with principal component analysis (PCA), another widely used multivariate analysis tool in population genetics \citep{cavalli-sforza1994, reich2008, novembre2008, mcvean2009}. Informally, PCA is a rotation of the data such that the axis of highest variation is the first PC. The second PC th
+\subsection{Introduction to PCA}
+
+\subsection{Introduction to MDS}
+
+
 	
 \section{Relationship of PCA, $F_2$ and Outgroup-$F_3$}
-	Let us assume we have some genotype data $\MX$, which contains data from $n$ on the populations on the rows, and $k$ loci on columns. Each population may be represented by a single (pseduo-)haploid, diploid individual, but in general will be an aggregation of one or many samples.
+	Let us assume we have some genotype data $\MX$, which contains allele-frequency data from $n$ populations on the rows, and $k$ loci on columns. Each population may be represented by a single haploid, pseudo-haploid or diploid individual. Thus, a PCA where each row represents a single individual \cite{patterson2006} is included in this framework. 
 	
-	To analyze this data, we might perform a PCA. A standard way of doing this is to do first center the matrix by subtracting the mean allele frequency from each column and perform an Singular Value Decomposition (SVD):
+	The goal of a PCA is to find a low-dimensional representation of the data that explains most of the variance-structure in the data. For this purpose, we rotate the data matrix around its center point, such that the first axis aligns with the major axis of variation.
+	
+	\begin{figure}
+		\includegraphics[width=\textwidth]{pca_explanation.png}
+		\caption{Basic Idea of PCA from 2D to 1D representation}
+		\label{fig:pca_explanation}
+	\end{figure}
 	
 	\begin{equation}
 	\MY = \MC\MX = \mathbf{U} \MSINGULAR \mathbf{V}^T = \MP\ML
@@ -87,11 +107,40 @@ Since $F_2(X_1, X_2) = F_2(X_1, \mu) + F_2(X_2, \mu) - 2 F_3(\mu; X_1, X_2) \\= 
 (not sure if geometry notation would be easier here),
 
 \begin{equation}
-\MK = \MC\MX\MX^T\MC-\frac{1}{2} \MC \MF \MC = \MP\MP^T
+\MK = \MC\MK\MC = \frac{1}{2}\MC\big[\MF(X_1, \mu) + \MF(X_2, \mu) - \MF(X_1, X_2)\big]\MC=-\frac{1}{2} \MC \MF(X_1, X_2) \MC
 \end{equation}
+
+since $\MC\MF(X_1, X_3)\MC = 0$ for all constant $x_3$. In fact, this shows that if we were to mean-center any $F_3$-matrix (a standard step in multidimensional scaling) before decomposition, we retain a PCA.
+
 
 Thus, when we mean-center the $\MF$-matrix, we subtract the $F_2$ terms in above equations; as they are invariant with respect to the column/ row means. What remains, is directly proportional to the matrix decomposed under a standard PC. 
 
+\subsection{Outgroup-$F_3$-stats based MDS}
+If we have an MDS based on $F_3$, 
+
+\begin{align}
+-\MC\MFT(O, X_1; X_2)\MC &= -\frac{1}{2}\MC\big[\MF(X_1, \mu) - \MF(X_2, \mu) + \MF(X_1, X_2)\big]\MC\\
+&=\frac{1}{2} \MC \MF(X_1, X_2) \MC
+\end{align}
+
+
+In ancient DNA, a MDS has been proposed where
+\begin{enumerate}
+	\item the off-diagonal entries are $1 - F_3(O; X_1, X_2)$ for some outgroup $O$.
+	\item the diagonal is 0.
+\end{enumerate}
+Thus, this matrix differs from that derived above in that one has been added to all off-diagonal entries; and $F_2(X_1,X_2)$ has been subtracted from the diagonal. We have therefore
+\begin{align}
+\MFT^{(Fu)} = \mathbf{1} - \MFT + \mathbf{O},
+\end{align}
+where $\mathbf{1}$ is a matrix of ones and $\mathbf{O}$ is a diagonal matrix with entries
+$$o_{ii} = F_2(O, X_i) -1$$.
+
+Centering then yields
+\begin{align}
+\MC\MFT^{(Fu)}\MC &= \MC\mathbf{1}\MC - \MC\MFT\MC + \MC\mathbf{O}\MC\nonumber\\
+                  &= \MC\MF\MC + \MC\mathbf{O}\MC\\
+\end{align}
 
 
 %In summary, a PCA and an eigendecomposition of the (negative) $\MF$-matrix will give the same results, and can be thought of as an eigendecomposition of the $\MFT$-matrix of an outgroup $F_3$-matrix with the sample mean as an outgroup.
@@ -120,19 +169,7 @@ However, as $F_2$ is a squared Euclidean distance of allele frequencies, it is i
 
 What this means is that we are free to calculate $F_2$ either on the uncentered data $\MX$, the centered data $\MY$ or the principal components $\MP$. Formally,
 
-\begin{eqnarray}
-F_2(X_i, X_j) &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 = F_2(Y_i, Y_j)\nonumber\\
-&=& \sum_{l=1}^L \big( \sum_k L_{kl}P_{ik} - \sum_kL_{kl}P_{kj}\big)^2\nonumber\\
-&=& \sum_{l=1}^L \left( \sum_k L_{kl} (P_{ik} -P_{jk}) \right)^2\nonumber\\
-&=& \sum_{l=1}^L \left( \sum_k L_{kl}^2 (P_{ik} -P_{jk})^2 + 2\sum_{k\neq k'} L_{kl}L_{k'l}(P_{ik} - P_{jk'})^2 \right)\nonumber\\
-&=& \sum_k \left(\sum_{l=1}^L L_{kl}^2\right) (P_{ik} -P_{jk})^2 + \sum_{k\neq k'}\left(\sum_{l=1}^L L_{kl}L_{k'l}\right) (P_{ik} - P_{jk'})^2\nonumber\\
-&=& \sum_k (P_{ik} - P_{jk})^2
-\end{eqnarray}
 
-
-In summary, the first row shows that $F_2$ on the centered data will give the same results (as distances are invariant to translations), in the second row we apply the PC-decomposition. The third row is obtained from factoring out $L_{lk}$. Row four is obtained by multiplying out the sum inside the square term for a particular $l$. We have $k$ terms when for $\binom{k}{2}$ terms for different $k$'s.  Row five is obtained by expanding the outer sum and grouping terms by $k$.The final line is obtained by recognizing that $\ML$ is an orthonormal basis; where dot products of different vectors have lengths zero.
-
-Note that if we estimate $F_2$, unbiased estimators are obtained by subtracting the population-heterozygosities $H_i, H_j$ from the statistic. As these are scalars, they do not change above calculation.
 
 SHORT VERSION
 \begin{align}
@@ -235,7 +272,21 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 	\begin{equation}
 	\MK = \MY \MY^T = \MC\MX\MX^T \MC = \MP\MP^T
 	\end{equation}
-	
 
+\appendix
+\section{Derivation}
+\begin{eqnarray}
+F_2(X_i, X_j) &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 = F_2(Y_i, Y_j)\nonumber\\
+&=& \sum_{l=1}^L \big( \sum_k L_{kl}P_{ik} - \sum_kL_{kl}P_{kj}\big)^2\nonumber\\
+&=& \sum_{l=1}^L \left( \sum_k L_{kl} (P_{ik} -P_{jk}) \right)^2\nonumber\\
+&=& \sum_{l=1}^L \left( \sum_k L_{kl}^2 (P_{ik} -P_{jk})^2 + 2\sum_{k\neq k'} L_{kl}L_{k'l}(P_{ik} - P_{jk'})^2 \right)\nonumber\\
+&=& \sum_k \underbrace{\left(\sum_{l=1}^L L_{kl}^2\right)}_1 (P_{ik} -P_{jk})^2 + \sum_{k\neq k'}\underbrace{\left(\sum_{l=1}^L L_{kl}L_{k'l}\right)}_{0} (P_{ik} - P_{jk'})^2\nonumber\\
+&=& \sum_k (P_{ik} - P_{jk})^2
+\end{eqnarray}
+
+In summary, the first row shows that $F_2$ on the centered data will give the same results (as distances are invariant to translations), in the second row we apply the PC-decomposition. The third row is obtained from factoring out $L_{lk}$. Row four is obtained by multiplying out the sum inside the square term for a particular $l$. We have $k$ terms when for $\binom{k}{2}$ terms for different $k$'s.  Row five is obtained by expanding the outer sum and grouping terms by $k$.The final line is obtained by recognizing that $\ML$ is an orthonormal basis; where dot products of different vectors have lengths zero.
+
+Note that if we estimate $F_2$, unbiased estimators are obtained by subtracting the population-heterozygosities $H_i, H_j$ from the statistic. As these are scalars, they do not change above calculation.
 \bibliography{main}
+
 \end{document}
