@@ -93,9 +93,11 @@ The goal of this section is to give a cursory introduction to $F$-statistics, PC
 	\begin{equation}
 	k_{ij} = \sum_l y_{il} y_{jl} = \sum_l (x_{il} - \mu_l)(x_{yl} - \mu_l) = F_3(\MEAN; X_i, X_j)\text{,}
 	\end{equation}
-	where $\MEAN = (\mu_1, \dots \mu_k)$ is the vector of the mean allele frequency at each SNP. One interpretation is that $\MEAN$ denotes a ``pivot''-population whose allele frequency vector is the sample mean of the allele frequency space. Because of this, it will always lie at the origin of the PC-space, and performing a PCA is equal to a rotation around this ``pivot''-population.
+	where $\MEAN = (\mu_1, \dots \mu_k)$ is the vector of the mean allele frequency at each SNP. One interpretation is that $\MEAN$ denotes a ``pivot''-population whose allele frequency vector is the sample mean of the allele frequency space. By definition, it lies at the origin of the PC-space, and performing a PCA is equal to a rotation around this ``pivot''-population.
 	
-	One implication of this is that $\MEAN$ strongly depends on sample composition. If we add many closely related populations (or, in an individual based framework, )This yields an (informal) analogy to the midpoint rooting of a tree in phylogenetics \citep[see e.g.][]{felsenstein2004}. In the absence of further information, a sensible choice for the root of a tree is the point that is furthest away from all the tips, 
+	
+	
+	One implication of this is that $\MEAN$ strongly depends on sample composition. If we add many closely related populations (or, in an individual based framework, )This yields an (informal) analogy to the midpoint rooting of a tree in phylogenetics \citep[see e.g.][]{felsenstein2004}. In the absence of any further information, a sensible choice for the root of a tree is the point that is furthest away from all the tips.
 	
 	
 	
