@@ -103,8 +103,10 @@ The goal of this section is to give a cursory introduction to $F$-statistics, PC
 	
 	Thus, we can also think of a PCA as performing a decomposition of an Outgroup-$F_3$-matrix, where we set the output to the mean of all marker allele frequencies. This is good practice if we do not have any outgroups available. However, we often also have outgroup data; for example when studying early European variation, Africans are sometimes a suitable outgroup. In this case, it would be consequential to perform an eigendecomposition of a true outgroup $F_3$-matrix.
 	
+	\paragraph{note}
+	This could yield an (informal) analogy to the midpoint rooting of a tree in phylogenetics \citep[see e.g.][]{felsenstein2004}. In the absence of further information, a sensible choice for the root of a tree is the point that is furthest away from all the tips. However,  if we do have better info (i.e. an outgroup), that could yield more sensible results. A caveat is that the eigencomposition of a non-centered matrix does not appear to give the desired properties -- would need to dig substantially deeper into how pca maximises variance explains to come up with better algo.
 
-	
+\subsection{PCA vs metric MDS on $F$-statistics}	
 	
 This is also a useful way to establish how we can obtain $\MP$ from $\MF$ directly: Note that the row and column means of $\MK$ are zero:
 \begin{equation*}
@@ -119,21 +121,17 @@ Since $F_2(X_1, X_2) = F_2(X_1, \mu) + F_2(X_2, \mu) - 2 F_3(\mu; X_1, X_2) \\= 
 \MK = \MC\MK\MC = \frac{1}{2}\MC\big[\MF(X_1, \mu) + \MF(X_2, \mu) - \MF(X_1, X_2)\big]\MC=-\frac{1}{2} \MC \MF(X_1, X_2) \MC
 \end{equation}
 
-since $\MC\MF(X_1, X_3)\MC = 0$ for all constant $x_3$. In fact, this shows that if we were to mean-center any $F_3$-matrix (a standard step in multidimensional scaling) before decomposition, we retain a PCA.
+since $\MC\MF(X_1, c)\MC = 0$ for all constant $c$. Thus, by double-centering a matrix of $\MF$-values (multiplied by $-\frac{1}{2}$), we can obtain $\MK$ and hence $\MP$. This is exactly what is done in classical multidimensional-scaling, and this derivation is merely a special case of a well-known method.
 
-
-Thus, when we mean-center the $\MF$-matrix, we subtract the $F_2$ terms in above equations; as they are invariant with respect to the column/ row means. What remains, is directly proportional to the matrix decomposed under a standard PC. 
-
-\subsection{Outgroup-$F_3$-stats based MDS}
-If we have an MDS based on $F_3$, 
-
+However, this result goes even further: consider any $F_3$-matrix, where the ``focal''-population is kept constant:
 \begin{align}
--\MC\MFT(O, X_1; X_2)\MC &= -\frac{1}{2}\MC\big[\MF(X_1, \mu) - \MF(X_2, \mu) + \MF(X_1, X_2)\big]\MC\\
-&=\frac{1}{2} \MC \MF(X_1, X_2) \MC
+\MC\MFT(O; X_1, X_2)\MC &= \frac{1}{2}\MC\big[\MF(X_1, O) + \MF(X_2, O) - \MF(X_1, X_2)\big]\MC\nonumber\\
+ &=-\frac{1}{2} \MC \MF(X_1, X_2) \MC 
 \end{align}
 
+this shows that if we were to mean-center \emph{any} $F_3$-matrix (a standard step in multidimensional scaling) before decomposition, we retain a PCA.
 
-In ancient DNA, a MDS has been proposed where
+One important detail here are the diagonals of $\MFT$; above results assumes that $F_3(O, X_i, X_i) = F_2(O, X_i)$. This differs from how MDS has been sometimes applied on ancient DNA-data \citep{fu2016}:
 \begin{enumerate}
 	\item the off-diagonal entries are $1 - F_3(O; X_1, X_2)$ for some outgroup $O$.
 	\item the diagonal is 0.
@@ -147,17 +145,19 @@ $$o_{ii} = F_2(O, X_i) -1$$.
 
 Centering then yields
 \begin{align}
-\MC\MFT^{(Fu)}\MC &= \MC\mathbf{1}\MC - \MC\MFT\MC + \MC\mathbf{O}\MC\nonumber\\
-                  &= \MC\MF\MC + \MC\mathbf{O}\MC\\
+-\MC\MFT^{(Fu)}\MC &= -\MC\mathbf{1}\MC + \MC\MFT\MC - \MC\mathbf{O}\MC\nonumber\\
+                  &= -\frac{1}{2}\big[\MC\MF\MC +\MC\mathbf{O}\MC\big]\nonumber\\
+                  &= -\frac{1}{2}\big[\MC(\MF + \mathbf{O})\MC\big]
 \end{align}
 
+\paragraph{open questions}: How big is the effect of $\mathbf{O}$. Is it as expected cancelling out differences in sampling time? If so, are outgroup-$F$-stats generally preferable to PCA?
 
 %In summary, a PCA and an eigendecomposition of the (negative) $\MF$-matrix will give the same results, and can be thought of as an eigendecomposition of the $\MFT$-matrix of an outgroup $F_3$-matrix with the sample mean as an outgroup.
 
 
-\section{Approximating uncertainty on PCA-placement}
 
-\section{Projection using f-stats}
+
+\subsection{Projection using f-stats}
 Suppose we have a sample $U$ we wish to project onto an existing PCA-basis made from $\MX$, and let us assume we can compute $F_2(U, X_i)$ for all $i$. The ``best'' point i
 For any particular reference sample, $F_2$ places the point on the hypercircle with equation
 \begin{equation}
@@ -171,21 +171,22 @@ where $\mathbf{d}$ is a column vector with $$d_i = F_2(X_i, \MEAN) - F_2(X_i, U)
 
 Given a fixed projection, this allows us to also propagate uncertainty on a PCA plot.
 
+\paragraph{Potential Application} Use uncertainty on $F_2/F_3$ to propagate uncertainty on PCA-placement
+
+
 \section{$F$-stats in PCA-space}
-The PCA aims to reveal the axes of major variance. The data is then ``rotated'' such that these axes can be visualized. Usually, only the first few PCs are considered. 
+In the previous section, we showed that MDS and PCA are closely related to $F$-statistics, when we consider a matrix of many populations. However, one of the main advantages of the $F$-stats framework is that they can be used for specific hypotheses. Thus, in this section I am exploring how these hypotheses relate to the placement of populations on a PCA plot.
 
-However, as $F_2$ is a squared Euclidean distance of allele frequencies, it is invariant to rotation and translation. Hence, neither mean-centering, which is a translation nor PCA-rotation will change $F_2$.
+Recall that informally, PCA aims to reveal the axes of major variance. To do that, we find an optimal ``rotation'' of the data, such that these axes can be visualized. 
 
-What this means is that we are free to calculate $F_2$ either on the uncentered data $\MX$, the centered data $\MY$ or the principal components $\MP$. Formally,
+As shown by e.g. \cite{oteo-garcia2021}, $F$-stats can be thought of as inner products in Euclidean space, and $F_2$ is an (estimated) squared Euclidean distance between two populations in allele frequency space. PCA includes a translation and rotation of data, but a distance is invariant to both these operations. Hence, neither mean-centering, which is a translation nor PCA-rotation will change $F_2$. What this means is that we are free to calculate $F_2$ either on the uncentered data $\MX$, the centered data $\MY$ or the principal components $\MP$. Formally,
 
-
-
-SHORT VERSION
 \begin{align}
 F_2(X_i, X_j) &=&  \sum_{l=1}^L \big( x_{il} -x_{jl}\big)^2 - H_i - H_j &&\nonumber\\ 
  &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 - H_i - H_j  &=& F_2(Y_i, Y_j) \nonumber\\
- &=& \sum_k (P_{ik} - P_{jk})^2 - H_i - H_j &=& F_2(P_i, P_j)
+ &=& \sum_k (P_{ik} - P_{jk})^2 - H_i - H_j &=& F_2(P_i, P_j) \text{,}
 \end{align}
+where $H_i$ and $H_j$ are the bias-correction terms proposed in \cite{reich2009}. A detailed derivation of this is given in Appendix \ref{appendix:fonpc}.
 As $F_3$ and $F_4$ can be written as sums of various $F_2$-terms, analogous relations apply.
 
 \subsection{$F$-stats in 2-dimensional PC-space}
@@ -283,7 +284,7 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 	\end{equation}
 
 \appendix
-\section{Derivation}
+\section{Derivation}\label{appendix:fonpc}
 \begin{eqnarray}
 F_2(X_i, X_j) &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 = F_2(Y_i, Y_j)\nonumber\\
 &=& \sum_{l=1}^L \big( \sum_k L_{kl}P_{ik} - \sum_kL_{kl}P_{kj}\big)^2\nonumber\\
