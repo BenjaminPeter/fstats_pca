@@ -136,8 +136,31 @@ PCA is equivalent to outgroup-$F_3$-analysis with sample mean as outgroup
 			PCA is equivalent to MDS on $\MF$
 		\end{alertblock}
 	}
-	\end{frame}
+\end{frame}
+
+\begin{frame}
+	\frametitle{PCA is MDS on Outgroup$\MFT$}
+	
+	\begin{itemize}
+		\item<1-> PCA is decomposition of Covariance matrix: $\MY\MY^T$
+		\item<2-> Consider $\MFT(O); f_{ij} = F_3(O; X_i, X_j) = O^2 - OX_i - OX_j +  X_i X_j$
+		\item<4-> $\MC\MFT\MC = \underbrace{\MC O^2\MC}_{0}  - 
+		\underbrace{\MC O\MX_i\MC}_{0} -
+		\underbrace{\MC O\MX_j\MC}_{0} + 
+		\underbrace{\MC\MX\MX^T\MC}_{\MY\MY^T}$
+	\end{itemize}
+	
+	
+	\only<5>{
+		\begin{alertblock}{Observation}
+			Decomposition of \emph{any} centered $F_3$-matrix is equivalent to PCA.
+		\end{alertblock}
+	}
+\end{frame}
 
 
+\begin{frame}
+\frametitle{0-diagonal MDS}
+\end{frame}
 	
 \end{document}
