@@ -267,6 +267,28 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 	
 	\subsection{Missing data}
 	
+	\subsection{$F_2$ error}
+	In most $F$-statistics applications, $F_2$ is \emph{estimated} using the minimum-variance unbiased estimator \citep{reich2009}
+	\begin{subequations}
+
+	\begin{equation}
+	f_2(X_1, X_2) = \frac{1}{L}\sum_l (x_{l1} - x_{l2})^2 - \frac{1}{L}\sum_l\frac{x_{l1} (1-x_{l1})}{n_{l1}-1} - 
+	\frac{1}{L}\sum_l\frac{x_{l2} (1-x_{l2})}{n_{l2}-1} - 
+	\end{equation}
+	in contrast, as shown above, PCA can be thought as a decomposition of a matrix of uncorrected $F_2$-statistics:
+	\begin{equation}
+	F_2(X_1, X_2) = \frac{1}{L}\sum_l(x_{l1} - x_{l2})^2
+	\end{equation}
+	\end{subequations}
+
+	This leads to some issues, for example trying to perform a PCA on the matrix of $f_2$-values is not positive semidefinite, and so some principal components may be imaginary. One possible resolution is probabilistic PCA \citep[e.g.][]{engelhardt2010,agrawal2020}.
+	
+	\begin{align}
+	    y_{ij} | \MP_{ij}, \epsilon_i &= (\MP\ML)_{ij} + \epsilon_{ij}\nonumber\\
+	    x_i & \sim N(0, \mathbf{I}) \nonumber\\
+	    \epsilon_i &\sim N(0, \sigma^2 \mathbf{I})\nonumber
+	\end{align}
+	
 	\subsection{What is a dimension?}
 	A single population at a particular point in time can be thought of as a single point in allele-frequency space, given by it's $p$-dimensional locus of allele frequencies in that population. If this population evolves for some time in isolation, allele frequencies will change due to genetic drift; i.e. the population evolves along a single tree branch in the interpretation of \cite{patterson2012}. If we now add a second population, it will behave exactly the same, and the drift in the second population will be uncorrelated to the first, i.e. it evolves in a second dimension. Thus, if we have two populations that descend from the same ancestral population in isolation, they can be thought of as evolving along orthognal dimensions from the same point. This argument is at the foundation of F-statistics.
 	
