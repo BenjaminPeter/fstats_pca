@@ -1,5 +1,7 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+
 %\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -262,7 +264,20 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 
 
 
+\section{Results}
+\begin{figure}[!ht]
+	\includegraphics[width=\textwidth]{figures/fig_f3_data.pdf}
+	\caption{\textbf{PCA and $F_3$-statistics} A: PCA of Western Eurasian data; the circle denotes the region for which $F_3(X; \text{Basque}, \text{Turkish})$ may be negative. Populations for which $F_3$ is negative are colored in red. B, E: $F_3$ approximated with two (blue) and ten (red) PCs versus the full spectrum. C,F: Contributions of PCs 1-10 to each $F_3$-statistic. D: PCA of World data set, color indicates value of $F_3(\text{Mbuti}; \text{Mozabite}, X)$. The black line shows the projection axis Mbuti-Mozabite, the gray lines indicates the projected position of each population. }
+	\label{fig:f3}
+\end{figure}
 
+\begin{figure}[!ht]
+\includegraphics[width=\textwidth]{figures/fig_f4_data.pdf}	
+	\caption{\textbf{PCA and $F_4$-statistics} A: Spectrum of select $F_4$-statistics in World data set. B: Projection angle representation of $F_4(X, Sardinian; Mozabite, Yoruba)$ (red) and approximations using two (blue) and ten (green) PCs. C: Spectrum of select $F-4$-statistics in Westeurasian data set. D: Scatterplot of $F_4$-projection on Finnish-Canary Islanders axis and residual PC1.
+	E: $F_4(X, \text{French}, \text{Finnish}, \text{Canary Islander})$ vs. prediction using two (blue) and ten(red) PCs. F: Percent variance explained for the projection of panel D and the first nine residual PCs.
+	}
+\label{fig:f4}
+\end{figure}
 
 
 	
@@ -319,6 +334,27 @@ F_2(X_i, X_j) &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 = 
 In summary, the first row shows that $F_2$ on the centered data will give the same results (as distances are invariant to translations), in the second row we apply the PC-decomposition. The third row is obtained from factoring out $L_{lk}$. Row four is obtained by multiplying out the sum inside the square term for a particular $l$. We have $k$ terms when for $\binom{k}{2}$ terms for different $k$'s.  Row five is obtained by expanding the outer sum and grouping terms by $k$.The final line is obtained by recognizing that $\ML$ is an orthonormal basis; where dot products of different vectors have lengths zero.
 
 Note that if we estimate $F_2$, unbiased estimators are obtained by subtracting the population-heterozygosities $H_i, H_j$ from the statistic. As these are scalars, they do not change above calculation.
+
+\section{Het term}
+\begin{align}
+H_i &= \sum_l X_{ij} (1-X_{ij})\\
+&= \sum_j (Y_{ij} + \mu_j) - (Y_{ij} + \mu_j)^2\\
+&= \sum_j Y_{ij}(1-2\mu_j) - Y_{ij}^2 + \mu_j(1-\mu_j)\\
+&= \sum_j \left[(1-2\mu_j)\sum_k P_{ik}L_{kj} - \left(\sum_k P_{ik}L_{kj}\right)^2 +  \mu_j(1-\mu_j)\right] \\
+&= \sum_k P_{ik} \sum_j (1-2\mu_j)L_{kj} - \sum_k P_{ik}^2 + M \\
+\end{align}
+with $M= \sum_j \mu_j(1-\mu_j)$
+
+because the square terms
+\begin{align}
+S &= \sum_j\left(\sum_k P_{ik}L_{kj}\right)^2 \\
+&=  \sum_j \left(\sum_k P_{ik}L_{kj}\right)\left(\sum_{k'} P_{ik'}L_{k'j}\right)\\
+&= \sum_j \left[\left(\sum_k P_{ik}^2L_{kj}^2\right) + \left(\sum_{k \neq k'} P_{ik} P_{ik'} L_{kj}L_{k'j}\right)\right]\\
+&= \left(\sum_k P_{ik}^2 \underbrace{\left[ \sum_j L_{kj}^2\right]}_1 \right) + \left(\sum_{k \neq k'} P_{ik} P_{ik'} \underbrace{\left[ \sum_j L_{kj}L_{k'j} \right]}_0\right)\\
+&= \sum_k P_{ik}^2 = \sum_k \lambda_k^2 V_{ik}^2
+\end{align}
+
+
 \bibliography{main}
 
 \end{document}
