@@ -1,0 +1,11 @@
+DATA: /mnt/ancient/ModernHuman/ReichLab/reich_public_geno_v44.3/v44.3_HO_public
+OUT:        subdata/worldfoci1
+genotypename:	DATA.geno
+snpname:	DATA.snp
+indivname:	DATA.ind 
+genooutfilename:   OUT.geno
+snpoutfilename:    OUT.snp
+indoutfilename:    OUT.ind
+outputformat:   EIGENSTRAT
+hashcheck: YES
+poplistname: subdata/worldfoci.poplist
