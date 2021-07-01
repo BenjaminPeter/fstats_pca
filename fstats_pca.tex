@@ -56,7 +56,6 @@ The goal of this section is to give a cursory introduction to $F$-statistics, PC
 	Let us assume we have some genotype data summarized in a matrix $\MX$. Each of the $k$ columns contains the allele-frequencies at a single SNP, and we have $n$ rows; one corresponding to either a population or individual, depending on the desired resolution of the analysis. As a population may be represented by just one (pseudo-)haploid or diploid individual, there is no conceptual difference between these cases, but I will refer to populations as unit for analysis, for simplicity. 
 	
 	The goal of a PCA is to find a low-dimensional representation of the data that explains most of the variance-structure in the data (see Fig. \ref{fig:pca_explanation} for an intuitive explanation). 
-	
 	\begin{figure}
 		\includegraphics[width=\textwidth]{pca_explanation.png}
 		\caption{Basic Idea of PCA from 2D to 1D representation. A: Allele frequencies from different populations (blue dots) at two SNPs. A PCA is performed by centering the data (B), and rotating it (B) such that the first PC explains the majority of variation in the data, and the second PC is orthognal to the first, and explains the residual. A lower-dimensional approximation (in this case 1D) can be achieved by just keeping the first PC (E); which can be translated back to the original data space by inverting the rotation and centering (F).}
