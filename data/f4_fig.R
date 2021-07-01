@@ -52,7 +52,9 @@ f4pc2 = f4_from_pc_matrix(pcmat, idz, idx, idy) %>%
         as.data.frame %>% rownames_to_column("pop1") %>%
         left_join(f42, .) %>% 
         filter(! pop1 %in% ids) %>%
-        mutate(PC1_2=rowSums(across(PC1:PC2)), PC1_10=rowSums(across(PC1:PC10)))
+        mutate(PC1_2=rowSums(across(PC1:PC2)), 
+               PC1_3=rowSums(across(PC1:PC3)),
+               PC1_10=rowSums(across(PC1:PC10)))
     v = f4pc2 %>% 
         filter(pop1 %in% c("Greek", "Iranian", "Sicilian", "Estonian", "Saudi", "Georgian", "Spanish")) %>% 
         pivot_longer(PC1:PC33) %>% 
@@ -87,6 +89,13 @@ P6 = f4pc %>%
     geom_point() + 
     xlab("f4(X, FRA; FIN, CI)") + ylab("approx. f4")  + BTHEME
 
+f4all = f4(f2s, pop3=idx, pop4 = idy, pop1=sample_list, pop2=sample_list) %>% arrange(pop1, pop2)
+f4pcall = f4_from_pc_matrix2(pcmat, px=idx, py=idy) %>%
+    #as.data.frame %>% rownames_to_column("pop1") %>%
+    left_join(f4all, .) %>% 
+    filter(! pop1 %in% ids) %>%
+    mutate(PC1_2=rowSums(across(PC1:PC2)), PC1_4=rowSums(across(PC1:PC4)))
+
 
 
 }
@@ -107,6 +116,13 @@ if(F){
         select(pop1, pop2, est) %>% 
         pivot_wider(names_from=pop2, values_from=est, values_fill=0, names_sort=T) %>% 
         column_to_rownames('pop1')
+    f4all = f4(f2s, pop3=idy, pop4 = idz, pop1=sample_list, pop2=sample_list) %>% arrange(pop1, pop2)
+    f4pcall = f4_from_pc_matrix2(pcmat, px=idy, py=idz) %>%
+        #as.data.frame %>% rownames_to_column("pop1") %>%
+        left_join(f4all, .) %>% 
+        filter(! pop1 %in% ids) %>%
+        mutate(PC1_2=rowSums(across(PC1:PC2)), PC1_10=rowSums(across(PC1:PC20)))
+
     f4pc = f4_from_pc_matrix(pcmat, idx, idy, idz) %>%
         as.data.frame %>% rownames_to_column("pop1") %>%
         left_join(f4, .) %>% 

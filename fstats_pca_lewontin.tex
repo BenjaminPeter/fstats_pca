@@ -166,8 +166,29 @@ Conjecture: Thus, we are measuring the distances between the admixing population
 $F_4(X_1, X_1', X_2, X_2') = 0$
  
 	
-\subsection{Higher-Dimensional Spaces}
+\section{Results}
+\subsection{$F_4$}
+Using $F_3$-statistics, I showed that we can think of the admixture test as a test of whether the admixed population lies in a particular $n$-ball, and the outgroup $F_3$-statistic can be thought of as a projection of the test populations on the line connecting the outgroup to the reference sample. In this section, I will develop similar interpretation of $F_4$ on PCA-plots, and to investigate sparsity. 
 
+First, we investigate the sparsity in the world overview data set: We find that the vast amount of contribution to the statistics comes from the first two PCs (Figure \ref{fig:f4}A). For example, the correlation between $F_4(X, Y, \text{Mozabite}, \text{Yoruba})$ and its approximation using the first two PCs is 99.2\%. To visualize the interpretation of $F_4$ as an angle, we use statistics of the form $F_4(X, \text{Sardinian}; \text{Mozabite}, \text{Yoruba})$, which can be interpreted as the angle between the vectors Mozabite-Yoruba and $X$-Sardinian. In Figure \ref{fig:f4}B, I show the angle based on two (blue), ten (green) and all PCs $red$. I find that for most Asian and American populations the angle is very close to 90°, as would be expected if the variation between African and non-African populations is mostly orthogonal. On the other hand, if $X$ is an African population, the angle is lower, and much less well approximated. This demonstrates that this PCA-plot likely does not model within-African population structure adequately. 
+
+The $F_4$-statistics for the Westeurasian data set are slightly less sparse, the correlation coefficients between $F_4(X, \text{French}; \text{Finnish}, \text{Canary Islander})$ and its approximation using the first two or three PCs is 95.5\% and 99.1\% respectively (Figure \ref{fig:f4}E). I also show that the interpretation of $F_4$ as a projection can be used as a useful visualization (Figure \ref{fig:f4}D). On the $x$-axis, I plot $\langle X; \text{Finnish}, \text{Canary Islander}\rangle$, so that the horizontal distance between all pairs of populations corresponds to their respective $F_4$-statistics $F_4(X, Y; \text{Finnish}, \text{Canary Islander})$. On the $Y$-axis and with the coloring I display the first two principal components of the residual, i.e. the genetic variation that is missed by viewing the data through this projection. We find that most European populations have positive values on residual PC1, and are relatively closely clustered. In contrast Middle Eastern and Caucasian populations have negative values on this gradient. This allows us to visualize that this particular $F_4$-projection does an adequate job if we are interested in describing European variation, but it fails to explain the non-European data. We can further quantify this by investigating the percent of variance explained on each axis (Figure \ref{fig:f4}F), where I find that the projection axis only describes around 12\% of hte variation, compared to residual PC1 with almost 30\%.
+
+
+\begin{figure}[!ht]
+	\includegraphics[width=\textwidth]{figures/fig_f3_data.pdf}
+	\caption{\textbf{PCA and $F_3$-statistics} A: PCA of Western Eurasian data; the circle denotes the region for which $F_3(X; \text{Basque}, \text{Turkish})$ may be negative. Populations for which $F_3$ is negative are colored in red. B, E: $F_3$ approximated with two (blue) and ten (red) PCs versus the full spectrum. C,F: Contributions of PCs 1-10 to each $F_3$-statistic. D: PCA of World data set, color indicates value of $F_3(\text{Mbuti}; \text{Mozabite}, X)$. The black line shows the projection axis Mbuti-Mozabite, the gray lines indicates the projected position of each population. }
+	\label{fig:f3}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\includegraphics[width=\textwidth]{figures/fig_f4_data.pdf}	
+	\caption{\textbf{PCA and $F_4$-statistics} A: Spectrum of select $F_4$-statistics in World data set. B: Projection angle representation of $F_4(X, Sardinian; Mozabite, Yoruba)$ (red) and approximations using two (blue) and ten (green) PCs. C: Spectrum of select $F-4$-statistics in Westeurasian data set. D: Scatterplot of $F_4$-projection on Finnish-Canary Islanders axis and residual PC1.
+		E: $F_4(X, \text{French}, \text{Finnish}, \text{Canary Islander})$ vs. prediction using two (blue) and ten(red) PCs. F: Percent variance explained for the projection of panel D and the first nine residual PCs.
+	}
+	\label{fig:f4}
+\end{figure}
 
 \section{Trees and admixture graphs in PCA-space}
 \subsection{Trees}
