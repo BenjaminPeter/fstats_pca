@@ -25,7 +25,7 @@ pcs2 = pcs %>% left_join(f3, by=c(pop="pop1")) %>%
     mutate(col=as.factor(cut(est, c(-1,-1e-10,1e-10,2), labels=F) ))
 P1 = ggplot() + 
     geom_circle(aes(x0=PC1, y0 =PC2, r=radius), data=circle_df, color='lightgray', fill='lightgray') +
-#    geom_circle(aes(x0=PC1, y0 =PC2, r=r0), data=circle_df, color='darkgray', fill='darkgray') +
+    geom_circle(aes(x0=PC1, y0 =PC2, r=r0), data=circle_df, color='darkgray', fill='#808080') +
     geom_text(aes(x=PC1, y=PC2, label=pop, color=col), data=pcs2) +
     coord_fixed()  + BTHEME
 

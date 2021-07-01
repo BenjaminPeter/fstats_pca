@@ -10,6 +10,8 @@
 \usepackage{comment}
 \usepackage{natbib}
 
+\usepackage{url}
+
 \bibliographystyle{evolution.bst}
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
@@ -54,7 +56,6 @@ The goal of this section is to give a cursory introduction to $F$-statistics, PC
 	Let us assume we have some genotype data summarized in a matrix $\MX$. Each of the $k$ columns contains the allele-frequencies at a single SNP, and we have $n$ rows; one corresponding to either a population or individual, depending on the desired resolution of the analysis. As a population may be represented by just one (pseudo-)haploid or diploid individual, there is no conceptual difference between these cases, but I will refer to populations as unit for analysis, for simplicity. 
 	
 	The goal of a PCA is to find a low-dimensional representation of the data that explains most of the variance-structure in the data (see Fig. \ref{fig:pca_explanation} for an intuitive explanation). 
-	
 	\begin{figure}
 		\includegraphics[width=\textwidth]{pca_explanation.png}
 		\caption{Basic Idea of PCA from 2D to 1D representation. A: Allele frequencies from different populations (blue dots) at two SNPs. A PCA is performed by centering the data (B), and rotating it (B) such that the first PC explains the majority of variation in the data, and the second PC is orthognal to the first, and explains the residual. A lower-dimensional approximation (in this case 1D) can be achieved by just keeping the first PC (E); which can be translated back to the original data space by inverting the rotation and centering (F).}
@@ -265,6 +266,25 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 
 
 \section{Results}
+The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation on PCA plots. In this section, I use these interpretation in the analysis of human genetic variation data set. I use two data sets based on the ``Human Origins''-SNP set (597,573 SNPs). Both are subsets of the Reich lab compendium data set v44.3, downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}. 
+
+\paragraph{West-Eurasian data set}
+This data set of 1,119 individuals from 62 populations contains  present-day individuals from the Eastern Mediterranean, Caucasus and Europe. It is frequently used as a basis of comparison for ancient genetic analyses of Western Eurasian individuals \cite{patterson2012}. Population genetic differentiation in this region is low and closely mirrors geography \cite{novembre2008}. 
+
+\paragraph{World Overview data set}
+This data set of 638 individuals from 33 population contains individuals throughout the world, and is used as a sparse data set capturing much of global human genetic variation. This data set spans Africa, Eurasia and the Americas, and we might therefore expect the population structure to be much more sparse.
+
+I perform analyses at the level of populations to ease presentation, and because it is an assumption of $F$-statistics that the genetic variation with sampled population is independent of the variation between samples that I am focusing on here. I use \texttt{admixtools 2.0.0} \url{https://github.com/uqrmaie1/admixtools} to compute a matrix of $F_2$-statistics between all populations. To obtain a PC-decomposition I use equation XXX and the \texttt{eigen} function in \texttt{R}, and compare them with the $F_3$ and $F_4$-statistics calculated using admixtools 2.
+
+\paragraph{Admixture-$F_3$}
+As a first step, I plot the first two principal components of the Westeurasian data set (Figure \ref{fig:f3}A). This PCA presents two parallel clines, one from the Levant and Arabia (``BedouinB'') to the Caucasus (``Abkhasian''), and a second one from Southern (``Sardinian'') to Northeastern Europe (``Mordovian''). In this context, I examine $F_3(X; Basque, Turkish)$, i.e. a statistic that aims to ask which populations can be represented as a mixture between a Southwestern (Basque) and Southeastern (Turkish) European population. The -- largely Southern European -- populations for which the point estimate of these $F_3$-statistic is negative are highlighted in red. They both fall close to the center of the $F_3$-circle, either defined on the first two (dark grey) or all PCs (light gray). However, many populations inside the circle on the first 2 PCs, including English, Sardinians and Canary Islanders have positive $F_3$-values, on higher PCs, showing that the first two PCs do not capture all the genetic variation related to population structure for this data set. 
+
+This is expected because for spatially continuous populations, PCA will not be sparse \cite{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
+
+Thus, the main benefit of this PCA-plot is that it allows us to identify populations outside the circle (from the Levant and Caucasus), for which $F_3$ is guaranteed to be positive.
+
+\paragraph{Outgroup-$F_3$}
+
 \begin{figure}[!ht]
 	\includegraphics[width=\textwidth]{figures/fig_f3_data.pdf}
 	\caption{\textbf{PCA and $F_3$-statistics} A: PCA of Western Eurasian data; the circle denotes the region for which $F_3(X; \text{Basque}, \text{Turkish})$ may be negative. Populations for which $F_3$ is negative are colored in red. B, E: $F_3$ approximated with two (blue) and ten (red) PCs versus the full spectrum. C,F: Contributions of PCs 1-10 to each $F_3$-statistic. D: PCA of World data set, color indicates value of $F_3(\text{Mbuti}; \text{Mozabite}, X)$. The black line shows the projection axis Mbuti-Mozabite, the gray lines indicates the projected position of each population. }
@@ -309,6 +329,9 @@ If the data were normally distributed, $\MK$ has a $n$-dimensional Wishart-distr
 	    x_i & \sim N(0, \mathbf{I}) \nonumber\\
 	    \epsilon_i &\sim N(0, \sigma^2 \mathbf{I})\nonumber
 	\end{align}
+	
+	
+	
 	
 	\subsection{What is a dimension?}
 	A single population at a particular point in time can be thought of as a single point in allele-frequency space, given by it's $p$-dimensional locus of allele frequencies in that population. If this population evolves for some time in isolation, allele frequencies will change due to genetic drift; i.e. the population evolves along a single tree branch in the interpretation of \cite{patterson2012}. If we now add a second population, it will behave exactly the same, and the drift in the second population will be uncorrelated to the first, i.e. it evolves in a second dimension. Thus, if we have two populations that descend from the same ancestral population in isolation, they can be thought of as evolving along orthognal dimensions from the same point. This argument is at the foundation of F-statistics.
