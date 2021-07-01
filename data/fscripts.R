@@ -1,15 +1,15 @@
 require(admixtools)
 require(tidyverse)
 require(Matrix)
+require(ggforce)
 
 
-pca_from_f2s <- function(f2s){
-    f2 = f2(f2s)
+pca_from_f2s <- function(f2s, force_nonneg=F){
+    f2 = f2(f2s, unique_only=F, sure=T) 
     n = dim(f2s)[1]
     f2mat = f2 %>%
-        mutate(tmp=pop2, pop2=pop1, pop1=tmp) %>% 
-        select(-tmp) %>% bind_rows(f2) %>% 
-        select(-se) %>% 
+        mutate(est=if(force_nonneg){pmax(est, 0)}else{est}) %>%
+        select(-se) %>%
         pivot_wider(names_from=pop2, values_from=est, values_fill=0, names_sort=T) %>%
         arrange(pop1) %>%
         column_to_rownames('pop1') %>% as.matrix
