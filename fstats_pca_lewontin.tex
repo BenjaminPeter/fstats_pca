@@ -4,7 +4,7 @@ margin=1.5cm,
 includefoot,
 footskip=30pt,
 ]{geometry}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 %\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -37,53 +37,41 @@ footskip=30pt,
 \newcommand{\MEAN}{\boldsymbol{\mu}} % Kernel
 \begin{document}
 \section{Introduction}
-About 15\% of genetic variation in humans can be explained by population structure \cite{lewontin1972, barbujani1997, rosenberg2003}, but the information contained in these 15\% is sufficient to study the genetic diversity and history in great detail \cite{edwards2003}. For some data sets it is possible to predict an individuals origin at a resolution of a few hundred kilometers \cite{novembre2008, leslie2015}, and direct-to-consumer-genetics companies are using this variation to analyze the genetic data of millions of customers.
+About 15\% of genetic variation in humans can be explained by population structure \citep{dobzhansky1972, barbujani1997, rosenberg2002}, but the information contained in these 15\% is sufficient to study our genetic diversity and history in great detail \citep{cavalli-sforza1994,reich2018a}. For some data sets it is possible to predict an individuals origin at a resolution of a few hundred kilometers \citep{novembre2008, leslie2015}, and direct-to-consumer-genetics companies are using this variation to analyze the genetic data of millions of customers.
+
+Understanding and characterizing this variation is also crucial for genomic medicine: Risk loci identified in one population perform progressively worse in more distant populations \citep{berg2019, duncan2019}; so identifying a good ``reference'' data set is crucial. Understanding genetic variation is also important when designing studies, in order to measure which populations studies should target \citep{fullerton2016}. Despite these needs, no generally accepted model for human population structure exists. The historical view that humans diversity can be partitioned into  distinct ``races'' \citep[e.g.][]{blumenback1798} has long been superseded in favor of more accurate and nuanced models. These models fail because they only explain a small amount of variation...
 
 In Lewontin's pioneering analysis, he found that less than half (6\%), of that variation could be attributed to the continental-scale groups he called races, it seemed  which he used to claim that ''racial classification is (...) seen to be of virtually no genetic or taxonomic significance``.
 
-One related question is how discrete human populations are. While human genetic differentiation generally increases with geographic distance \cite{ramachandran2005, rosenberg2007}, this increase is not uniform. Obstacles to migration,  such as oceans, mountains or deserts do frequently cause discontinuities in population structure \cite{peter2020a}. Thus, while barriers to gene flow rarely are absolute, segregation policies by (perceived) ethnic or racial ancestry frequently cause local small-scale population differentiation that persist to the present day.
+Human genetic diversity has both discrete and continuous components \citep{rosenberg2002, rosenberg2005, bradburd2015,  reich2018, peter2020a}. On the one hand, barriers to migration such as mountain ranges, oceans or deserts lead to reduced gene flow, and thus populations on different continents had periods with little-to-no gene flow. On the other hand, local gene flow between neighboring populations is also pervasive, and the out-of-Africa expansion caused gradual patterns of differentiation \cite{ramachandran2005}. Finally, long-distance migrations, and secondary contact between diverged groups such as Neandertals and early modern humans add to the complexity of human population structure.
 
-Thus, it frequently a useful analysis tool to think of populations as discrete units. For example, even though the underlying population structure may be continuous, sampling is not; and when quantifying ascertainment and sampling biases, or when discussing population structure it is often helpful to pretend populations are discrete, even though the underlying structure is typically more complex. This leads to challenges both in data interpretation and communication, and often researchers will analyze a data set both using methods that assume population structure is discrete, and methods where this assumption does not need to be made.
+The way this complexity is frequently handled is that multiple models with different assumptions and used, each emphasizing a particular aspects of the data. Data-driven methods such as Principal Component Analysis (PCA) \citep{cavalli-sforza1994} structure \citep{pritchard2000} or multidimensional scaling (MDS, \cite{malaspinas2014}) are often used to display the full complexity of the data, but they have the disadvantage that they are not easily interpretable. For this more explicit demographic models \citep{gutenkunst2009, kamm2015, excoffier2013} are used, which allow for parameter estimation or hypothesis tests. Particularly in the analysis of human ancient DNA, a set of techniques based on $F$-statistics \textit{sensu} Patterson have risen in popularity \citep{patterson2012, peter2016}. This framework is based on the assumption that the relationship between three or four populations is often tree-like, and allows for a variety of tests of treeness and more complex demographic models \citep{patterson2012, harney2021}. 
 
-One discrete framework for the analysis of human population structure that gained a lot of traction in the last decade are the $F$-statistics \textit{sensu} Patterson \cite{patterson2012, peter2016}. This framework treats populations as discrete units in the analysis, and allows for a variety of tests for treeness. Using this framwork, the vast majority of present-day human populations are admixed \cite{pickrell2014}. Yet, this framework starts with the assumption that admixture is i) rare and ii) discrete.
-
-However, $F$-statistics are not restricted to discrete populations. Indeed, as they can be written as functions of allele frequency variances, or expected pairwise coalescence times, statistics that can be calculated under a wide range of demographic models \cite{peter2016}. Indeed, as they reflect inner products, they can be generalized to Euclidean space \cite{oteo2021} (or any Hilbert space, although we won't pursue that here).
-Here, I explore these links between $F$-statistics and Euclidean spaces to establish connections between $F$-statistics and PCA. This allows direct interpretation of admixture in scenarios where population structure might not be discrete.
-
-
-
-
-Particularly for the analysis of ancient DNA, two approaches have been proven to be particularly useful: one are global summary analyses, such as Structure \citep{pritchard2000, alexander2009} Principal Component Analysis (PCA) \citep{cavalli-sforza1994, reich2008, novembre2008, mcvean2009} and classical multidimensional scaling (MDS) \cite{fu2016, malaspinas_bammds}. Typically, these methods assume that population structure is \emph{sparse}, so that a low-rank approximation with few underlying ``components'' is sufficient to model population structure See e.g. \cite{engelhardt2010} for a useful perspective how these approaches are related.
-
-Facing a novel data set, PCA or MDS are often the first analyses (beyond quality controls) a researcher performs, in order to obtain insights in the general population structure they are faced with. In order to answer more specific questions and to test specific hypotheses, the $F$-statistic framework of \cite{patterson2012} has been proven particularly powerful (see also \cite{peter2016} for a more gentle introduction). In the $F$-statistic framework, usually only a small number of populations are used at once, to e.g. test for treeness and find closely related populations.
-
-Even though these two approaches are considered in almost every ancient DNA paper, links between the inferences made from them are usually only compared qualitatively. In this paper, our goal is to show that PCA and $F$-statistics are in fact closely related by construction, and use a very similar summary of the data. 
-
-
-
+However, the connections between PCA, $F$-statistics and demographic models are currently unclear, which makes quantitative comparisons, detecting model violations and joint interpretation of the results of these approaches difficult. Since both $F$-statistics and PCA are functions of expected pairwise coalescent times \citep{mcvean2009, peter2016}, this is one avenue to link these approaches. Here, I instead use the geometric interpretation of $F$-statistics introduced by  \cite{oteo-garcia2021} to directly visualize $F$-statsitics on a PCA plot. 
 
 
 	
 \section{Theory}
-In this section, I will give a very brief introduction to $F$-statistics and PCA. A more detailed technical introduction of PCA is given in XXXXX, and a useful guide to interpretation is \cite{cavalli-sforza1994}.
+In this section, I will give a very brief formal introduction to $F$-statistics and PCA. A more detailed technical introduction of PCA is given in e.g. \cite{jolliffe2013}, and a useful guide to interpretation is \cite{cavalli-sforza1994}.
 
 \subsection{Introduction to PCA}
-Let us assume we have some genotype data summarized in a matrix $\MX$ whose entry $x_{ij}$ reflects the allele frequency of the $i$-th population at the $j$-th genotype. If we have $S$ SNPs and $n$ populations, $\MX$ will have dimension $n \times S$. As a population may be represented by just one (pseudo-)haploid or diploid individual, there is no conceptual difference between these cases and I will
-refer to populations as unit for analysis, for simplicity. Since the allele
+Let us assume we have some genotype data summarized in a matrix $\MX$ whose entry $x_{ij}$ reflects the allele frequency of the $i$-th population at the $j$-th genotype. If we have $S$ SNPs and $n$ populations, $\MX$ will have dimension $n \times S$. As a population may be represented by just one individual, there is no conceptual difference between these cases and I will
+refer to populations as unit for analysis. Since the allele
 frequencies are between zero and one, we can interpret each Population $X_i$
-of $\MX$ as a point in $[0, 1]^S$, the \emph{data space} of all possible allele frequencies on our markers.
+of $\MX$ as a point in $[0, 1]^S$, the allele frequency or \emph{data space}.
 	
-The goal of PCA is to find a low-dimensional subspace $\mathbb{R}^K$ of the data that explains most of the variation in the data. $K$ is at most $n-1$, but the historical processes that generated often result in \emph{sparse} data \citep{engelhardt2010,
-patterson2012}, so that $K \ll n$; for visualization $K=2$ is frequently used (see Fig. \ref{fig:pca_explanation} for an intuitive explanation). 
+The goal of PCA is to find a low-dimensional subspace $\mathbb{R}^K$ that explains most of the variation in the data. $K$ is at most $n-1$, but the historical processes that generated often result in \emph{sparse} data \citep{engelhardt2010}, so that $K \ll n$ explains most ofthe variation; for visualization $K=2$ is frequently used. 
 	
+\begin{comment}
 	\begin{figure}
 		\includegraphics[width=\textwidth]{pca_explanation.png}
 		\caption{Basic Idea of PCA from 2D to 1D representation. A: Allele frequencies from different populations (blue dots) at two SNPs. A PCA is performed by centering the data (B), and rotating it (B) such that the first PC explains the majority of variation in the data, and the second PC is orthognal to the first, and explains the residual. A lower-dimensional approximation (in this case 1D) can be achieved by just keeping the first PC (E); which can be translated back to the original data space by inverting the rotation and centering (F).}
 		\label{fig:pca_explanation}
 	\end{figure}
+\end{comment}
 	
 There are several algorithms that are used to calculate a PCA in practice,
-   the most common one is based on singular value decomposition. In this approach, we first mean-center $\MX$, obtaining a centered matrix $\MY$
+   the most common one is based on singular value decomposition \citep{jolliffe2013}. In this approach, we first mean-center $\MX$, obtaining a centered matrix $\MY$
 	\begin{equation*}
 	y_{il} = x_{il} - \mu_l
 	\end{equation*}
@@ -92,12 +80,12 @@ There are several algorithms that are used to calculate a PCA in practice,
 	PCA can then be written as
 	
 	\begin{equation}
-	\MY = \MC\MX = \mathbf{U} \MSINGULAR \mathbf{V}^T = \MP\ML\text{,}
+	\MY = \MC\MX = (\mathbf{U} \MSINGULAR) \mathbf{V}^T = \MP\ML\text{,}
 	\end{equation}
 	
-	where $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix that subtracts row means, with $\mathbf{I}, \mathbf{1}$  the identity matrix and a matrix of ones, respectively. The orthogonal matrix of principal components $\MP=\mathbf{U}\MSINGULAR$ has size $n \times n$ and is used to reveal population structure. The loadings $\ML=\mathbf{V}^T$ are an orthonormal matrix of size $n \times k$, its rows give the contribution of each SNP to each PC, it is often useful to look for outliers that might be indicative of selection \cite[e.g][]{francois2010}.
+	where $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix that subtracts row means, with $\mathbf{I}, \mathbf{1}$  the identity matrix and a matrix of ones, respectively. The orthogonal matrix of principal components $\MP=\mathbf{U}\MSINGULAR$ has size $n \times n$ and is used to reveal population structure. The SNP loadings $\ML=\mathbf{V}^T$ are an orthonormal matrix of size $n \times k$, its rows give the contribution of each SNP to each PC, it is often useful to look for outliers that might be indicative of selection \citep[e.g][]{francois2010}.
 	
-	In many  implementations \citep[e.g]{patterson2006}, SNPs are weighted by
+	In many  implementations \citep[e.g][]{patterson2006}, SNPs are weighted by
     the inverse of their standard deviation. As this weighting often makes little
     difference in practice \citep{mcvean2009}, I will assume throughout that SNPs
     are unweighted.
@@ -112,20 +100,28 @@ PCA is typically used to model population structure between many populations. $F
 	F_4(X_1, X_2; X_3, X_4) &=& \sum_{l=1}^S(x_{1l} - x_{2l})(x_{3l} - x_{4l}) &=& \langle X_1 - X_2, X_3 - X_4 \rangle	\text{,}
 	\end{align}
 \end{subequations}
-where $\norm{\cdot}$ denotes the Euclidean norm and $\langle \cdot, \cdot \rangle$ denotes the dot product.
+where $\norm{\cdot}$ denotes the Euclidean norm and $\langle \cdot, \cdot \rangle$ denotes the dot product. Furthermore, both $F_3$ and $F_4$ can be written as sums of $F_2$-statistics:
+$2F_3(X_1; X_2, X_3) = 2F_2(X_2, X_3) - F_2(X_1, X_2) + F_2(X_1, X_3)$ and $2F_4(X_1, X_2; X_3, X_4) = F_2(X_1, X_3) + F_2(2_4) - F_2(X_1,X_4) - F_2(X_2, X_3)$.
 
-$F$-statistics have been primarily motivated in the context of trees and admixture graphs \citep{patterson2012}, although they can be calculated under most population genetic models \citep{peter2016}. Most commonly, $F_3$ and $F_4$ are interpreted as admixture tests: Negative values of  $F_3(X_1; X_2, X_3) < 0$ are interpreted that $X_1$ is a mixture between populations (related to) $X_2$ and $X_3$. Similarly if populations are related as a tree, then $F_4(X_1, X_2; X_3, X_4) =0$. Alternatively, $F_2$, $F_3$ and $F_4$ are all used to measure genetic similarity. $F_2(X_1, X_2)$ represents the variance in allele frequency between populations $X_1$ and $X_2$, which is a measure of genetic drift. The outgroup-$F_3$-statistic $F_3(X_O; X_U, X_i)$ is used if we have an unknown population $X_U$, and want to find its closest relatives from a panel of populations $X_i$. The highest values of $F_3$ indicate the population $X_i$ most closely related to $X_U$. Including an outgroup $X_0$ allows correction for sampling-time difference, which are common in applications on ancient DNA. Finally, $F_4(X_1, X_2; X_3, X_4)$ is used to measure the length of the internal branch on the tree connecting these four populations. It is used to reconstruct admixture graphs \cite{patterson2012, lipson2013} and to estimate admixture proportions \citep{petr2019, harney2020}.
+$F$-statistics have been primarily motivated in the context of trees and admixture graphs \citep{patterson2012}. In a tree, $F_2(X, Y)$ measures the length of all branches between populations $X$ and $Y$; and $F_3$ and $F_4$ represent external and internal branches in a tree, respectively \citep{peter2016}.
 
-Here, we are interested in interpreting the $F$-statistics in the data space $\mathbb{R}^S$, and compare it with PCA. For a thorough introduction of interpreting $F$-statistics in data space, see \cite{oteo-garcia2021}.
-	
-\paragraph{Principal components from $F$-statistics}
-The principal components can be directly calculated from $F$-statistics using multidimensional scaling. Suppose we calculate the pairwise $F_2(X_i, X_j)$ between all $n$ populations, and collect them in a matrix $\MF$. We can obtain the principal components from this matrix by double-centering it, so that its row and column means are zero, and perform an eigendecomposition of the resulting matrix:
+This interpretation is useful to understand a number of applications. The outgroup-$F_3$-statistic $F_3(O; U, X_i)$, for example, is useful if we have an unknown population $U$, and want to find its closest relatives from a panel of populations $X_i$. The highest values of $F_3$ indicate the population $X_i$ most closely related to $U$, using the outgroup $O$ to correct for differences in sample times. The internal branches described by  $F_4$-statistics are frequently used for complex models, such as  reconstructing admixture graphs \citep{patterson2012, lipson2013} and estimating admixture proportions \citep{petr2019, harney2021}.
+
+Most commonly however, $F_3$ and $F_4$ are used as admixture tests: Negative values of  $F_3(X_1; X_2, X_3) < 0$ correspond to a branch with negative genetic drift, which is a violation of treeness. Similarly if populations are related as a tree, then $F_4(X_1, X_2; X_3, X_4) =0$. 
+
+To move away from trees and graph models, I build upon the geometric framework of \cite{oteo-garcia2021}. Here, we think of each population as a point in the data space $\mathbb{R}^S$, made up of the allele frequency at each SNP. Then, $F_2(X_1, X_2) = \normsq{X_1 - X_2}$ is the squared Euclidean distance between two populations $X_1$ and $X_2$, and $F_4(X_1, X_2 ; X_3, X_4) = \langle X_1 - X_2, X_3 - X_4 \rangle$ is the inner (dot) product between these two vectors. These dot products are useful for a variety of projections that use population structure.
+
+
+
+\subsection{Connection between PCA and $F$-statsitics}	
+\subsubsection{Principal components from $F$-statistics}
+PCA and $F$-statistics are closely related. In fact, the principal components can be directly calculated from $F$-statistics using multidimensional scaling \citep{gower1966}. Suppose we calculate the pairwise $F_2(X_i, X_j)$ between all $n$ populations, and collect them in a matrix $\MF$. We can obtain the principal components from this matrix by double-centering it, so that its row and column means are zero, and perform an eigendecomposition of the resulting matrix:
 \begin{equation}
 \MP\MP^T = - \frac{1}{2}\MC\MF\MC \text{.} \label{eq:mds}
 \end{equation}
 
-\section{$F$-statistics in PCA-space}
-As shown by e.g. \cite{oteo-garcia2021}, $F$-statistics can be thought of as inner products in Euclidean space, and $F_2$ is an (estimated) squared Euclidean distance between two populations in allele frequency space. By performing a PCA, we just translate and rotate our data, but Euclidean distances and dot products are both invariant under both these operations. Hence, neither mean-centering (a translation) nor PCA (a rotation) will change $F_2$. What this means is that we are free to calculate $F_2$ either on the uncentered data $\MX$, the centered data $\MY$ or any other orthogonal basis such as the principal components $\MP$. Formally,
+\subsubsection{$F$-statistics in PCA-space}
+By performing a PCA, we rotate our data to reveal the axes of highest variation. However, the dot product is invariant under rotation, and $F$-statistics can be thought of as dot products.  What this means is that we are free to calculate $F_2$ either on the uncentered data $\MX$, the centered data $\MY$ or any other orthogonal basis such as the principal components $\MP$. Formally,
 
 \begin{align}
 F_2(X_i, X_j) &=&  \sum_{l=1}^L \big( x_{il} -x_{jl}\big)^2  &&\nonumber\\ 
@@ -166,7 +162,7 @@ that substantial variation is hidden on higher PCs.
 
 
 \subsubsection{When is $F_3$ negative?}
-The $F_3$-statistic becomes more interesting; as outlines above we either think of $F_3$ as ``outgroup''-$F$-stats or as admixture $F$-stats. In the admixture case, we may ask the following question: given two source populations $X_1$, $X_2$, where would admixed populations on a PCA plot lie? From theory, we would expect it to lie between $X_1$ and $X_2$, with the exact location depending on sample sizes \cite{brisbin2012, mcvean2009}. 
+The $F_3$-statistic becomes more interesting; as outlines above we either think of $F_3$ as ``outgroup''-$F$-stats or as admixture $F$-stats. In the admixture case, we may ask the following question: given two source populations $X_1$, $X_2$, where would admixed populations on a PCA plot lie? From theory, we would expect it to lie between $X_1$ and $X_2$, with the exact location depending on sample sizes \citep{brisbin2012, mcvean2009}. 
 
 Formally, we would reject admixture if $F_3$ is negative, i.e. we are looking for the space
 \begin{eqnarray}
@@ -214,7 +210,7 @@ The $F_4$-statistics for the Westeurasian data set are slightly less sparse, the
 
 
 	\subsection{What is a dimension?}
-	In both the PCA and $F$-statistic framework, a population at  a particular point in time can be thought of as a single point in allele-frequency space, given by the $k$-dimensional vector $v_0$ of allele frequencies at the $k$ SNPs in that population. If this population evolves for some time in isolation, allele frequencies will change due to genetic drift from $v_0$ to some other point $v_1$. Likewise, a second population with frequency $w_0$ will move to $w_1$. Crucially, if these populations do not interact, the changes in allele frequency, $v_1 - v_0$ and $w_1 - w_0$ will be uncorrelated \cite{patterson2012}. Thus, if we have two populations that descend from the same ancestral population in isolation, they can be thought of as evolving along orthognal dimensions from the same point. This argument is at the foundation of F-statistics.
+	In both the PCA and $F$-statistic framework, a population at  a particular point in time can be thought of as a single point in allele-frequency space, given by the $k$-dimensional vector $v_0$ of allele frequencies at the $k$ SNPs in that population. If this population evolves for some time in isolation, allele frequencies will change due to genetic drift from $v_0$ to some other point $v_1$. Likewise, a second population with frequency $w_0$ will move to $w_1$. Crucially, if these populations do not interact, the changes in allele frequency, $v_1 - v_0$ and $w_1 - w_0$ will be uncorrelated \citep{patterson2012}. Thus, if we have two populations that descend from the same ancestral population in isolation, they can be thought of as evolving along orthognal dimensions from the same point. This argument is at the foundation of F-statistics.
 	
 	
 
@@ -222,7 +218,7 @@ The $F_4$-statistics for the Westeurasian data set are slightly less sparse, the
 The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation on PCA plots. In this section, I use these interpretation in the analysis of human genetic variation data set. I use two data sets based on the ``Human Origins''-SNP set (597,573 SNPs). Both are subsets of the Reich lab compendium data set v44.3, downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}. 
 
 \paragraph{West-Eurasian data set}
-This data set of 1,119 individuals from 62 populations contains  present-day individuals from the Eastern Mediterranean, Caucasus and Europe. It is frequently used as a basis of comparison for ancient genetic analyses of Western Eurasian individuals \cite{patterson2012}. Population genetic differentiation in this region is low and closely mirrors geography \cite{novembre2008}. 
+This data set of 1,119 individuals from 62 populations contains  present-day individuals from the Eastern Mediterranean, Caucasus and Europe. It is frequently used as a basis of comparison for ancient genetic analyses of Western Eurasian individuals \citep{patterson2012}. Population genetic differentiation in this region is low and closely mirrors geography \citep{novembre2008}. 
 
 \paragraph{World Overview data set}
 This data set of 638 individuals from 33 population contains individuals throughout the world, and is used as a sparse data set capturing much of global human genetic variation. This data set spans Africa, Eurasia and the Americas, and we might therefore expect the population structure to be much more sparse.
@@ -232,7 +228,7 @@ I perform analyses at the level of populations to ease presentation, and because
 \paragraph{Admixture-$F_3$}
 As a first step, I plot the first two principal components of the Westeurasian data set (Figure \ref{fig:f3}A). This PCA presents two parallel clines, one from the Levant and Arabia (``BedouinB'') to the Caucasus (``Abkhasian''), and a second one from Southern (``Sardinian'') to Northeastern Europe (``Mordovian''). In this context, I examine $F_3(X; Basque, Turkish)$, i.e. a statistic that aims to ask which populations can be represented as a mixture between a Southwestern (Basque) and Southeastern (Turkish) European population. The -- largely Southern European -- populations for which the point estimate of these $F_3$-statistic is negative are highlighted in red. They both fall close to the center of the $F_3$-circle, either defined on the first two (dark grey) or all PCs (light gray). However, many populations inside the circle on the first 2 PCs, including English, Sardinians and Canary Islanders have positive $F_3$-values, on higher PCs, showing that the first two PCs do not capture all the genetic variation related to population structure for this data set. 
 
-This is expected because for spatially continuous populations, PCA will not be sparse \cite{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
+This is expected because for spatially continuous populations, PCA will not be sparse \citep{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
 
 Thus, the main benefit of this PCA-plot is that it allows us to identify populations outside the circle (from the Levant and Caucasus), for which $F_3$ is guaranteed to be positive.
 
@@ -263,7 +259,7 @@ The $F_4$-statistics for the Westeurasian data set are slightly less sparse, the
 \end{figure}
 
 \section{Discussion}
-Particularly for the analysis of ancient DNA, $F$-statistics have been established as a powerful tool to describe population genetic diversity, but they have a number of limitations. In particular, they assume that populations are discrete, related as a graph, and that gene flow between populations is rare \cite{patterson2012,harney2020}. As a consequence, researchers concerned about model fits may ascertain reference populations in a way that satisfies these assumptions, thus inadvertently making population structure appear sparser than it truly is. This is perhaps most obvious from Figure \ref{fig:f3}B, where large gaps are present. However, these gaps are due to sparse sampling that disappear if more populations were sampled \cite[e.g.][]{peter2020a}, not due to gaps in genetic diversity. If population ascertainment is not done very carefully, tools built on top of $F$-statistics, such as \texttt{qpGraph} and \texttt{qpAdm}, may thus only provide a very loose lower bound for the number of gene flow events.
+Particularly for the analysis of ancient DNA, $F$-statistics have been established as a powerful tool to describe population genetic diversity, but they have a number of limitations. In particular, they assume that populations are discrete, related as a graph, and that gene flow between populations is rare \citep{patterson2012,harney2021}. As a consequence, researchers concerned about model fits may ascertain reference populations in a way that satisfies these assumptions, thus inadvertently making population structure appear sparser than it truly is. This is perhaps most obvious from Figure \ref{fig:f3}B, where large gaps are present. However, these gaps are due to sparse sampling that disappear if more populations were sampled \citep[e.g.][]{peter2020a}, not due to gaps in genetic diversity. If population ascertainment is not done very carefully, tools built on top of $F$-statistics, such as \texttt{qpGraph} and \texttt{qpAdm}, may thus only provide a very loose lower bound for the number of gene flow events.
 
 In contrast, the perspective on $F$-statistics in data space \citep{oteo-garcia2021} and on PCA does not require assumptions on number of admixture or gene flow events. Independent of any model, A population $X_x$ can be thought of as admixed between $ X_1$ and $X_2$ if it lies in the ball with diameter $\overline{X_1X_2}$. And independent of any models, two axes of variation that are not perpendicular to each other shows that there is some degree of shared history. 
 
@@ -278,11 +274,11 @@ While the data space produces a much larger model space than trees, the main dra
 
 
 
-To make PCA and $F$-statistics more comparable in practical settings, there are a number of -- mainly statistical -- concerns that still need to be addressed in future work. The perhaps most obvious one is that PCA is most frequently run on individuals, whereas $F$-statistics are often calculated on populations. This is not a conceptual issue, as both PCA and $F$-statistics can be run on either \cite{cavalli-sforza1994}. Population based analyses have the advantage that they are easier to interpret and compute (current packages are ill-equipped to calculate all pairwise $F$-statistics between data sets with thousands of individuals \cite{patterson2012}). However, this requires the assumption that the within-population variation is independent from the between-population variation; something that is analogous to the variance partitioning based on PCs here. 
+To make PCA and $F$-statistics more comparable in practical settings, there are a number of -- mainly statistical -- concerns that still need to be addressed in future work. The perhaps most obvious one is that PCA is most frequently run on individuals, whereas $F$-statistics are often calculated on populations. This is not a conceptual issue, as both PCA and $F$-statistics can be run on either \citep{cavalli-sforza1994}. Population based analyses have the advantage that they are easier to interpret and compute (current packages are ill-equipped to calculate all pairwise $F$-statistics between data sets with thousands of individuals \citep{patterson2012}). However, this requires the assumption that the within-population variation is independent from the between-population variation; something that is analogous to the variance partitioning based on PCs here. 
 
-A second difference is that frequently, rare SNPs are weighted higher in PCA, whereas all SNPs are weighted the same for $F$-statistics \cite{patterson2006}. This is only a difference of convention; $F$-statistics could also be calculated using the same weighting. The close connection between the two approaches developed here suggest that for most analyses, users might want to be consistent and use the same weighting for both types of analyses. 
+A second difference is that frequently, rare SNPs are weighted higher in PCA, whereas all SNPs are weighted the same for $F$-statistics \citep{patterson2006}. This is only a difference of convention; $F$-statistics could also be calculated using the same weighting. The close connection between the two approaches developed here suggest that for most analyses, users might want to be consistent and use the same weighting for both types of analyses. 
 
-The third and perhaps biggest gap are statistical issues. The treatment here focusses on the mean estimated $F$-statistic, but many  applications of $F$-statistics are based on hypothesis tests \cite{patterson2012}. This requires estimating accurate standard errors for these statistics, which is difficult since nearby SNPs will be correlated \cite{hahn2019}. In contrast, standard PCA does not modeljointly models the covariance matrix due to population structure and sampling. On the other hand, for both data sets I investigated here, the matrix $\MF$ of $F$-statistics estimated using admixtools2 is not a proper squared Euclidean distance matrix, i.e. it is not negative semidefinite and has imaginary PCs. This is not a practical when considering single $F$-statistics or PCA (for analyses here, I used a nearby matrix  \citep{higham2002} with no apparent loss of precision). It does however mean that tools that use matrices of $F$-statistics, such as \texttt{qpadm} or \texttt{qpgraph} may be ill-calibrated, which may partly explain why they generally have poor out-of-sample predictive power and are restricted to a few dozen samples at a time. A model-based framework based on probabilistic PCA \citep{meisner2021, agrawal2020, softimpute} would likely be able to generate consistent $F$-statistics and PCs, while incorporating sampling error and missing data.
+The third and perhaps biggest gap are statistical issues. The treatment here focusses on the mean estimated $F$-statistic, but many  applications of $F$-statistics are based on hypothesis tests \citep{patterson2012}. This requires estimating accurate standard errors for these statistics, which is difficult since nearby SNPs will be correlated \citep{hahn2018}. In contrast, standard PCA does not modeljointly models the covariance matrix due to population structure and sampling. On the other hand, for both data sets I investigated here, the matrix $\MF$ of $F$-statistics estimated using admixtools2 is not a proper squared Euclidean distance matrix, i.e. it is not negative semidefinite and has imaginary PCs. This is not a practical when considering single $F$-statistics or PCA (for analyses here, I used a nearby matrix  \citep{higham2002} with no apparent loss of precision). It does however mean that tools that use matrices of $F$-statistics, such as \texttt{qpadm} or \texttt{qpgraph} may be ill-calibrated, which may partly explain why they generally have poor out-of-sample predictive power and are restricted to a few dozen samples at a time. A model-based framework based on probabilistic PCA \citep{meisner2021, agrawal2020, hastie2015} would likely be able to generate consistent $F$-statistics and PCs, while incorporating sampling error and missing data.
 
 \begin{itemize}
     \item weighting of SNPs
