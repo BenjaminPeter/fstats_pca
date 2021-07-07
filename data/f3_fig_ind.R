@@ -2,7 +2,7 @@ source("fscripts.R")
 library(ggpubr)
 BTHEME = theme_classic() + theme(legend.position="none")
 
-if(T){
+if(F){
 f2s = admixtools::read_f2("westeurasian1ind/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
@@ -48,7 +48,7 @@ P5 = f3pc %>% pivot_longer(PC1:PC10) %>%
     ylab("f3(X; Tur., Bas.)") + 
     scale_x_continuous(breaks=1:10) + BTHEME
 }
-if(F){
+if(T){
 f2s = admixtools::read_f2("worldfoci2ind")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
@@ -83,9 +83,8 @@ df = tibble(x=pcs$PC1,
 pcs2 = pcs %>% left_join(f3, by=c(pop="pop3")) 
 P3 = ggplot() + 
     geom_abline(intercept=intercept, slope=slope) +
-    #geom_circle(aes(x0=PC1, y0 =PC2, r=radius), data=circle_df, color='lightgray', fill='lightgray') +
-    #geom_circle(aes(x0=PC1, y0 =PC2, r=r0), data=circle_df, color='darkgray', fill='darkgray') +
-    geom_text(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
+    #geom_text(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
+    geom_point(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
     scale_color_viridis_c(direction=1) + 
     geom_segment(data=df, aes(x=x, y=y, xend=xend, yend=yend), alpha=.1, color='lightgray') +
     coord_fixed() + BTHEME
@@ -93,7 +92,7 @@ P3 = ggplot() +
 
 P4 = f3pc %>% select(pop3, est, PC1_2, PC1_10, PC1_20) %>% 
     filter(!pop3 %in% c(idx, idy)) %>%
-    pivot_longer(starts_with("PC"), names_to='PC', values_to="f3") %>% 
+#    pivot_longer(starts_with("PC"), names_to='PC', values_to="f3") %>% 
     ggplot(aes(x=est, y=f3, color=PC)) + geom_point() + geom_abline() + 
     xlab("f3(Mbuti, Mozabite, X)") + ylab("approx. f3")  + BTHEME
 P6 = f3pc %>% pivot_longer(PC1:PC20) %>% 

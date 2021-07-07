@@ -2,8 +2,8 @@ source("fscripts.R")
 library(glue)
 BTHEME = theme_classic() + theme(legend.position="none")
 
-if(F){
-f2s = admixtools::read_f2("westeurasian1/")
+if(T){
+f2s = admixtools::read_f2("westeurasian1ind/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
 idx = "Finnish"
@@ -99,7 +99,7 @@ f4pcall = f4_from_pc_matrix2(pcmat, px=idx, py=idy) %>%
 
 
 }
-if(T){
+if(F){
     f2s = admixtools::read_f2("worldfoci2ind")
     pcmat = pca_from_f2s(f2s)
     pcs = pca_from_pcmat(pcmat)
@@ -175,8 +175,8 @@ if(T){
 #ggsave( "f4_iwesteurasia2.png", P4, width=1.25, height=4, scale=1.5)
 #ggsave( "f4_iwesteurasia3.png", P5, width=1.3, height=1, scale=1.5)
 #ggsave( "f4_iwesteurasia4.png", P6, width=1.3, height=1, scale=1.5)
-ggsave( "f4_iworld1.png", P1, width=1.75, height=4, scale=1.5)
-ggsave( "f4_iworld2.png", P2, width=1.25, height=4, scale=1.5)
+#ggsave( "f4_iworld1.png", P1, width=1.75, height=4, scale=1.5)
+#ggsave( "f4_iworld2.png", P2, width=1.25, height=4, scale=1.5)
 
 
 
