@@ -88,7 +88,8 @@ There are several algorithms that are used to perform PCAs, the most common one 
 PCA is typically used to model population structure between many populations. $F$-statistics take the opposite approach, revealing the relationship between just two,  three or four populations at a time. The three $F$-statistics can be defined as 
 \begin{subequations}
 	\begin{align}
-	&F_2(X_1, X_2) &=& \frac{1}{S}\sum_{l=1}^S(x_{1l} - x_{2l})^2 &=& \frac{1}{S}\normsq{X_1-  X_2}\\
+	&F_2(X_1, X_2) &=& \frac{1}{S}\sum_{l=1}^S(x_{1l} - x_{2l})^2
+	&=& \frac{1}{S}\langle X_1 - X_2, X_1 - X_2 \rangle = \frac{1}{S}\normsq{X_1-  X_2}\\
 	&F_3(X_1; X_2, X_3) &=& \frac{1}{S}\sum_{l=1}^S(x_{1l} - x_{2l})(x_{1l} - x_{3l}) &=& \frac{1}{S}\langle X_1 - X_2, X_1 - X_3 \rangle\\	
 	&F_4(X_1, X_2; X_3, X_4) &=& \frac{1}{S}\sum_{l=1}^S(x_{1l} - x_{2l})(x_{3l} - x_{4l}) &=& \frac{1}{S}\langle X_1 - X_2, X_3 - X_4 \rangle	\text{,}
 	\end{align}
@@ -97,7 +98,7 @@ where $\norm{\cdot}$ denotes the Euclidean norm and $\langle \cdot, \cdot \rangl
 \begin{subequations}
 \begin{align}
 \langle a, b \rangle &= \sum_i a_ib_i\\
-\langle a, b \rangle &= \norm{a}\norm{b}\cos{\phi}\\
+\langle a, b \rangle &= \norm{a}\norm{b}\cos(\phi)\\
 \langle a, a \rangle &= \normsq{a}\\
 \langle a + c, b \rangle &= \langle a, b \rangle + \langle b, c \rangle,
 \end{align}
@@ -133,7 +134,7 @@ F_2(X_i, X_j) &=&  \sum_{l=1}^L \big( x_{il} -x_{jl}\big)^2  &&\nonumber\\
 &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2   &=& F_2(Y_i, Y_j) \nonumber\\
 &=& \sum_{k=1}^n (p_{ik} - p_{jk})^2  &=& F_2(P_i, P_j) \text{,}\label{eq:fpc}
 \end{align}
-A derivation of this change-of-basis is given in Appendix \ref{appendix:fonpc}.
+A derivation of this change-of-basis is given in Appendix \ref{appendix:fonpc}, Equation \ref{eq:changeofbasis}.
 As $F_3$ and $F_4$ can be written as sums of $F_2$-terms (Eqs. \ref{eq:f3fromf2}, \ref{eq:f4fromf2}), analogous relations apply.
 
 In most applications, we do not use all PCs, but instead truncate to the first $K$ PCs, which explain most of the between-population genetic variation.
@@ -144,7 +145,7 @@ F_2(P_i, P_j) = \underbrace{\sum_{k=1}^K(p_{ik} - p_{jk})^2}_{\hat{F_2}^{(K)}(P_
 If we sum up the approximation errors $F_2 - \hat F_2$ over all pairs of populations, we obtain the Frobenius-norm of the error $\normsq{\MF - \hat{\MF}}_F$; which is precisely the function that is minimized in MDS \citep{jolliffe2013}. Thus, $\hat\MF^{(K)}$ is an optimal sparse approximation of $\MF$ for any $K$.
 
 \section{Material \& Methods}
-The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation in PCA-space, which can be approximated on PCA plots. In the next section I explore this connection in detail, and illustrate it on two sample data sets that I briefly introduce here. Both are based on the analyses by \cite{lazaridis2014}. The data is from the Reich lab compendium data set (v44.3), downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}, using data on the ``Human Origins''-SNP set (597,573 SNPs). SNPs with missing data in any population are excluded. The code used to create all figures and analyses will be available on [Archive to be created before publishing].
+The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation in PCA-space, which can be approximated on PCA plots. In the next section I explore this connection in detail, and illustrate it on two sample data sets that I briefly introduce here. Both are based on the analyses by \cite{lazaridis2014}. The data is from the Reich lab compendium data set (v44.3), downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}, using data on the ``Human Origins''-SNP set (597,573 SNPs). SNPs with missing data in any population are excluded. The code used to create all figures and analyses will be available on \url{https://github.com/BenjaminPeter/fstats_pca}.
 
 \paragraph{``World'' data set}
 This data set represents global human genetic variation (638 individuals from 33 population), as used by \citep{lazaridis2014}. As this data set is very sparse, it may be well-approximated by an admixture graph.
@@ -154,8 +155,8 @@ This data set represents global human genetic variation (638 individuals from 33
 This data set of 1,119 individuals from 62 populations contains  present-day individuals from the Eastern Mediterranean, Caucasus and Europe. It is frequently used as a basis of comparison for ancient genetic analyses of Western Eurasian individuals \citep{patterson2012, lazaridis2014}. Genetic differentiation in this region is low and closely mirrors geography \citep{novembre2008}, and thus may not be particularly graph-like.
 
 
-\paragraph{Computation $F$-statistics and PCA}
-I perform analyses at the level of populations to ease presentation.  It is an assumption of $F$-statistics that the genetic variation within sampled population is independent of the variation between samples \citep{patterson2012}. All computations are performed in \texttt{R}. I use \texttt{admixtools 2.0.0} \url{https://github.com/uqrmaie1/admixtools} to compute $F$-statistics. To obtain a PC-decomposition, I first calculate all pairwise $F_2$-statistics, obtain a nearby negative semidefinite matrix using the \texttt{nearPD} function, and then use equation \ref{eq:mds} and the \texttt{eigen} function to obtain the PCs. 
+\paragraph{Computing $F$-statistics and PCA}
+I perform analyses at the level of populations to ease presentation.  It is an assumption of $F$-statistics that the genetic variation within sampled population is independent of the variation between samples \citep{patterson2012}. All computations are performed in \texttt{R}. I use \texttt{admixtools 2.0.0} (\url{https://github.com/uqrmaie1/admixtools}) to compute $F$-statistics. To obtain a PC-decomposition, I first calculate all pairwise $F_2$-statistics, obtain a nearby negative semidefinite matrix using the \texttt{nearPD} function, and then use equation \ref{eq:mds} and the \texttt{eigen} function to obtain the PCs. 
 
 \section{Results}
 
@@ -188,14 +189,14 @@ Given two source populations $X_1$, $X_2$, can we predict which populations $X_x
 The $F_3$-statistic gives a more precise interpretation: we are looking for the space where $F_3$ is negative, i.e. 
 \begin{eqnarray}
 2 F_3(X_x; X_1, X_2) &=& 2\langle  X_x - X_1, X_x - X_2 \rangle \nonumber\\
-      &=& \normsq{X_x - X_1} + \normsq{X_x - X_2}  - \normsq{X_1 - X_2} < 0
+      &=& \normsq{X_x - X_1} + \normsq{X_x - X_2}  - \normsq{X_1 - X_2} < 0 \label{eq:f3neg}
 \end{eqnarray}
-By the Pythagorean theorem, $F_3 = 0 $ if and only if $X_1, X_2$ and $X_x$ form a right-angled triangle. The associated region where $F_3=0$ is a $n$-sphere (or a circle in two dimensions) with diameter $\overline{X_1X_2}$. $F_3$ is negative when the triangle is obtuse, i.e. $X_x$ is admixed if it lies inside the $n$-ball with diameter $\overline{X_1X_2}$ (Figure \ref{fig:geom}B). 
+By the Pythagorean theorem, $F_3 = 0 $ if and only if $X_1, X_2$ and $X_x$ form a right-angled triangle. The associated region where $F_3=0$ is a $n$-sphere (or a circle in two dimensions) with diameter $\overline{X_1X_2}$. $F_3$ is negative when the triangle is obtuse, i.e. $X_x$ is admixed if it lies inside the $n$-ball with diameter $\overline{X_1X_2}$ (Figure \ref{fig:geom}B, Equation \ref{eq:f3sphere}). 
 
 \paragraph{$F_3$ on a 2D-plot.} 
  If we project this $n$-ball on a two-dimensional plot, $\overline{X_1X_2}$ will usually not align with the PCs; thus the ball may be somewhat larger. This geometry is perhaps easiest visualized on a globe. If we look at the globe from a view point parallel to the equator, both the north and south poles are visible at the very edge of the circle. But if we look at it from above the north pole, the north- and south-poles will be at the very same point.
  
- Thus if $\hat{F}_3 \ll F_3$, the true circle will be bigger than would be predicted from a 2D-plot. In this case, substantial relevant genetic differentiation is ``hidden'' in the higher PCs, and populations that appear inside the circle on a PCA-plot may, in fact, have positive $F_3$-statistics. This is because they are outside the $n$-ball in higher dimensions. The converse interpretation is more strict: if a population lies outside the circle on \emph{any} 2D-projection, $F_3$ is guaranteed to be bigger than 0.
+ Thus if $\hat{F}_3 \ll F_3$, the true circle will be bigger than would be predicted from a 2D-plot. In this case, substantial relevant genetic differentiation is ``hidden'' in the higher PCs, and populations that appear inside the circle on a PCA-plot may, in fact, have positive $F_3$-statistics. This is because they are outside the $n$-ball in higher dimensions. The converse interpretation is more strict: if a population lies outside the circle on \emph{any} 2D-projection, $F_3$ is guaranteed to be bigger than 0 (see Equation \ref{eq:f3circle} in the Appendix).
 
 \paragraph{Example}
 As an example, I visualize the admixture statistic $F_3(X; \text{Basque}, \text{Turkish})$, on the first two PCs of the Westeurasian data set (Figure \ref{fig:f3}A). In this case, the projected $n$-ball (light gray) and circle based on 2D (dark gray) align relatively closely, but several populations inside the ball (e.g. Sardinian, Finnish) have, in fact, positive $F_3$-values. This reveals that the first two PCs do not capture all the genetic variation relevant for Southern European population structure. This is expected because for spatially continuous populations, PCA will not be sparse \citep{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
@@ -259,10 +260,9 @@ The percentage of between-population variance explained by the Sardinia-Yoruba a
 \end{figure}
 
 \section{Discussion}
-Particularly for the analysis of ancient DNA, $F$-statistics  are  a powerful tool to describe population genetic diversity. Here, I show that the geometry of $F$-statistics \citep{oteo-garcia2021} leads to a number of simple interpretations of $F$-statistics on a PCA plot. This allows for direct and quantitative comparisons between $F$-statistic-based results and PCA biplots. As PCA is often ran in an early step in data analysis, this also aids in generation of hypotheses that can be more directly evaluated using specific models using a lower number of populations. It could also allows for calculation of $F$-statistics involving unsampled populations, which can be useful for checking assumptions. 
+Particularly for the analysis of ancient DNA, $F$-statistics  are  a powerful tool to describe population genetic diversity. Here, I show that the geometry of $F$-statistics \citep{oteo-garcia2021} leads to a number of simple interpretations of $F$-statistics on a PCA plot. This allows for direct and quantitative comparisons between $F$-statistic-based results and PCA biplots. As PCA is often ran in an early step in data analysis, this also aids in generation of hypotheses that can be more directly evaluated using generative models, (e.g using a lower number of populations). It also allows reconciling apparent contradictions between $F$-statistics and PCA-plots; differences between the two data summaries are explained solely by higher PCs, and so whenever such contradictions arise, and so higher PCs will be informative for population structure. Previous interpretation of PCA in the context of population genetic models have primarily focused on the PCs, which can be derived analytically for trees \citep{cavalli-sforza1975} and homogeneous spatial models \citep{novembre2008a}. My interpretation here is different in that it puts more emphasis on the geometry itself, rather than directly interpreting the PCs. One consequence is that the results here are not impacted by sample ascertainment and sample sizes \citep{mcvean2009, novembre2008a}, which are common concerns in the interpretation of PCA. However, a very skewed sampling distribution will increases the likelihood that more or different PCs will have to be included in the analysis. From this perspective, one could envision a framework where $F$-statistics are used to decide which samples should be included to obtain a low-dimensional PCA-plot ``representative'' of the data
 
-As $F$-statistics are motivated by trees, they assume that populations are discrete, related as a graph, and that gene flow between populations is rare \citep{patterson2012,harney2021}. 
-However, in many regions, all humans populations are admixed to some degree \citep{pickrell2014}, and in regions such as Europe, genetic diversity is distributed continuously \citep{novembre2008}. This provides a challenge for interpretation; as many $F_3$ and $F_4$ statistics may indicate gene flow. In my example (Figure \ref{fig:f3}A), most Southern European populations are ``admixed'' between Basques and Turkish, but a more accurate model might be one of continuous variation where Basque and Turkish lie on one of multiple gradients; which is more directly visualized with PCA. There are a number of tools that have been developed that use multiple $F$-statistics to build complex models, such as \texttt{qpGraph} \citep{lazaridis2014} and \texttt{qpAdm} \citep{harney2021}. One issue with these approaches is that they are usually restricted to at most a few dozen populations. As ancient DNA data sets now commonly include thousands of individuals, analysts are faced with the challenge of which data to include. A common approach is to sample a large number of distinct models, and retain the ones that are compatible with the data. However, as both \texttt{qpGraph} and \texttt{qpAdm} assume that gene flow is rare and discrete, selecting sets of populations that did experience little gene flow will provide good fits. One example of this is the world foci data set used here, which contains only 33 populations from across the world, and which is well-approximated by two PCs. However, this ascertainment misses a large amount of variation; a more dense sampling would show that in many places human genetic diversity is very gradual and multi-layered \citep{lazaridis2014, peter2020a}. The PCA-based  interpretation offers an alternative that trades interpretability for robustness. Particularly interpreting a (normalized) $F_4$-statistic as a correlation coefficient translates to generalized models of gene flow. Separating $F$-statistics in a sum of model and residuals, and performing a PCA on the latter (such as in Figure \ref{fig:f4}D)  is another way how we can visualize $F$-statistics and evaluate the model fit.
+As $F$-statistics are motivated by trees, they assume that populations are discrete, related as a graph, and that gene flow between populations is rare \citep{patterson2012,harney2021}. However, in many regions, all humans populations are admixed to some degree \citep{pickrell2014}, and in regions such as Europe, genetic diversity is distributed continuously \citep{novembre2008, novembre2008a}. This provides a challenge for interpretation; as many $F_3$ and $F_4$ statistics may indicate gene flow. In my example (Figure \ref{fig:f3}A), most Southern European populations are ``admixed'' between Basques and Turkish, but a more accurate model might be one of continuous variation where Basque and Turkish lie on one of multiple gradients; which is more directly visualized with PCA. There are a number of tools that have been developed that use multiple $F$-statistics to build complex models, such as \texttt{qpGraph} \citep{lazaridis2014} and \texttt{qpAdm} \citep{harney2021}. One issue with these approaches is that they are usually restricted to at most a few dozen populations. As ancient DNA data sets now commonly include thousands of individuals, analysts are faced with the challenge of which data to include. A common approach is to sample a large number of distinct models, and retain the ones that are compatible with the data. However, as both \texttt{qpGraph} and \texttt{qpAdm} assume that gene flow is rare and discrete, selecting sets of populations that did experience little gene flow will provide good fits. One example of this is the world foci data set used here, which contains only 33 populations from across the world, and which is well-approximated by two PCs. However, this ascertainment misses a large amount of variation; a more dense sampling would show that in many places human genetic diversity is very gradual and multi-layered \citep{lazaridis2014, peter2020a}. The PCA-based  interpretation offers an alternative that trades interpretability for robustness. Particularly interpreting a (normalized) $F_4$-statistic as a correlation coefficient translates to generalized models of gene flow. Separating $F$-statistics in a sum of model and residuals, and performing a PCA on the latter (such as in Figure \ref{fig:f4}D)  is another way how we can visualize $F$-statistics and evaluate the model fit.
 
 To make this link directly applicable to data analysis, there are a number of -- primarily statistical -- concerns that will need to be addressed. Fist, PCA is most frequently run on individuals, whereas $F$-statistics are often calculated on populations. This is largely because in most workflows, PCA is run much earlier than $F$-statistics; it is a standard assumption of $F$-statistics that there is no population substructure \citep{patterson2012}, and an easy way to test that is ensure that all individuals cluster tightly on a PCA. 
 
@@ -274,19 +274,47 @@ An advantage of calculating $F$-statistics based on PCs is that they yield consi
 
 
 \appendix
-\section{Derivation}\label{appendix:fonpc}
+\section{Derivations}\label{appendix:fonpc}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{\thesection\arabic{equation}}
+Depending on a readers' background in linear algebra, these results may appear elementary; I include them here for reference and because they were not obvious to me at the onset of this project.
+\paragraph{$F$-statistics are invariant under a change-of-basis}
 \begin{eqnarray}
 F_2(X_i, X_j) &=& \sum_{l=1}^L \big( (x_{il} - \mu_l) -(x_{jl} -\mu_l)\big)^2 = F_2(Y_i, Y_j)\nonumber\\
 &=& \sum_{l=1}^L \big( \sum_k L_{kl}P_{ik} - \sum_kL_{kl}P_{kj}\big)^2\nonumber\\
 &=& \sum_{l=1}^L \left( \sum_k L_{kl} (P_{ik} -P_{jk}) \right)^2\nonumber\\
 &=& \sum_{l=1}^L \left( \sum_k L_{kl}^2 (P_{ik} -P_{jk})^2 + 2\sum_{k\neq k'} L_{kl}L_{k'l}(P_{ik} - P_{jk'})^2 \right)\nonumber\\
 &=& \sum_k \underbrace{\left(\sum_{l=1}^L L_{kl}^2\right)}_1 (P_{ik} -P_{jk})^2 + 2\sum_{k\neq k'}\underbrace{\left(\sum_{l=1}^L L_{kl}L_{k'l}\right)}_{0} (P_{ik} - P_{jk'})^2\nonumber\\
-&=& \sum_k (P_{ik} - P_{jk})^2
+&=& \sum_k (P_{ik} - P_{jk})^2 \label{eq:changeofbasis}
 \end{eqnarray}
 
 In summary, the first row shows that $F_2$ on the centered data will give the same results (as distances are invariant to translations), in the second row we apply the PC-decomposition. The third row is obtained from factoring out $L_{lk}$. Row four is obtained by multiplying out the sum inside the square term for a particular $l$. We have $k$ terms when for $\binom{k}{2}$ terms for different $k$'s.  Row five is obtained by expanding the outer sum and grouping terms by $k$.The final line is obtained by recognizing that $\ML$ is an orthonormal basis; where dot products of different vectors have lengths zero.
 
 Note that if we estimate $F_2$, unbiased estimators are obtained by subtracting the population-heterozygosities $H_i, H_j$ from the statistic. As these are scalars, they do not change above calculation.
+
+\paragraph{The region of negative $F_3$-statistics is a $n$-ball}
+Without loss of generality, assume that $X_1 = (r, 0, 0, \dots)$ and $X_2 = (-r, 0, 0, \dots)$, and let us assume that $X_x$ has coordinates $(x_1, x_2, \dots, x_S)$ Assuming $F_3(X_x; X_1, X_2) = 0$, equation \ref{eq:f3neg} becomes
+\begin{align}
+2 F_3(X_x; X_1, X_2) &=  \normsq{X_x - X_1} + \normsq{X_x - X_2}  - \normsq{X_1 - X_2} = 0 \nonumber\\
+&= \left[(x_1-r)^2 + \sum_{i=2}^S x_i^2\right] + \left[(x_1 + r)^2 + \sum_{i=2}^S x_i^2\right] - 4r^2 \nonumber\\
+&= 2 \left[\sum_{i=1}^S x_i^2 + r^2 + x_1r - x_1r\right] - 4r^2\nonumber\\
+F_3(X_x; X_1, X_2) & = -r^2 + \sum_{i=1}^S x_i^2 = -r^2 + \normsq{X_x} = 0  \text{,} \label{eq:f3sphere}
+\end{align}
+which is the equation of a $n$-sphere with radius $r$ and center at the origin, as assumed from the placing of $X_1$ and $X_2$. Now, assume that $F_3$ is negative, i.e. $F_3(X_x; X_1, X_2) = -k < 0$. Moving $r^2$ to the left we obtain
+\begin{equation}
+r^2 - k = \normsq{X_x} \text{,}
+\end{equation}
+which is another $n$-sphere with a smaller radius, showing that all points inside the $n$-sphere will have negative $F_3$-values.
+
+\paragraph{If a population lies outside the circle of this $n$-Sphere in any 2D-projection, $F_3$ is positive} 
+Assume the center of the $n$-sphere $C = \frac{X_1 + X_2}{2} = (c_1, c_2, \dots c_S)$, and $X_x = (x_1, x_2, \dots x_S)$.  Then, 
+\begin{align}
+F_3(X_x; X_1, X_2) &= \normsq{X_x - C} - r^2 \nonumber\\
+&= \underbrace{(x_1 - c_1)^2 + (x_2 - c_2)^2}_{>r^2} + \underbrace{\sum_{i=3}^S (x_i - c_i)^2}_{\geq 0} - r^2 \nonumber\\
+& > 0 \text{.}\label{eq:f3circle}
+\end{align}
+The condition $(x_1 - c_1)^2 + (x_2 - c_2)^2 >r^2$ is satisfied whenever $X_x$ is outside the circle obtained from projecting the $n$-sphere on the first two dimensions. An analogous argument applies for any low-dimensional representation.
+
 \bibliographystyle{plainnat}
 \bibliography{main}
 
