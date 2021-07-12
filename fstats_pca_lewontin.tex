@@ -108,7 +108,7 @@ where $\phi$ is the angle between $a$ and $b$.
  Furthermore, both $F_3$ and $F_4$ can be written as sums of $F_2$-statistics:
 \begin{subequations}
 	\begin{align}
-2F_3(X_1; X_2, X_3) &= F_2(X_2, X_3) - F_2(X_1, X_2) - F_2(X_1, X_3)\label{eq:f3fromf2}\\
+2F_3(X_1; X_2, X_3) &=  F_2(X_1, X_2) + F_2(X_1, X_3) - F_2(X_2, X_3)\label{eq:f3fromf2}\\
 2F_4(X_1, X_2; X_3, X_4) &= F_2(X_1, X_3) + F_2(X_2, X_4) - F_2(X_1,X_4) - F_2(X_2, X_3)\label{eq:f4fromf2}
 	\end{align}
 \end{subequations}
@@ -142,7 +142,7 @@ Thus,
 \begin{equation}
 F_2(P_i, P_j) = \underbrace{\sum_{k=1}^K(p_{ik} - p_{jk})^2}_{\hat{F_2}^{(K)}(P_i, P_j)} + \sum_{k=K+1}^n(p_{ik} - p_{jk})^2 \text{.}
 \end{equation}
-If we sum up the approximation errors $F_2 - \hat F_2$ over all pairs of populations, we obtain the Frobenius-norm of the error $\normsq{\MF - \hat{\MF}}_F$; which is precisely the function that is minimized in MDS \citep{jolliffe2013}. Thus, $\hat\MF^{(K)}$ is an optimal sparse approximation of $\MF$ for any $K$.
+If we sum up the approximation errors $F_2 - \hat F_2$ over all pairs of populations, we obtain the Frobenius-norm of the error $\normsq{\MF - \hat{\MF}}_F$; which is precisely the function that is minimized in MDS \citep{jolliffe2013}. Thus, $\hat\MF^{(K)}$ is an optimal low-rank approximation of $\MF$ for any $K$.
 
 \section{Material \& Methods}
 The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation in PCA-space, which can be approximated on PCA plots. In the next section I explore this connection in detail, and illustrate it on two sample data sets that I briefly introduce here. Both are based on the analyses by \cite{lazaridis2014}. The data is from the Reich lab compendium data set (v44.3), downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}, using data on the ``Human Origins''-SNP set (597,573 SNPs). SNPs with missing data in any population are excluded. The code used to create all figures and analyses will be available on \url{https://github.com/BenjaminPeter/fstats_pca}.
