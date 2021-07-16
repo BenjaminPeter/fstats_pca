@@ -77,10 +77,10 @@ There are several algorithms that are used to perform PCAs, the most common one 
 	\MY = \MC\MX = (\mathbf{U} \MSINGULAR) \mathbf{V}^T = \MP\ML\text{,}
 	\end{equation}
 	
-	where $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix that subtracts row means, with $\mathbf{I}, \mathbf{1}$  the identity matrix and a matrix of ones, respectively. The orthogonal matrix of principal components $\MP=\mathbf{U}\MSINGULAR$ has size $n \times n$ and is used to reveal population structure. The SNP loadings $\ML=\mathbf{V}^T$ are an orthonormal matrix of size $n \times S$, its rows give the contribution of each SNP to each PC, it is often useful to look for outliers that might be indicative of selection \citep[e.g][]{francois2010}.
+	where $\MC = \mathbf{I} -\frac{1}{n}\mathbf{1}$ is a centering matrix that subtracts row means, with $\mathbf{I}, \mathbf{1}$  the identity matrix and a matrix of ones, respectively. For any matrix $\MY$, we can perform a singular value decomposition $\MY = \mathbf{U}\MSINGULAR\mathbf{V}^T$ which, in the context of PCA, is interpreted as follows: The orthogonal matrix of principal components $\MP=\mathbf{U}\MSINGULAR$ has size $n \times n$ and is contains information about population structure. The SNP loadings $\ML=\mathbf{V}^T$ are an orthonormal matrix of size $n \times S$, its rows give the contribution of each SNP to each PC, it is often used to look for outliers, which might be indicative of selection \citep[e.g][]{francois2010}.
 	
 	In many  implementations \citep[e.g.][]{patterson2006}, SNPs are weighted by
-    the inverse of their standard deviation. As this weighting often makes little
+    the inverse of their standard deviations. As this weighting often makes little
     difference in practice \citep{mcvean2009}, I will assume throughout that SNPs
     are unweighted.
 
@@ -139,10 +139,16 @@ As $F_3$ and $F_4$ can be written as sums of $F_2$-terms (Eqs. \ref{eq:f3fromf2}
 
 In most applications, we do not use all PCs, but instead truncate to the first $K$ PCs, which explain most of the between-population genetic variation.
 Thus, 
+\begin{align}
+F_2(P_i, P_j) &=& \sum_{k=1}^K(p_{ik} - p_{jk})^2 &+& \sum_{k=K+1}^n(p_{ik} - p_{jk})^2&&&&\nonumber\\
+&=& {\hat{F_2}^{(K)}(P_i, P_j)} &+& {\epsilon^{(K)}(P_i, P_j)}&&&& \text{.}
+\end{align}
+In this notation, $\hat{F_2}^{(K)}$ is the approximation of $F_2$ with only the first $K$ PCs considered, and $\epsilon^{(K)}$ is the corresponding approximation error.
+If we sum up the squared approximation errors over all pairs of populations, we obtain 
 \begin{equation}
-F_2(P_i, P_j) = \underbrace{\sum_{k=1}^K(p_{ik} - p_{jk})^2}_{\hat{F_2}^{(K)}(P_i, P_j)} + \sum_{k=K+1}^n(p_{ik} - p_{jk})^2 \text{.}
+\sum_{i,j} \epsilon^{(K)}(P_i, P_j)^2 = \sum_{i,j} \left(\hat{F_2}^{(K)}(P_i, P_j) - F_2^{(K)}(P_i, P_j)\right)^2 = \normsq{\MF - \hat{\MF}}_F \text{,}
 \end{equation}
-If we sum up the approximation errors $F_2 - \hat F_2$ over all pairs of populations, we obtain the Frobenius-norm of the error $\normsq{\MF - \hat{\MF}}_F$; which is precisely the function that is minimized in MDS \citep{jolliffe2013}. Thus, $\hat\MF^{(K)}$ is an optimal low-rank approximation of $\MF$ for any $K$.
+where the Frobenius-norm $\normsq{\cdot}_F$ of a matrix is defined as the square root of the sum-of-squares of all its elements. This is precisely the function that is minimized in MDS \citep{jolliffe2013}. In that sense, $\hat\MF^{(K)}$ is the optimal low-rank approximation of $\MF$ for any $K$ in that it minimizes the approximation error of all $F_2$-statistics.
 
 \section{Material \& Methods}
 The theory outlined in the previous section suggests that $F$-statistics have a geometric interpretation in PCA-space, which can be approximated on PCA plots. In the next section I explore this connection in detail, and illustrate it on two sample data sets that I briefly introduce here. Both are based on the analyses by \cite{lazaridis2014}. The data is from the Reich lab compendium data set (v44.3), downloaded from \url{https://reich.hms.harvard.edu/allen-ancient-dna-resource-aadr-downloadable-genotypes-present-day-and-ancient-dna-data}, using data on the ``Human Origins''-SNP set (597,573 SNPs). SNPs with missing data in any population are excluded. The code used to create all figures and analyses will be available on \url{https://github.com/BenjaminPeter/fstats_pca}.
@@ -151,7 +157,7 @@ The theory outlined in the previous section suggests that $F$-statistics have a 
 This data set represents global human genetic variation (638 individuals from 33 population), as used by \citep{lazaridis2014}. As this data set is very sparse, it may be well-approximated by an admixture graph.
 
 
-\paragraph{West-Eurasian data set}
+\paragraph{Western Eurasian data set}
 This data set of 1,119 individuals from 62 populations contains  present-day individuals from the Eastern Mediterranean, Caucasus and Europe. It is frequently used as a basis of comparison for ancient genetic analyses of Western Eurasian individuals \citep{patterson2012, lazaridis2014}. Genetic differentiation in this region is low and closely mirrors geography \citep{novembre2008}, and thus may not be particularly graph-like.
 
 
@@ -169,10 +175,10 @@ I perform analyses at the level of populations to ease presentation.  It is an a
 %\subsection{Geometry of $F$-statistics in PC-space}
 The transformation from the previous section allows us to consider the geometry
 of $F$-statistics in PCA-space. The relationships we will discuss formally only
-hold if we use all $n-1$ PCs. However, the appeal of PCA is that frequently,
+hold if we use all PCs. However, the appeal of PCA is that frequently,
 only a very small number $K \ll n$ of PCS contain most information that is
 relevant for population structure (for visualization
-$K=2$ is often used).
+$K=2$ is often used). 
 
 \subsection{$F_2$ in PC-space}
 The $F_2$-statistic is an estimate of the squared Euclidean distance between two
@@ -186,22 +192,22 @@ that substantial variation is hidden on higher PCs.
 \subsection{When are admixture-$F_3$ statistics negative?}
 Given two source populations $X_1$, $X_2$, can we predict which populations $X_x$ could be considered admixed between these populations based on PCA? Since the allele frequencies of $X_x$ are intermediate between those of $X_1$ and $X_2$, we would expect it to lie between $X_1$ and $X_2$, with the exact location depending on sample sizes \citep{brisbin2012, mcvean2009}. 
 
-The $F_3$-statistic gives a more precise interpretation: we are looking for the space where $F_3$ is negative, i.e. 
+The $F_3$-statistic gives a more precise interpretation: we are looking for the space where $F_3$ is negative, i.e. the set of points $X_x$ for which 
 \begin{eqnarray}
 2 F_3(X_x; X_1, X_2) &=& 2\langle  X_x - X_1, X_x - X_2 \rangle \nonumber\\
-      &=& \normsq{X_x - X_1} + \normsq{X_x - X_2}  - \normsq{X_1 - X_2} < 0 \label{eq:f3neg}
+      &=& \normsq{X_x - X_1} + \normsq{X_x - X_2}  - \normsq{X_1 - X_2} < 0 \label{eq:f3neg}\text{.}
 \end{eqnarray}
-By the Pythagorean theorem, $F_3 = 0 $ if and only if $X_1, X_2$ and $X_x$ form a right-angled triangle. The associated region where $F_3=0$ is a $n$-sphere (or a circle in two dimensions) with diameter $\overline{X_1X_2}$. $F_3$ is negative when the triangle is obtuse, i.e. $X_x$ is admixed if it lies inside the $n$-ball with diameter $\overline{X_1X_2}$ (Figure \ref{fig:geom}B, Equation \ref{eq:f3sphere}). 
+By the Pythagorean theorem, $F_3 = 0 $ if and only if $X_1, X_2$ and $X_x$ form a right-angled triangle. The associated region where $F_3=0$ is a $n$-sphere (or a circle in two dimensions) with diameter $\overline{X_1X_2}$ (The overline notation denotes a line segment). $F_3$ is negative when the triangle is obtuse, i.e. $X_x$ is admixed if it lies inside the $n$-ball with diameter $\overline{X_1X_2}$ (Figure \ref{fig:geom}B, Equation \ref{eq:f3sphere}). 
 
-\paragraph{$F_3$ on a 2D-plot.} 
- If we project this $n$-ball on a two-dimensional plot, $\overline{X_1X_2}$ will usually not align with the PCs; thus the ball may be somewhat larger. This geometry is perhaps easiest visualized on a globe. If we look at the globe from a view point parallel to the equator, both the north and south poles are visible at the very edge of the circle. But if we look at it from above the north pole, the north- and south-poles will be at the very same point.
+\paragraph{$F_3$ on a 2D PCA-plot.} 
+ If we project this $n$-ball on a two-dimensional plot, $\overline{X_1X_2}$ will usually not align with the PCs; thus the ball may be somewhat larger than it appears on the plot. This geometry is perhaps easiest visualized on a globe. If we look at the globe from a view point parallel to the equator, both the north and south poles are visible at the very edge of the circle. But if we look at it from above the north pole, the north- and south-poles will be at the very same point.
  
  Thus if $\hat{F}_3 \ll F_3$, the true circle will be bigger than would be predicted from a 2D-plot. In this case, substantial relevant genetic differentiation is ``hidden'' in the higher PCs, and populations that appear inside the circle on a PCA-plot may, in fact, have positive $F_3$-statistics. This is because they are outside the $n$-ball in higher dimensions. The converse interpretation is more strict: if a population lies outside the circle on \emph{any} 2D-projection, $F_3$ is guaranteed to be bigger than 0 (see Equation \ref{eq:f3circle} in the Appendix).
 
 \paragraph{Example}
-As an example, I visualize the admixture statistic $F_3(X; \text{Basque}, \text{Turkish})$, on the first two PCs of the Westeurasian data set (Figure \ref{fig:f3}A). In this case, the projected $n$-ball (light gray) and circle based on 2D (dark gray) align relatively closely, but several populations inside the ball (e.g. Sardinian, Finnish) have, in fact, positive $F_3$-values. This reveals that the first two PCs do not capture all the genetic variation relevant for Southern European population structure. This is expected because for spatially continuous populations, PCA will not be sparse \citep{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
+As an example, I visualize the admixture statistic $F_3(X; \text{Basque}, \text{Turkish})$, on the first two PCs of the Western Eurasian data set (Figure \ref{fig:f3}A). In this case, the projected $n$-ball (light gray) and circle based on 2D (dark gray) align relatively closely, but several populations inside the ball (e.g. Sardinian, Finnish) have, in fact, positive $F_3$-values. This reveals that the first two PCs do not capture all the genetic variation relevant for Southern European population structure. This is expected because for spatially continuous populations, PCA will not be sparse \citep{novembre2008a}.  Consequently, approximating $F_3$ by the first two or ten PCs (Figure \ref{fig:f3}B) only gives a coarse approximation of $F_3$, and from Figure \ref{fig:f3}C we see that many higher PCs contribute to $F_3$ statistics.
 
-However, many populations, particularly from the Levant and Caucasus, fall outside the circle, which allows us to immediately conclude that their $F_3$-statistics must be positive.
+However, many populations, particularly from Western Asia and the Caucasus, fall outside the circle. This allows us to immediately conclude that their $F_3$-statistics must be positive.
 
 
 \begin{figure}[!ht]
@@ -211,12 +217,14 @@ However, many populations, particularly from the Levant and Caucasus, fall outsi
 \end{figure}
 
 \subsection{$F$-statistics as projections}
-The inner product $\langle X_x - X_1, X_x - X_2 \rangle$ is closely related to the projection of a vector onto another one. This interpretation is useful either when calculating an outgroup-$F_3$-statistic, or when we want to find the ``best'' admixture source $X_2$ if we assume the admixed population $X_x$ and one source $X_1$ are known.  The angle between $X_x - X_1$ and $X_x - X_2$ is obtuse if $X_2$ is in the half-plane whose boundary goes through $X_x$ and is orthogonal to $\overline{X_XX_1}$ (Figure \ref{fig:geom}C), and its value is proportional to the projection onto $X_X - X_1$. A common interpretation guide is to use the population which yields the most negative $F_3$-statistic as the population which is most closely related to the ``true'' source of admixture \citep{patterson2012}; on a PCA-plot this corresponds to using the population that is furthest away from $X_x$ on the direction $X_x - X_1$.
+The inner product $\langle X_x - X_1, X_x - X_2 \rangle$ is closely related to the projection of a vector onto another one. This interpretation is useful either when calculating an outgroup-$F_3$-statistic, or when we want to find the ``best'' admixture source $X_2$ if we assume the admixed population $X_x$ and one source $X_1$ are known.  The angle between $X_x - X_1$ and $X_x - X_2$ is obtuse if $X_2$ is in the half-plane whose boundary goes through $X_x$ and is orthogonal to $\overline{X_XX_1}$ (Figure \ref{fig:geom}C), and its value is proportional to the projection onto $X_X - X_1$. This can be useful for interpretation: if potential source pulations are related according to a tree, the admixture axis will be orthogonal to the tree branches connecting potential source populations, and the population with the most negative $F$-statistic will be the most likely source \citep{patterson2012}. 
 
-This projection argument also helps to interpret Outgroup-$F_3$-statistic on a PCA-plot (Figure \ref{fig:geom}D), but in this case we aim to find the most closely related population as that with the highest $F_3$-statistic. 
+On the other hand, if population relationships are more gradual, the interpretation is different: The lowest $F_3$-statistics will correspond to the populations where the $n$-sphere is biggest, i.e. the ends of the cline.  This is a practical issuel for example \cite{patterson2012} observed that many Western Eurasian populations have the most negative $F_3$-statistics if one of the source population is from Europe, and one from South America, which can be thought of a gradient in relationships throughout Eurasia and the Americas. Depending on whether we think of population relationships as more clinal or tree-like, negative $F_3$-statistics will thus have very different interpretations.
+
+This projection argument also helps to interpret Outgroup-$F_3$-statistic on a PCA-plot (Figure \ref{fig:geom}D). In this context, we interpret the statistic $F_3(O; U, X_i)$ as the projection of $X_i$ onto the line segment $\overline{OU}$ from the outgroup $O$ to the test population $U$. The population $X_i$ with the largest $F_3$-statistic will have the largest projected segment, and is thus interpreted as the population most closely related to $U$. 
 
 \paragraph{Example}
-Again, these projection will be orthogonal when using the full data, and may only be approximately orthogonal when approximated using the first two PCs. In Figure \ref{fig:f3}D, I visualize the outgroup-$F_3$-statistic $F_3(\text{Mbuti}; \text{Mozabite}, X_i)$, i.e. a statistic that aims to find the population most closely related to Mozabite (a Berber ethnic group from the northern Sahara), assuming the Mbuti are an outgroup. On a PCA, we can interpret this $F_3$ statistic as the projection of the line segment from $\text{Mbuti}$ to population $X_i$ onto the line through Mbuti and Mozabite (black line). For each population, the projection is indicated with a grey line. In the full data space, this line is always orthogonal to the segment Mbuti-Mozabite, but on the plot (i.e. the subspace spanned by the first two PCs), this is not necessarily the case. We see that particularly the samples from East Asia, Siberia and the Americas project very close to orthogonally, suggesting that most of the variation is captured by these first two PCs, and the coloring based on the full $F_3$-statistics shows that in this case, the first two PCs approximate the $F_3$-statistic very well. We can quantify this and find that the first two PCs slightly underestimate the absolute value of $F_3$ (Figure \ref{fig:f3}E), but keep the relative ordering. This $F_3$-statistic is also very sparse, with e.g. PCs 3-5, 7 and 10 having almost zero contribution to all statistics (Figure \ref{fig:f3}F), and PCs 6, 8 and 9 having a similar non-zero contribution for almost all statistics, likely because these PCs explain within-African variation.
+Again, these projections will be orthogonal when using the full data, and may only be approximately orthogonal when approximated using the first two PCs. In Figure \ref{fig:f3}D, I visualize the outgroup-$F_3$-statistic $F_3(\text{Mbuti}; \text{Mozabite}, X_i)$, i.e. a statistic that aims to find the population most closely related to Mozabite (a Berber ethnic group from the northern Sahara), assuming the Mbuti are an outgroup. On a PCA, we can interpret this $F_3$ statistic as the projection of the line segment from $\text{Mbuti}$ to population $X_i$ onto the line through Mbuti and Mozabite (black line). For each population, the projection is indicated with a grey line. In the full data space, this line is always orthogonal to the segment Mbuti-Mozabite, but on the plot (i.e. the subspace spanned by the first two PCs), this is not necessarily the case.  The coloring is based on the $F_3$-statistic calculated from all the data. In this case, the first two PCs approximate the $F_3$-statistic very well: Particularly the samples from East Asia, Siberia and the Americas project very close to orthogonally, suggesting that most of the variation is captured by these first two PCs.  We can quantify this and find that the first two PCs slightly underestimate the absolute value of $F_3$ (Figure \ref{fig:f3}E), but keep the relative ordering. This $F_3$-statistic is also very sparse, with e.g. PCs 3-5, 7 and 10 having almost zero contribution to all statistics (Figure \ref{fig:f3}F), and PCs 6, 8 and 9 having a similar non-zero contribution for almost all statistics, likely because these PCs explain within-African variation.
 
 
 \subsection{$F_4$-statistics as angles}
@@ -233,7 +241,7 @@ Since $F_4$ is a covariance, its magnitude lacks an interpretation. Therefore, c
 where $\phi$ is the angle between $X_1 - X_2$ and $X_3 - X_4$. Thus, independent drift events lead to $\cos(\phi) = 0$, so that the angle is 90 degrees, whereas an angle close to zero means $\cos(\phi)\approx 1$, which means most of the genetic drift on this branch is shared.
 
 \paragraph{Example}
-To illustrate the angle interpretation I again use the Westeurasian data. The PCA-biplot shows two roughly parallel clines (Figure \ref{fig:f3}A), a European gradient (from Sardinian to Chuvash), and a Asian cline (from Arab to Caucasus populations). This is quantified in Figure \ref{fig:f4}A, where I plot the angle corresponding to $F_4(X, \text{Sardinian}; \text{Saudi}, \text{Georgian})$. For most European populations, using two PCs (green points) gives an angle close to zero, corresponding to a correlation coefficient between the two clines of $r>0.9$. Just adding PC3 (blue), however, shows that the parallelism of the clines is spurious: Using three PCs or the full data (red) shows that most correlations are low. I arrive at a similar interpretation from the spectrum of these statistics (Figure \ref{fig:f4}B), which has high loadings for the first three PCs, with minimal contributions from the higher ones.
+To illustrate the angle interpretation I again use the Western Eurasian data. The PCA-biplot shows two roughly parallel clines (Figure \ref{fig:f3}A), a European gradient (from Sardinian to Chuvash), and a Asian cline (from Arab to Caucasus populations). This is quantified in Figure \ref{fig:f4}A, where I plot the angle corresponding to $F_4(X, \text{Sardinian}; \text{Saudi}, \text{Georgian})$. For most European populations, using two PCs (green points) gives an angle close to zero, corresponding to a correlation coefficient between the two clines of $r>0.9$. Just adding PC3 (blue), however, shows that the parallelism of the clines is spurious: Using three PCs or the full data (red) shows that most correlations are low. I arrive at a similar interpretation from the spectrum of these statistics (Figure \ref{fig:f4}B), which has high loadings for the first three PCs, with minimal contributions from the higher ones.
 
 \subsection{Other projections}
 So far, I used eq. \ref{eq:fpc} to interpret $F$-statistics on a PC-plot, but the argument holds for \emph{any} orthonormal transformation. This allows for a variety of visualizations that use both $F$-statistics and PCs. The motivation for this is that sometimes we wish to partition the variation in the data into a subspace of interest, and an orthogonal residual space that captures the information discarded. Examples where analyses are restricted to such subspaces include the $F_4$-ratio test \citep{patterson2012, petr2019}, \texttt{qpWave} \citep{skoglund2015} and \texttt{qpAdm} \citep{harney2021}. For the $F_4$-ratio, for example, a ratio
@@ -252,7 +260,7 @@ The percentage of between-population variance explained by the Sardinia-Yoruba a
 
 \begin{figure}[!ht]
 \includegraphics[width=\textwidth]{figures/fig_f4_data.pdf}	
-	\caption{\textbf{PCA and $F_4$-statistics} A: Projection angle and correlation coefficient $r$ representation of $F_4(X, Sardinian; Saudi, Georgian)$ (red) in the Westeurasian data set, and approximations using two (green) and three (blue) PCs.
+	\caption{\textbf{PCA and $F_4$-statistics} A: Projection angle and correlation coefficient $r$ representation of $F_4(X, Sardinian; Saudi, Georgian)$ (red) in the Western Eurasian data set, and approximations using two (green) and three (blue) PCs.
 	B: Spectrum of select $F_4$-statistics in the Western Eurasian data set.  C: Spectrum of $F-4$-statistics in World data set. D: Scatterplot of $F_3$-projection on Sardinian-Yoruba axis  and residual PC1.
 	E: Percent variance explained from of the projection based on $F_3$ in panel D and first nine residual PCs (light gray), compared with percent variance explained by first ten PCs (dark gray).
 	}
@@ -271,8 +279,11 @@ A second difference is that frequently, rare SNPs are weighted higher in PCA, wh
 The third and perhaps biggest gap are statistical issues. The treatment here focuses on the mean estimated $F$-statistic, but many  applications of $F$-statistics are based on hypothesis tests \citep{patterson2012}. This requires estimating accurate standard errors for these statistics, which is difficult since nearby SNPs will be correlated due to recombination \citep{hahn2018}. In contrast, PCA jointly models the covariance matrix due to population structure and sampling, so if hypothesis tests are desired this will need to be incorporated.
 
 An advantage of calculating $F$-statistics based on PCs is that they yield consistent estimtates. For both data sets I investigated here, the matrix $\MF$ of $F$-statistics obtained  using admixtools2 is not a proper squared Euclidean distance matrix, i.e. it is not negative semidefinite and has imaginary PCs. A model-based framework based on probabilistic PCA \citep{hastie2015, meisner2021, agrawal2020} would likely be able to generate consistent $F$-statistics and PCs, while incorporating sampling error and missing data.
+\newpage
+\bibliographystyle{plainnat}
+\bibliography{main}
 
-
+\newpage
 \appendix
 \section{Derivations}\label{appendix:fonpc}
 \setcounter{equation}{0}
@@ -315,7 +326,5 @@ F_3(X_x; X_1, X_2) &= \normsq{X_x - C} - r^2 \nonumber\\
 \end{align}
 The condition $(x_1 - c_1)^2 + (x_2 - c_2)^2 >r^2$ is satisfied whenever $X_x$ is outside the circle obtained from projecting the $n$-sphere on the first two dimensions. An analogous argument applies for any low-dimensional representation.
 
-\bibliographystyle{plainnat}
-\bibliography{main}
 
 \end{document}
