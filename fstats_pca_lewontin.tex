@@ -140,7 +140,7 @@ Thus,
 F_2(P_i, P_j) &=& \sum_{k=1}^K(p_{ik} - p_{jk})^2 &+& \sum_{k=K+1}^n(p_{ik} - p_{jk})^2&&&&\nonumber\\
 &=& {\hat{F_2}^{(K)}(P_i, P_j)} &+& {\epsilon^{(K)}(P_i, P_j)}&&&& \text{.}
 \end{align}
-In this notation, $\hat{F_2}^{(K)}$ is the approximation of $F_2$ with only the first $K$ PCs considered, and $\epsilon^{(K)}$ is the corresponding approximation error.
+In this notation, $\hat{F_2}^{(K)}$ is the approximation of $F_2$ with only the first $K$ PCs considered, and $\epsilon^{(K)}$ is the corresponding approximation error. I will omit the superscript when the exact number of PCs is not relevant.
 If we sum up the squared approximation errors over all pairs of populations, we obtain 
 \begin{equation}
 \sum_{i,j} \epsilon^{(K)}(P_i, P_j)^2 = \sum_{i,j} \left(\hat{F_2}^{(K)}(P_i, P_j) - F_2^{(K)}(P_i, P_j)\right)^2 = \normsq{\MF - \hat{\MF}}_F \text{,}
@@ -182,7 +182,7 @@ populations. It thus corresponds to the squared distance between populations in 
 reflects the intuition that closely related populations  will be close to each other on a
 PCA-plot, and have low pairwise $F_2$-statistics. In converse, if two
 populations have high $F_2$ but appear on the same point on an PCA-plot, this suggests
-that substantial variation is hidden on higher PCs.
+that substantial variation is hidden on higher PCs, and we may want to investigate the PCs which contribute a large distance to this particular $F_2$-statistic in order to better understand and visualize their relationship.
 
 
 \subsection{When are admixture-$F_3$ statistics negative?}
