@@ -209,7 +209,7 @@ ids = c(idx, idy, idz)
 
 }
 
-if(T){
+if(F){
 f2s = admixtools::read_f2("f4ratio"); sample_list= rownames(f2s)[!rownames(f2s) %in% "Denisova.DG"]
 f2s = admixtools::read_f2("f4ratio", pops=sample_list )
 pcmat = pca_from_f2s(f2s)

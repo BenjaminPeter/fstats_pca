@@ -3,12 +3,12 @@ require(tidyverse)
 require(glue)
 
 
-data_loc = 'subdata/f4ratio'
+data_loc = 'subdata/ancient'
 inds = read_table2(glue("{data_loc}.ind"), col_names=c("iid","sex", "pop"))
 
 
 
-f2loc1 = 'f4ratio'
+f2loc1 = 'ancient'
 
 #afs = admixtools::extract_afs(data_loc, pops=sample_list, 
 #                              outdir=glue("{f2loc1}_afs"),format="eigenstrat", 
