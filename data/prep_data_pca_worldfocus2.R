@@ -15,5 +15,6 @@ f2loc1 = 'worldfoci2'
 #                              cols_per_chunk=1000)
 f2s = admixtools::extract_f2(data_loc, 
                              outdir=f2loc1, maxmem=64000, 
+                             blgsize = 0.005,
                              overwrite=T, n_cores=100)
 
