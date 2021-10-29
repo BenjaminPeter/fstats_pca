@@ -1,13 +1,17 @@
 source("fscripts.R")
 library(ggpubr)
+library(ggrepel)
+library(glue)
+
+R = 1.5
 BTHEME = theme_classic() + theme(legend.position="none")
 
 if(T){
 f2s = admixtools::read_f2("westeurasian1/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
-idx = "Basque"
-idy = "Turkish"
+idx = "Sardinian"
+idy = "Finnish"
 
 sample_list = pcs$pop 
 
@@ -20,14 +24,25 @@ circle = pcs %>% filter(pop %in% c(idx, idy)) %>% select(-pop)
 circle_df = colMeans(circle) %>% t %>% as.data.frame
 circle_df$radius = (dist(circle) %>% as.matrix)[1,2] / 2
 circle_df$r0 = (dist(circle[,1:2]) %>% as.matrix)[1,2] / 2
+circle_df$r34 = (dist(circle[,3:4]) %>% as.matrix)[1,2] / 2
+circle_df$r23 = (dist(circle[,2:3]) %>% as.matrix)[1,2] / 2
+circle_df$r56 = (dist(circle[,5:6]) %>% as.matrix)[1,2] / 2
 
 pcs2 = pcs %>% left_join(f3, by=c(pop="pop1")) %>% 
     mutate(col=as.factor(cut(est, c(-1,-1e-10,1e-10,2), labels=F) ))
 P1 = ggplot() + 
     geom_circle(aes(x0=PC1, y0 =PC2, r=radius), data=circle_df, color='lightgray', fill='lightgray') +
     geom_circle(aes(x0=PC1, y0 =PC2, r=r0), data=circle_df, color='darkgray', fill='#808080') +
-    geom_text(aes(x=PC1, y=PC2, label=pop, color=col), data=pcs2) +
+    geom_text_repel(aes(x=PC1, y=PC2, label=pop, color=col), data=pcs2) +
+    geom_point(aes(x=PC1, y=PC2, label=pop, color=col), data=pcs2) +
+    coord_fixed(xlim=c(-0.05, 0.05), ylim=c(-0.03, 0.03))  + BTHEME
+P1b = ggplot() + 
+    geom_circle(aes(x0=PC2, y0 =PC3, r=radius), data=circle_df, color='lightgray', fill='lightgray') +
+    geom_circle(aes(x0=PC2, y0 =PC3, r=r23), data=circle_df, color='darkgray', fill='#808080') +
+    geom_text_repel(aes(x=PC2, y=PC3, label=pop, color=col), data=pcs2) +
+    geom_point(aes(x=PC2, y=PC3, label=pop, color=col), data=pcs2) +
     coord_fixed()  + BTHEME
+
 
 f3pc = f3_from_pc_matrix(pcmat, idx, idy) %>% 
     as.data.frame %>% rownames_to_column("pop1") %>% 
@@ -37,7 +52,7 @@ f3pc = f3_from_pc_matrix(pcmat, idx, idy) %>%
 P2 = f3pc %>% select(pop1, est, PC1_2, PC1_10) %>% 
     pivot_longer(starts_with("PC"), names_to='PC', values_to="f3") %>% 
     ggplot(aes(x=est, y=f3, color=PC)) + geom_point() + geom_abline() +
-    xlab("f3(X; Turkish, Basque)") + ylab("approx. f3")  + BTHEME +
+    xlab(glue("f3(X; {idx}, {idy})")) + ylab("approx. f3")  + BTHEME +
     coord_cartesian(xlim=c(-0.001, 0.005), ylim=c(-0.001, 0.005))
 
 P5 = f3pc %>% pivot_longer(PC1:PC10) %>% 
@@ -45,15 +60,18 @@ P5 = f3pc %>% pivot_longer(PC1:PC10) %>%
     ggplot(aes(x=PC, y=value, group=PC)) + 
     geom_hline(yintercept=0, color='lightgray') + 
     geom_boxplot() + 
-    ylab("f3(X; Tur., Bas.)") + 
+    ylab("f3(X; Sar, Fin)") + 
     scale_x_continuous(breaks=1:10) + BTHEME
+ggsvg(P1, "f3_westeurasia1.svg", width=4 * R, height=2.5 * R)
+ggsvg(P2, "f3_westeurasia2.svg", width=1.5 * R, height=1.25 * R)
+ggsvg(P5, "f3_westeurasia3.svg", width=1.5 * R, height=1.25 * R)
 }
-if(T){
+if(F){
 f2s = admixtools::read_f2("worldfoci2")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
 idx = "Mbuti"
-idy = "Mozabite"
+idy = "Sardinian"
 
 sample_list = pcs$pop 
 
@@ -80,41 +98,45 @@ df = tibble(x=pcs$PC1,
 
 
 pcs2 = pcs %>% left_join(f3, by=c(pop="pop3")) 
+pcs2
+pcs2[pcs2$pop %in% c(idx, idy),'est'] = NA
 P3 = ggplot() + 
     geom_abline(intercept=intercept, slope=slope) +
+    geom_segment(data=df, aes(x=x, y=y, xend=xend, yend=yend), alpha=.3) +
     #geom_circle(aes(x0=PC1, y0 =PC2, r=radius), data=circle_df, color='lightgray', fill='lightgray') +
     #geom_circle(aes(x0=PC1, y0 =PC2, r=r0), data=circle_df, color='darkgray', fill='darkgray') +
-    geom_text(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
-    scale_color_viridis_c(direction=1) + 
-    geom_segment(data=df, aes(x=x, y=y, xend=xend, yend=yend), alpha=.3) +
-    coord_fixed() + BTHEME
+    geom_text_repel(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
+    geom_point(aes(x=PC1, y=PC2, label=pop, color=est), data=pcs2) +
+    scale_color_viridis_c(direction=1, na.value='red') + 
+    coord_fixed(xlim=c(-.1, .2), ylim=c(-.1, .1)) + BTHEME +
+    xlab('PC1') + ylab('PC2')
+
 
 
 P4 = f3pc %>% select(pop3, est, PC1_2, PC1_10) %>% 
     filter(!pop3 %in% c(idx, idy)) %>%
     pivot_longer(starts_with("PC"), names_to='PC', values_to="f3") %>% 
     ggplot(aes(x=est, y=f3, color=PC)) + geom_point() + geom_abline() + 
-    xlab("f3(Mbuti, Mozabite, X)") + ylab("approx. f3")  + BTHEME
+    xlab(glue("f3({idx}; {idy}, X)")) + ylab("approx. f3")  + BTHEME
 P6 = f3pc %>% pivot_longer(PC1:PC10) %>% 
     mutate(PC=as.integer(substr(name, 3,10))) %>% 
     ggplot(aes(x=PC, y=value, group=PC)) + 
     geom_hline(yintercept=0, color='lightgray') + 
     geom_boxplot() + 
-    ylab("f3(Mbu.; Moz., X)") + 
+    ylab("f3(Mbu; Sar, X)") + 
     scale_x_continuous(breaks=1:10) + BTHEME
+ggsvg(P3, "f3_world1.svg", width=3.5 * R, height=2.5 * R)
+ggsvg(P4, "f3_world2.svg", width=1.5 * R, height=1.5 * R)
+ggsvg(P6, "f3_world3.svg", width=1.5 * R, height=1.5 * R)
 }
 
 
-ggsvg(P1, "f3_westeurasia1.svg", width=3.5, height=3)
-ggsvg(P2, "f3_westeurasia2.svg", width=3.5, height=1)
-ggsvg(P3, "f3_world1.svg", width=3.5, height=3)
-ggsvg(P4, "f3_world2.svg", width=3.5, height=1)
-ggsave( "f3_westeurasia1.png", P1, width=3.5, height=3, scale=1.5)
-ggsave( "f3_westeurasia2.png", P2, width=1.75, height=1, scale=1.5)
-ggsave( "f3_westeurasia3.png", P5, width=1.75, height=1, scale=1.5)
-ggsave( "f3_world1.png", P3, width=3.5, height=3, scale=1.5)
-ggsave( "f3_world2.png", P4, width=1.75, height=1, scale=1.5)
-ggsave( "f3_world3.png", P6, width=1.75, height=1, scale=1.5)
+#ggsave( "f3_westeurasia1.png", P1, width=3.5, height=3, scale=1.5)
+#ggsave( "f3_westeurasia2.png", P2, width=1.75, height=1, scale=1.5)
+#ggsave( "f3_westeurasia3.png", P5, width=1.75, height=1, scale=1.5)
+#ggsave( "f3_world1.png", P3, width=3.5, height=3, scale=1.5)
+#ggsave( "f3_world2.png", P4, width=1.75, height=1, scale=1.5)
+#ggsave( "f3_world3.png", P6, width=1.75, height=1, scale=1.5)
 
 
 

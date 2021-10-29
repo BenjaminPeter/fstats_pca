@@ -16,7 +16,9 @@ pca_from_f2s <- function(f2s, force_nonneg=F){
 
     cmat = double_center(f2mat)
 
-    E = eigen(nearPD(-cmat/2)[[1]])
+    #E = eigen(nearPD(-cmat/2)[[1]])
+    E = eigen(-cmat/2)
+    E$values[E$values < 0] = 0
 
     pcs = t(t(E$vectors) * sqrt(pmax(E$values, 0))) 
     rownames(pcs) = rownames(f2mat)
@@ -35,7 +37,9 @@ pca_from_f4 <- function(f4){
 
     cmat = double_center(f4mat)
 
-    E = eigen(nearPD(-cmat/2)[[1]])
+    #E = eigen(nearPD(-cmat/2)[[1]])
+    E = eigen(-cmat/2)
+    E$values[E$values < 0] = 0
 
     pcs = t(t(E$vectors) * sqrt(pmax(E$values, 0))) 
     rownames(pcs) = rownames(f4mat)
