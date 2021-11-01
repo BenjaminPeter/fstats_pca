@@ -1,12 +1,14 @@
 source("fscripts.R")
 library(glue)
+library(ggrepel)
 BTHEME = theme_classic() + theme(legend.position="none")
+R=1.5
 
 if(T){
     f2s = admixtools::read_f2("worldfoci2")
     pcmat = pca_from_f2s(f2s)
     pcs = pca_from_pcmat(pcmat)
-    idx = "Sardinian"
+    idx = "Surui"
     idz = "Han"
     idy = "Mbuti"
 ids = c(idx, idy)
@@ -40,8 +42,10 @@ KA = KA %>% as.data.frame %>% mutate(pop = rownames(B))
 X = KA %>% select(pop, A=V1) %>% left_join(K)
 
 P3 = X %>% 
-    mutate(V2 = ifelse(pop %in% c(idx, idy), NA, V2)) %>%
-    ggplot(aes(x=A, y=V1, label=pop, color=V2)) + 
+    #mutate(V2 = ifelse(pop %in% c(idx, idy), NA, V2)) %>%
+    #ggplot(aes(x=A, y=V1, label=pop, color=V2)) + 
+    mutate(A = ifelse(pop %in% c(idx, idy), NA, A)) %>%
+    ggplot(aes(x=V1, y=V2, label=pop, color=A)) + 
     geom_hline(yintercept=X$V1[X$pop == idx], color='lightgray') +
     geom_text_repel() + 
     geom_point() +
@@ -134,7 +138,11 @@ P6 = cbind(lab=1:33, pctv=y$pctv, PCA=x[,1]) %>%
     scale_x_continuous("Projection axis", breaks=1:10) + ylab("%var explained") 
 
 
+ggsvg(P3,  "f4_world1.svg", width = R * 3.5, height=2.5 * R)
+ggsvg(P4, "f4_world2.svg",  width = R * 4, height=1.5 *R)
+ggsvg(P5, "f4_world3.svg", width = R * 1.3, height=1 *R)
 
+ggsvg(P6,  "f4_world4.svg", width = R * 2.6, height=1.3 *R)
 }
 if(T){
 f2s = admixtools::read_f2("westeurasian1/")
@@ -221,14 +229,9 @@ ids = c(idx, idy, idz)
         coord_flip(xlim=c(.5,10.5)) +
         scale_x_continuous(breaks=1:10) +
         scale_y_continuous(breaks=c(-0.001, .002))
+ggsvg(P1, "f4_westeurasia1.svg", width = R * 1.5, height=4 *R)
+ggsvg(P2, "f4_westeurasia2.svg", width = R * 5.5, height=1.5 *R)
 }
 
 
 
-R=1.5
-ggsvg(P3,  "f4_world1.svg", width = R * 3.5, height=2.5 * R)
-ggsvg(P4, "f4_world2.svg",  width = R * 4, height=1.5 *R)
-ggsvg(P5, "f4_world3.svg", width = R * 1.3, height=1 *R)
-ggsvg(P6,  "f4_world4.svg", width = R * 2.6, height=1.3 *R)
-ggsvg(P1, "f4_westeurasia1.svg", width = R * 1.5, height=4 *R)
-ggsvg(P2, "f4_westeurasia2.svg", width = R * 5.5, height=1.5 *R)
