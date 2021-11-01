@@ -6,7 +6,7 @@ library(glue)
 R = 1.5
 BTHEME = theme_classic() + theme(legend.position="none")
 
-if(T){
+if(F){
 f2s = admixtools::read_f2("westeurasian1/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
@@ -66,12 +66,12 @@ ggsvg(P1, "f3_westeurasia1.svg", width=4 * R, height=2.5 * R)
 ggsvg(P2, "f3_westeurasia2.svg", width=1.5 * R, height=1.25 * R)
 ggsvg(P5, "f3_westeurasia3.svg", width=1.5 * R, height=1.25 * R)
 }
-if(F){
+if(T){
 f2s = admixtools::read_f2("worldfoci2")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
 idx = "Mbuti"
-idy = "Sardinian"
+idy = "Surui"
 
 sample_list = pcs$pop 
 
