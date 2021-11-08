@@ -11,16 +11,52 @@ footskip=30pt,
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{comment}
-\usepackage[authoryear, comma]{natbib}
 \usepackage{lineno}
 \usepackage{url}
 
-
+%\usepackage[authoryear, comma]{natbib}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{mbe}
+\usepackage[style=authoryear,
+			natbib=true,
+			backend=biber,
+			maxbibnames=10,
+			maxcitenames=2,
+			uniquename=false,
+			uniquelist=false,
+			isbn=false]{biblatex}
+\addbibresource{main.bib}
+%biblatex stuff
+\DeclareFieldFormat[article]{citetitle}{#1}
+\DeclareFieldFormat[article]{title}{#1} 
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+\renewcommand{\labelnamepunct}{\addcolon\space}
+\AtEveryBibitem{\clearlist{language}}
+\AtEveryBibitem{\clearfield{month}}
+\AtEveryCitekey{\clearfield{month}}
+\AtEveryBibitem{\ifentrytype{article}{
+		\clearfield{url}
+		\clearfield{urlyear}
+	    \clearfield{language}}{}}
+\AtEveryBibitem{\ifentrytype{book}{
+		\clearfield{url}
+		\clearfield{urlyear}
+		\clearfield{language}}{}}
+	
+	\renewbibmacro*{volume+number+eid}{%
+		\printfield{volume}%
+		%  \setunit*{\adddot}% DELETED
+		\setunit*{\addnbspace}% NEW (optional); there's also \addnbthinspace
+		\printfield{number}%
+		\setunit{\addcomma\space}%
+		\printfield{eid}}
+	\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
 
 
 \linenumbers
-\bibliographystyle{genetics}
-%\bibliographystyle{plainnat}
+
+
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\normsq}[1]{\left\lVert#1\right\rVert^2}
@@ -44,13 +80,13 @@ footskip=30pt,
 	\maketitle
 \begin{abstract}
 Human  genetic diversity is shaped by our complex history. Population genetic tools to understand this variation can broadly be classified into data-driven methods such as Principal Component Analysis (PCA), and model-based approaches such as $F$-statistics.
-Here, I show that these two perspectives are closely related, and I derive explicit connections between the two approaches. I show that $F$-statistics have a simple geometrical interpretation in the context of PCA, and that orthogonal projections are the key concept to establish this link. I illustrate my results on two examples, one of local, and one of global human diversity. In both examples, I find that population structure is sparse, and only a few components contribute to most statistics. Based on these results, I develop novel visualizations that allow for investigating specific hypotheses, checking the assumptions of more sophisticated models. My results extend $F$-statistics to non-discrete populations, moving towards more complete and less biased descriptions of human genetic variation.d
+Here, I show that these two perspectives are closely related, and I derive explicit connections between the two approaches. I show that $F$-statistics have a simple geometrical interpretation in the context of PCA, and that orthogonal projections are the key concept to establish this link. I illustrate my results on two examples, one of local, and one of global human diversity. In both examples, I find that population structure is sparse, and only a few components contribute to most statistics. Based on these results, I develop novel visualizations that allow for investigating specific hypotheses, checking the assumptions of more sophisticated models. My results extend $F$-statistics to non-discrete populations, moving towards more complete and less biased descriptions of human genetic variation. 
 \end{abstract}
 \section{Introduction}
-As in most species, the genetic diversity of human populations has been influenced by our history and environment over the last several hundred thousand years \citep[e.g][]{cavalli-sforza1994,marciniak2017, reich2018a, nielsen2020}. In turn, an important goal of population genetics is to use observed patterns of variation to  investigate and reconstruct the demographic and evolutionary history of our species \citep{schraiber2015, orlando2021}. 
+As in most species, the genetic diversity of human populations has been influenced by our history and environment over the last several hundred thousand years \citep[e.g][]{cavalli-sforza1994,marciniak2017, reich2018a, nielsen2017}. In turn, an important goal of population genetics is to use observed patterns of variation to  investigate and reconstruct the demographic and evolutionary history of our species \citep{schraiber2015, orlando2021}. 
 
 The complicated genetic structure observed in present-day human populations \citep{the2015, mallick2016} is caused by the interplay of demographic and evolutionary processes with both discrete and continuous components \citep{pritchard2000, rosenberg2002a, serre2004, rosenberg2005, bradburd2018, reich2018a, peter2020a}.
-In particular, populations are expected to slowly differentiate if they are isolated from each other \citep{wahlund1928,cavalli-sforza1975}. In humans, this may be caused because continental-scale geographic distances limit migration, causing a pattern known as isolation-by-distance \citep{slatkin1985a}. However, these patterns are usually not uniform, but shaped by geography, particularly barriers  to migration such as mountain ranges, oceans or deserts \citep{cavalli-sforza1994, barbujani1990, rosenberg2005, bradburd2013, peter2020a}. In addition,  major historical population movements such as the out-of-Africa, Austronesian or Bantu expansions lead to more gradual patterns of genetic diversity over space \citep{cavalli-sforza1994, ramachandran2005, novembre2008, stoneking2016, racimo2020}. Local migration between neighboring populations will reduce differentiation, and long-distance migrations \citep{alves2016}, and secondary contact between diverged populations, such as Neandertals and modern humans \citep{green2010} may lead to locally increased diversity \citep{skov2019}.
+In particular, populations are expected to slowly differentiate if they are isolated from each other \citep{wahlund1928,cavalli-sforza1975}. In humans, this may be caused because continental-scale geographic distances limit migration, causing a pattern known as isolation-by-distance \citep{slatkin1985}. However, these patterns are usually not uniform, but shaped by geography, particularly barriers  to migration such as mountain ranges, oceans or deserts \citep{cavalli-sforza1994, barbujani1990, rosenberg2005, bradburd2013, peter2020a}. In addition,  major historical population movements such as the out-of-Africa, Austronesian or Bantu expansions lead to more gradual patterns of genetic diversity over space \citep{cavalli-sforza1994, ramachandran2005, novembre2008, stoneking2016, racimo2020}. Local migration between neighboring populations will reduce differentiation, and long-distance migrations \citep{alves2016}, and secondary contact between diverged populations, such as Neandertals and modern humans \citep{green2010} may lead to locally increased diversity \citep{skov2018}.
 
 Particularly for large and heterogeneous data sets, disentangling all these processes is challenging, and we cannot expect to devise a single model catching both broad strokes and minute details of human history. A commonly used analysis paradigm is thus to integrate tools based on different sets of assumptions. each emphasizing particular aspects of the data.
 
@@ -320,7 +356,7 @@ On the right-hand-side terms only the $F_3$ term depends on the $X_i$. The fract
 
 
 \paragraph{Example}
-In Figure \ref{fig:f4}A, I use the World data set to visualize the outgroup-$F_3$-statistic $F_3(\text{Mbuti}; \text{Sardinian}, X_i)$, in i.e. a statistic that aims to find the population most closely related to Sardinian (a Mediterranean Island), assuming the Mbuti are an outgroup to all populations in the data set. On a PCA, we can interpret this $F_3$ statistic as the projection of the line segment from $\text{Mbuti}$ to population $X_i$ onto the line through Mbuti and Sardinians (black line). For each population, the projection is indicated with a grey line. In the full data space, this line is always orthogonal to the segment Mbuti-Sardinian, but on the plot (i.e. the subspace spanned by the first two PCs), this is not necessarily the case.  The coloring is based on the $F_3$-statistic calculated from all the data, with brighter values indicating higher $F_3$-statistics. In this case, the first two PCs approximate the $F_3$-statistic very well: Particularly the samples from East Asia, Siberia and the Americas (cluster in the top left of the plot) project very close to orthogonally, suggesting that most of the genetic variation relevant for this analysis is captured by these first two PCs.  We can quantify this and find that the first two PCs slightly underestimate the absolute value of $F_3$ (Figure \ref{fig:fA}C), but keep the relative ordering. I also find that many PCs, e.g. PCs 3-5, 7 and 10 have almost zero contribution to all $F_3$-statistics (Figure \ref{fig:f3}D), and PCs 6, 8 and 9 having a similar non-zero contribution for almost all statistics, likely because these PCs explain within-African variation.
+In Figure \ref{fig:f4}A, I use the World data set to visualize the outgroup-$F_3$-statistic $F_3(\text{Mbuti}; \text{Sardinian}, X_i)$, in i.e. a statistic that aims to find the population most closely related to Sardinian (a Mediterranean Island), assuming the Mbuti are an outgroup to all populations in the data set. On a PCA, we can interpret this $F_3$ statistic as the projection of the line segment from $\text{Mbuti}$ to population $X_i$ onto the line through Mbuti and Sardinians (black line). For each population, the projection is indicated with a grey line. In the full data space, this line is always orthogonal to the segment Mbuti-Sardinian, but on the plot (i.e. the subspace spanned by the first two PCs), this is not necessarily the case.  The coloring is based on the $F_3$-statistic calculated from all the data, with brighter values indicating higher $F_3$-statistics. In this case, the first two PCs approximate the $F_3$-statistic very well: Particularly the samples from East Asia, Siberia and the Americas (cluster in the top left of the plot) project very close to orthogonally, suggesting that most of the genetic variation relevant for this analysis is captured by these first two PCs.  We can quantify this and find that the first two PCs slightly underestimate the absolute value of $F_3$ (Figure \ref{fig:f3}C), but keep the relative ordering. I also find that many PCs, e.g. PCs 3-5, 7 and 10 have almost zero contribution to all $F_3$-statistics (Figure \ref{fig:f3}D), and PCs 6, 8 and 9 having a similar non-zero contribution for almost all statistics, likely because these PCs explain within-African variation.
 
 
 \subsection{$F_4$-statistics as angles}
@@ -375,7 +411,7 @@ This allows for direct and quantitative comparisons between $F$-statistic-based 
 The other cause for disagreements between $F$-statistics and PCA are differences in assumptions. The version of PCA I used for my analyses was chosen such that the similarities to $F$-statistics are maximized. In particular, I assume here that i) we have no missing data, ii) SNPs are equally weighted and iii) that individuals can be grouped into populations and iv) we use estimated allele frequencies. In contrast, most data analyses have to grapple with missing data, SNP are often weighted according to their allele frequency and observed, individual-level genotypes are used as the basis of PCA.
 
 \subsubsection{missing data}
-The liability of PCA to missing data is a well-studied problem and a number of algorithms for imputing have been proposed \citep[e.g.][]{hastie2015, meisner2017, meisner2021}. Calculating $F$-statistics first is yet another way to impute data for PCA that works well if missingness is low \citep{meisner2021}. In contrast, missing data in $F$-statistics is handled by estimating a standard error using resampling across the genome \citep{patterson2012}, which does not distinguish between biological and sampling variation. These strategies are distinct, but not unique to the relative approaches and a PCA-like decomposition from $F$-statistics is commonly applied using MDS \citep[e.g.][]{fu2016}, and a PCA-based approach to estimating $F$-statistics may provide higher accuracy than naive approaches because it allows using data from related populations.
+The liability of PCA to missing data is a well-studied problem and a number of algorithms for imputing have been proposed \citep[e.g.][]{hastie2015, meisner2018, meisner2021}. Calculating $F$-statistics first is yet another way to impute data for PCA that works well if missingness is low \citep{meisner2021}. In contrast, missing data in $F$-statistics is handled by estimating a standard error using resampling across the genome \citep{patterson2012}, which does not distinguish between biological and sampling variation. These strategies are distinct, but not unique to the relative approaches and a PCA-like decomposition from $F$-statistics is commonly applied using MDS \citep[e.g.][]{fu2016}, and a PCA-based approach to estimating $F$-statistics may provide higher accuracy than naive approaches because it allows using data from related populations.
 
 \subsubsection{normalization}
 The normalization of SNPs is similarly a matter of convention. The $F$-statistic framework assumes that each SNP is an identically-distributed (but not independent) random variable; and the same would hold if SNPs were weighted. The drawback for individual $F$-statistics is that this adds a dependency on additional samples (through the mean allele frequency) that may be unwanted for individual $F$-statistics, but could be advantageous for tools that aim to do joint inference from  many $F$-statistics \citep{patterson2012, harney2021}. As genetic differentiation between human populations is low, the  normalization used may matter little in practice, but should be explored in future work \citep{felsenstein1973}. 
@@ -415,7 +451,8 @@ There are a number of tools that have been developed that use multiple $F$-stati
 
 
 \newpage
-\bibliography{main}
+%\bibliography{main}
+\printbibliography
 
 \newpage
 \appendix
