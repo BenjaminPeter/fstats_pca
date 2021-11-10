@@ -880,8 +880,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.9240845"
-     inkscape:cx="141.94394"
-     inkscape:cy="91.358889"
+     inkscape:cx="142.07135"
+     inkscape:cy="91.868562"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1581,45 +1581,103 @@
        id="path3053-9-59-7-3-3-6"
        d="m 162.64379,51.235688 v 0"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:#333333;stroke-width:0.229;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker3406-9-8-8-9-0);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    <g
-       id="g10906"
-       transform="rotate(-1.506813,170.85848,47.78126)">
-      <g
-         id="g11389"
-         transform="rotate(90,162.58765,42.00496)">
-        <path
-           d="m 170.30236,48.397577 c 0.0234,-0.664066 0.57496,-1.148558 1.22181,-1.121068"
-           style="fill:none;stroke:#404040;stroke-width:0.229;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path1111-33-6"
-           inkscape:connector-curvature="0" />
-        <path
-           d="m 170.98453,48.002838 0.001,-0.04978 0.0664,0.0017 -0.001,0.04978 z"
-           style="fill:none;stroke:#404040;stroke-width:0.229;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path1115-4-9"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-      </g>
-      <g
-         id="g11389-9"
-         transform="rotate(180,157.71927,49.452258)">
-        <path
-           d="m 170.30236,48.397577 c 0.0234,-0.664066 0.57496,-1.148558 1.22181,-1.121068"
-           style="fill:none;stroke:#404040;stroke-width:0.229;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path1111-33-6-2"
-           inkscape:connector-curvature="0" />
-        <path
-           d="m 170.98453,48.002838 0.001,-0.04978 0.0664,0.0017 -0.001,0.04978 z"
-           style="fill:none;stroke:#404040;stroke-width:0.229;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path1115-4-9-0"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-      </g>
-    </g>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path3053-0-7-1-1-5-0-6"
        d="m 89.24874,69.173003 v 0"
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#aaaaaa;fill-opacity:1;fill-rule:nonzero;stroke:#aaaaaa;stroke-width:0.187734;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker3406-9-8-8-6-6);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+    <g
+       inkscape:label=""
+       transform="matrix(0.26055701,0,0,0.26055701,63.585665,42.765728)"
+       id="g19024-3"
+       style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1">
+      <g
+         id="g7209-6"
+         style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1">
+        <g
+           style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1"
+           id="g6842-7">
+          <use
+             xlink:href="#symbol6215"
+             x="91.925003"
+             y="81.962997"
+             id="use5911-5"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1" />
+        </g>
+        <g
+           style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1"
+           id="g6673-3">
+          <use
+             xlink:href="#symbol6598"
+             x="100.961"
+             y="78.348"
+             id="use2219-5"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1" />
+        </g>
+        <g
+           style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1"
+           id="g1700-6">
+          <use
+             xlink:href="#symbol9679"
+             x="100.179"
+             y="84.435997"
+             id="use4741-2"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1;stroke:#aaaaaa;stroke-opacity:1" />
+        </g>
+      </g>
+    </g>
+    <g
+       inkscape:label=""
+       transform="matrix(0.26055701,0,0,0.26055701,67.655823,33.301206)"
+       id="g19639-9"
+       style="fill:#aaaaaa;fill-opacity:1">
+      <g
+         id="g41-1"
+         style="fill:#aaaaaa;fill-opacity:1">
+        <g
+           style="fill:#aaaaaa;fill-opacity:1"
+           id="g507-2">
+          <use
+             xlink:href="#symbol9688"
+             x="91.925003"
+             y="81.962997"
+             id="use4178-7"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1" />
+        </g>
+        <g
+           style="fill:#aaaaaa;fill-opacity:1"
+           id="g3997-0">
+          <use
+             xlink:href="#symbol9695"
+             x="100.961"
+             y="78.348"
+             id="use2962-9"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1" />
+        </g>
+        <g
+           style="fill:#aaaaaa;fill-opacity:1"
+           id="g9048-3">
+          <use
+             xlink:href="#symbol3269"
+             x="100.179"
+             y="84.435997"
+             id="use8298-6"
+             width="100%"
+             height="100%"
+             style="fill:#aaaaaa;fill-opacity:1" />
+        </g>
+      </g>
+    </g>
   </g>
 </svg>

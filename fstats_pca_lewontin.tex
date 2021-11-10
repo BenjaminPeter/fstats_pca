@@ -373,6 +373,12 @@ where $\phi$ is the angle between $X_1 - X_2$ and $X_3 - X_4$. Thus, independent
 
 \paragraph{Example}
 To illustrate the angle interpretation I return to the Western Eurasian data. The PCA-biplot shows two roughly parallel clines (Figure \ref{fig:f3}A), a European gradient (from Sardinian to Finnish and Chuvash), and a Asian cline from Arab populations (top right) to the Caucasus  (bottom right). This is quantified in Figure \ref{fig:f3}D, where I plot the angle corresponding to $F_4(X, \text{Saudi}; \text{Sardinian}, \text{Finnish})$. For most Asian populations, using two PCs (green points) gives an angle close to zero, corresponding to a correlation coefficient between the two clines of $r>0.9$. Just adding a third PC (blue), however, shows that the clines are not, in fact, parallel, and the correlation for most populations is low. The finding that three PCs are necessary to explain this data can also be seen from the spectrum of these $F_4$-statistics (Figure \ref{fig:f3}E), which have high contributions only from the first three PCs.
+\begin{figure}[!ht]
+	\includegraphics[width=.7\textwidth]{figures/fig_f4_ratio.pdf}	
+	\caption{\textbf{Admixture proportion estimates} A: Visualization of the admixture graph scenario used to estimate the ancestry proportion $\alpha$ contributed from $X_1$ to $X_X$, using references $R_1$ and $R_2$. The full grey line corresponds to the projection axis, and the dotted grey lines corresponds to the branches ignored in the projections. The admixture proportion $\alpha$ corresponds to the length of the dashed red line relative to the black line between $X_1$ and $X_2$. B: The same scenario, but in Euclidean space, $X_1$, $X_2$ and $X_X$ align on a line both in the (low-dimensional approximation of the) residual space and on the projection axis. 
+	}	
+	\label{fig:ratio}
+\end{figure}
 
 \subsection{Other projections}
 So far, I used eq. \ref{eq:fpc} to interpret $F$-statistics on a PCA-plot, but the argument holds for \emph{any} orthonormal projection of the data space. This is useful in particular for estimates of admixture proportions, which are often done as projections into a low-dimensional reference space defined by $F$-statistics \citep{patterson2012, petr2019, harney2021, oteo-garcia2021}. 
@@ -388,7 +394,7 @@ The admixture graph motivating this statistic is visualized in Figure \ref{fig:r
 The PCA-like projection can be used to visualize admixture proportions, as the horizontal position of $X_X$ relative to $X_1$ and $X_2$ (red dashed line vs black line) directly represents the estimated admixture proportion $\alpha$. In addition, the residuals can be used to verify assumptions of the admixture graph model. In particular, since $X_X$ arises as a linear combination of $X_1$ and $X_2$, if admixture is recent we might expect the three populations to be collinear; if they are not this means that either of the populations experienced gene flow from some other population which might bias results \citep{petr2019}.
 
 
-In addition, the external tree branches $X_1 - X'_1$ and $X_2 - X'_2$ are disjoint which means they should be orthogonal. One a one-dimensional residual plot (Figure \ref{fig:ratio)B) this can not be verified, but the statistic 
+In addition, the external tree branches $X_1 - X'_1$ and $X_2 - X'_2$ are disjoint which means they should be orthogonal. One a one-dimensional residual plot (Figure \ref{fig:ratio}B) this can not be verified, but the statistic 
 \begin{equation}
 F_4(X_1, X'_1; X_2, X'_2) = 0
 \end{equation}
@@ -400,33 +406,31 @@ I use the World data set as an example, using Sardinian and Mbuti as references 
 \section{Discussion}
 Particularly for the analysis of human genetic variation with a large number of individuals with heterogeneous relationships, $F$-statistics  are  a powerful tool to describe population genetic diversity. Here, I show that the geometry of $F$-statistics \citep{oteo-garcia2021} leads to a number of simple interpretations of $F$-statistics on a PCA-plot. 
 
-\subsection{Previous Interpretations}
+\subsection{The Geometry of Admixture}
 Previous interpretation of PCA in the context of population genetic models have focused on explicit models and aimed at directly interpreting the PCs in terms of population genetic parameters \citep{cavalli-sforza1975, novembre2008a, francois2010, francois2021}. My interpretation here is different in that the utility of PCA is to simplify the geometry of the data. One consequence is that the results here are not impacted by sample ascertainment, sample sizes or the number of principal components analyzed, which are common concerns in the interpretation of PCA. However, a very skewed sampling distribution will increases the likelihood that more, or different PCs will have to be included in the analysis. 
 
 The two data sets I analyzed here suggest that two PCS (for the World data set) respectively three PCS (for the Western Eurasian data) already provide a very good approximation for $F_4$-statistics (Figures \ref{fig:f3}E, \ref{fig:f4}E), reflecting the observation that frequently the first few PCs provide a good approximation of population structure. On the other hand, for admixture $F_3$-statistics, more PCs are needed (Figure \ref{fig:f3}BC), likely because these statistics do contain a term measuring local variation in the putative admixed population \citep{peter2016}, which is typically often incorporated on higher PCs. Thus, I would also expect individual-based analyses and $F_4$-statistics between closely related populations to require substantially more PCs.
 
-\subsection{more PCs}
 My focus on the geometry of the data allows for direct and quantitative comparisons between $F$-statistic-based results and PCA biplots. As PCA is often ran in an early step in data analysis, this may aid in generation of hypotheses that can be more directly evaluated using generative models, typically using a lower number of populations. It also allows reconciling apparent contradictions between $F$-statistics and PCA-plots. In many cases, differences between the two data summaries will be due to variation on higher PCs. In this case, plotting additional PCs, or further subsetting the data to a more local set of populations seems prudent. 
-
 
 \subsection{Assumptions}
 The other cause for disagreements between $F$-statistics and PCA are differences in assumptions. The version of PCA I used for my analyses was chosen such that the similarities to $F$-statistics are maximized. In particular, I assume here that i) we have no missing data, ii) SNPs are equally weighted and iii) that individuals can be grouped into populations and iv) we use estimated allele frequencies. In contrast, most data analyses have to grapple with missing data, SNP are often weighted according to their allele frequency and observed, individual-level genotypes are used as the basis of PCA.
 
-\subsubsection{missing data}
+\subsubsection{Missing data}
 The liability of PCA to missing data is a well-studied problem and a number of algorithms for imputing have been proposed \citep[e.g.][]{hastie2015, meisner2018, meisner2021}. Calculating $F$-statistics first is yet another way to impute data for PCA that works well if missingness is low \citep{meisner2021}. In contrast, missing data in $F$-statistics is handled by estimating a standard error using resampling across the genome \citep{patterson2012}, which does not distinguish between biological and sampling variation. These strategies are distinct, but not unique to the relative approaches and a PCA-like decomposition from $F$-statistics is commonly applied using MDS \citep[e.g.][]{fu2016}, and a PCA-based approach to estimating $F$-statistics may provide higher accuracy than naive approaches because it allows using data from related populations.
 
-\subsubsection{normalization}
+\subsubsection{Normalization}
 The normalization of SNPs is similarly a matter of convention. The $F$-statistic framework assumes that each SNP is an identically-distributed (but not independent) random variable; and the same would hold if SNPs were weighted. The drawback for individual $F$-statistics is that this adds a dependency on additional samples (through the mean allele frequency) that may be unwanted for individual $F$-statistics, but could be advantageous for tools that aim to do joint inference from  many $F$-statistics \citep{patterson2012, harney2021}. As genetic differentiation between human populations is low, the  normalization used may matter little in practice, but should be explored in future work \citep{felsenstein1973}. 
 
 
-\subsubsection{estimated vs. observed allele frequencies}
+\subsubsection{Estimated vs. observed allele frequencies}
 The third difference between $F$-statistics and standard  PCA is on the usage of estimated allele frequencies versus individual-based genotypes. The fact that PCA does not distinguish between sample-based errors and the underlying structure is a well-known drawback of standard PCA, and applying the theory presented here to individual-based PCA would result in $F$-statistics that incorporate some sampling noise. Probabilistic PCA is one class of approaches that aim to separate the population structure from sampling noise \citep[e.g.][]{agrawal2020}. It seems likely that probabilistic PCA would yield a representation of the data that corresponds more closely aligned with $F$-statistics than regular PCA.
 
 
-\subsubsection{individual vs. population-based analyses}
+\subsubsection{Individual vs. population-based analyses}
 The final issue is that PCA is commonly run on individual-based data, whereas $F$-statistics often group individuals into populations. This is not necessary; population-based PCA has been the default in the past \citep{cavalli-sforza1994}, and $F$-statistics are often applied to individuals \citep[e.g.][]{green2010, massilani2020, yang2020}. Thus, more commonly the choice between individual-based and population-based approaches is in the goal of an analysis. Grouping individuals into populations introduces a major assumption, that can e.g. be justified using an individual-based PCA. In particular, since $F$-statistics assume individuals are randomly drawn from a population, they should form tight clusters on an individual-based PCA-plot, otherwise population substructure becomes a possible alternative model for negative $F_3$-statistics and non-zero $F_4$-statistics \citep{peter2016}.
 
-\subsubsection{summary}
+\subsubsection{Summary}
 The version of PCA used here differs from that proposed by \cite{patterson2006}, and thus some care will be required to directly extend the interpretations developed here to individual-based PCAs. However, the differences are largely due to conventions, and particularly for studies where the description of population structure is a major focus, results might be easier to interpret if conventions regarding missing data, normalization and estimation of allele frequencies are used consistently between $F$-statistics and PCA.
 
 \subsection{The Apportionment of Human Diversity}
@@ -440,18 +444,12 @@ However, these simplification do come at a cost, both in terms of model violatio
 
 In many parts of the world, and particularly at more local scales, distinctions between populations begin to blur, and everyone could be considered  admixed to some degree \citep{pickrell2014}. This provides a challenge for interpretation; as most $F_3$ and $F_4$-statistics will indicate departures from treeness. A naive interpretation of the $F$-statistics from my Eurasian example  (Figure \ref{fig:f3}A) would identify a substantial fraction of Europeans as (significantly) admixed between Finnish and Sardinians. In contrast, PCA reveals that the variation in this data set is not due to a single event, and so an arguably better description of the data set is one where Finnish and Sardinians lie on opposite ends of a more gradually structured population.
 
-This continuum between admixture and population structure becomes more problematic when interpreting tools that  use multiple $F$-statistics to build compound models, such as \texttt{qpGraph} \citep{lazaridis2014} and \texttt{qpAdm} \citep{harney2021}. One issue with these approaches is that they are usually restricted to at most a few dozen populations. As ancient DNA data sets now commonly include thousands of individuals, analysts are faced with the challenge of which data to include. A common approach is to sample a large number of distinct models, and retain the ones that are compatible with the data. However, as both \texttt{qpGraph} and \texttt{qpAdm} assume that gene flow is rare and discrete, selecting sets of populations that did experience little gene flow will provide good fits. The PCA-based  interpretation of $F$-statistics offers an alternative that trades interpretability for robustness, as we do not need 
-
-. Particularly interpreting a (normalized) $F_4$-statistic as a correlation coefficient translates to generalized models of gene flow. Separating $F$-statistics in a sum of model and residuals, and performing a PCA on the latter (such as in Figure \ref{fig:f4}D)  is another way how we can visualize $F$-statistics and evaluate the model fit.
+This continuum between admixture and population structure becomes more problematic when interpreting tools that  use multiple $F$-statistics to build compound models, such as \texttt{qpGraph} \citep{lazaridis2014} and \texttt{qpAdm} \citep{harney2021}. One issue with these approaches is that they are usually restricted to at most a few dozen populations. As ancient DNA data sets now commonly include thousands of individuals, analysts are faced with the challenge of which data to include. A common approach is to sample a large number of distinct models, and retain the ones that are compatible with the data. However, as both \texttt{qpGraph} and \texttt{qpAdm} assume that gene flow is rare and discrete, selecting sets of populations that did experience little gene flow will provide good fits. The PCA-based  interpretation of $F$-statistics offers an alternative that trades interpretability for robustness, as I do not to assume that gene flow is rare, and visualizing both the projection used for estimating admixture proportion, and the residual space, can be used to highlight scenarios where the assumptions are violated.
 
 
 
 
 
-
-\subsubsection{cost of simplificatio}
-
-However, these simplification do come at a cost, both in terms of model violations that may invalidate statistical results, and in terms of excluding people that do not rigidly fall into predefined genetic groups. By framing admixture in the continuous context of PCA, the approach developed here shows one way how this trade-off between interpretability and accuracy can be mitigated.
 
 \newpage
 %\bibliography{main}

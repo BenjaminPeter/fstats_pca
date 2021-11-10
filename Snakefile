@@ -21,4 +21,14 @@ rule allpdf:
         'figures/fig_data_europe.pdf',
         'figures/outgroup_f3.pdf',
         'figures/fstats_admixture_pca.pdf',
-        'figures/fstats_pca_vs_tree.pdf'
+        'figures/fstats_pca_vs_tree.pdf',
+        'figures/fig_f4_ratio.pdf',
+
+rule latex:
+    input:
+        rules.allpdf.input,
+        tex='fstats_pca_lewontin.tex'
+    output:
+        'fstats_pca_lewontin.pdf'
+    shell:
+        'latexmk -pdf {input.tex}'
