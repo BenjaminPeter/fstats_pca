@@ -375,30 +375,27 @@ where $\phi$ is the angle between $X_1 - X_2$ and $X_3 - X_4$. Thus, independent
 To illustrate the angle interpretation I return to the Western Eurasian data. The PCA-biplot shows two roughly parallel clines (Figure \ref{fig:f3}A), a European gradient (from Sardinian to Finnish and Chuvash), and a Asian cline from Arab populations (top right) to the Caucasus  (bottom right). This is quantified in Figure \ref{fig:f3}D, where I plot the angle corresponding to $F_4(X, \text{Saudi}; \text{Sardinian}, \text{Finnish})$. For most Asian populations, using two PCs (green points) gives an angle close to zero, corresponding to a correlation coefficient between the two clines of $r>0.9$. Just adding a third PC (blue), however, shows that the clines are not, in fact, parallel, and the correlation for most populations is low. The finding that three PCs are necessary to explain this data can also be seen from the spectrum of these $F_4$-statistics (Figure \ref{fig:f3}E), which have high contributions only from the first three PCs.
 
 \subsection{Other projections}
-So far, I used eq. \ref{eq:fpc} to interpret $F$-statistics on a PCA-plot, but the argument holds for \emph{any} orthonormal projection of the data space. This is useful in particular for estimates of admixture proportions, which are often done in a small reference space \citep{patterson2012, petr2019, harney2021, oteo-garcia2021}. 
+So far, I used eq. \ref{eq:fpc} to interpret $F$-statistics on a PCA-plot, but the argument holds for \emph{any} orthonormal projection of the data space. This is useful in particular for estimates of admixture proportions, which are often done as projections into a low-dimensional reference space defined by $F$-statistics \citep{patterson2012, petr2019, harney2021, oteo-garcia2021}. 
 
-The simplest approach is the $F_4$-ratio to infer the admixture sources of population $X$ as 
+For example, a common way to estimate admixture proportion is the $F_4$-ratio:
 \begin{eqnarray}
-\alpha = \frac{F_4(R_1, R_2; X, A)}{F_4(R_1, R_2; B, A)} = \frac{\vectorproj[R_1 - R_2]{X - A}}{\vectorproj[R_1 - R_2]{B - A}} \label{eq:f4ratio},
+\alpha = \frac{F_4(R_1, R_2; X_X, X_1)}{F_4(R_1, R_2; X_2, X_1)} = \frac{\vectorproj[R_1 - R_2]{X_X - X_1}}{\vectorproj[R_1 - R_2]{X_2 - X_1}} \label{eq:f4ratio},
 \end{eqnarray}
-which can be interpreted as projecting $X-A$ and $B-A$ onto $R_1 - R_2$ and measuring their relative proportions \citep{oteo-garcia2021}. One important assumption is that there is no gene flow between $X$ and the reference populations after gene flow \citep{petr2019}. One way to verify this is by inspecting the \emph{null space} of the projection, i.e. all vectors orthogonal to $R_1 - R_2$. One way this should manifest is that $A, B$ and $X$ should be colinear to each other on a PCA plot. 
+which can be interpreted as projecting $X_X-X_1$ and $X_2-X_1$ onto $R_1 - R_2$ and the ratio of the lengths gives the proportion of $X_x$ contributed by $X_1$  \citep{oteo-garcia2021}. 
+
+The admixture graph motivating this statistic is visualized in Figure \ref{fig:ratio}A, and the PCA-like interpretation in Figure \ref{fig:ratio}B. In both panels, the solid gray lines is the projection axis, and the dotted lines give the residual, i.e. the branches or genetic variation that is ignored by the projection. 
+
+The PCA-like projection can be used to visualize admixture proportions, as the horizontal position of $X_X$ relative to $X_1$ and $X_2$ (red dashed line vs black line) directly represents the estimated admixture proportion $\alpha$. In addition, the residuals can be used to verify assumptions of the admixture graph model. In particular, since $X_X$ arises as a linear combination of $X_1$ and $X_2$, if admixture is recent we might expect the three populations to be collinear; if they are not this means that either of the populations experienced gene flow from some other population which might bias results \citep{petr2019}.
 
 
-\texttt{qpAdm} extends this approach to a higher-dimensional reference space and multiple potential source populations.  One open practical question in many applications is which reference and putative source populations to use \citep{harney2021}. 
-
-
-The theory developed here suggests some possible visualizations that may address this issue. 
-
+In addition, the external tree branches $X_1 - X'_1$ and $X_2 - X'_2$ are disjoint which means they should be orthogonal. One a one-dimensional residual plot (Figure \ref{fig:ratio)B) this can not be verified, but the statistic 
+\begin{equation}
+F_4(X_1, X'_1; X_2, X'_2) = 0
+\end{equation}
+can be calculated for all samples.
 
 \subsubsection{Example}
-Let as use the World data set (Figure \ref{fig:f4}A), and use Sardinian and Mbuti as references for admixture estimation. One way we can do that is to project all populations $X$ onto this axis in the data (Figure \ref{fig:f4}B), so that the distance along the $X$-axis between any pairs of populations $X_1, X_2$ is proportional to $F_4(\text{Sardinian}, \text{Mbuti}; X_1, X_2)$.
-
-On the Y-axis, we may now plot the first PC of the Null Space of this projection, i.e. the variation that is not along the axis from Sardinians to Mbuti. This variation largely follows an East-West gradient across Eurasia, with Siberian, East Asian and American populations having the lowest values (Figure \ref{fig:f4}B).
-
-Populations suitable for $F_4$-ratios should now be colinear on such a plot. One example are the Tubalar, which appear roughly intermediate between the Kalash (from Pakistan) and the Surui (from Brazil)
- found a gradient from Africans to Europeans (Figure \ref{fig:f3}D). I focus on this cline using an alternative projection by using  $F$-statistics of the form $F_4(X, Y; \text{Sardinian}, \text{Yoruba})$), which might e.g. be used in an $F_4$-ratio.  These $F_4$-statistics are very well-approximated by the first two PCs, with a 99.2\% correlation between $F_4$ and its approximation using the first two PCs (Figure \ref{fig:f4}C).
-
-
+I use the World data set as an example, using Sardinian and Mbuti as references populations (Figure \ref{fig:f4}B). The data is the same as in  the PCA (Figure \ref{fig:f4}A), but it is now rotated such that the axis between the reference population (black line in Figure \ref{fig:f4}A) is now reflected by the x-axis. For any pair of populations $X_1$ $X_2$, their horizontal distance reflects $F_4(\text{Sardinian}, \text{Mbuti}; X_1, X_2)$ and the relative horizontal distance corresponds exactly to $F_4$-ratio admixture estimates. For many sets of populations, this is of course not sensible, and just looking at the first PC of the residual shows many examples where the populations are not collinear. For example, on the x-axis, the South American Surui are between Papuans and Georgians, but since the Surui clearly are not on the line between Papuans and Georgians, this cannot be the result of admixture.
 
 \section{Discussion}
 Particularly for the analysis of human genetic variation with a large number of individuals with heterogeneous relationships, $F$-statistics  are  a powerful tool to describe population genetic diversity. Here, I show that the geometry of $F$-statistics \citep{oteo-garcia2021} leads to a number of simple interpretations of $F$-statistics on a PCA-plot. 
