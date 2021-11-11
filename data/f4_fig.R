@@ -8,7 +8,7 @@ if(T){
     f2s = admixtools::read_f2("worldfoci2")
     pcmat = pca_from_f2s(f2s)
     pcs = pca_from_pcmat(pcmat)
-    idx = "Surui"
+    idx = "Sardinian"
     idz = "Han"
     idy = "Mbuti"
 ids = c(idx, idy)

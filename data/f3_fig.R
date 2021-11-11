@@ -6,7 +6,7 @@ library(glue)
 R = 1.5
 BTHEME = theme_classic() + theme(legend.position="none")
 
-if(F){
+if(T){
 f2s = admixtools::read_f2("westeurasian1/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
@@ -71,7 +71,7 @@ f2s = admixtools::read_f2("worldfoci2")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
 idx = "Mbuti"
-idy = "Surui"
+idy = "Sardinian"
 
 sample_list = pcs$pop 
 
