@@ -1,4 +1,5 @@
 .*
+*xml
 *xz
 *bbl
 *aux
@@ -10,3 +11,5 @@
 *out
 *nav
 *snm
+*.fls
+*_latexmk

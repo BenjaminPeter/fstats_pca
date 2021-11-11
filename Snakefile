@@ -7,7 +7,7 @@ rule svg2pdf:
     output: '{name}.pdf'
     shell: 'inkscape {input} --export-type=pdf --export-background="#fff"'
 
-rule all:
+rule allpng:
     input:
         'figures/fig_data_world.png',
         'figures/fig_data_europe.png',
@@ -24,11 +24,24 @@ rule allpdf:
         'figures/fstats_pca_vs_tree.pdf',
         'figures/fig_f4_ratio.pdf',
 
-rule latex:
+rule tables:
+    input:
+        'data/subdata/worldfoci2.ind',
+        'data/subdata/westeurasian1.ind',
+    output:
+        'supp_tables/file1.txt',
+        'supp_tables/file2.txt'
+    shell:
+        'cp {input[0]} {output[0]};'
+        'cp {input[1]} {output[1]}'
+
+rule all:
     input:
         rules.allpdf.input,
+        rules.tables.output,
         tex='fstats_pca_lewontin.tex'
     output:
         'fstats_pca_lewontin.pdf'
     shell:
         'latexmk -pdf {input.tex}'
+

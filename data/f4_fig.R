@@ -42,10 +42,10 @@ KA = KA %>% as.data.frame %>% mutate(pop = rownames(B))
 X = KA %>% select(pop, A=V1) %>% left_join(K)
 
 P3 = X %>% 
-    #mutate(V2 = ifelse(pop %in% c(idx, idy), NA, V2)) %>%
-    #ggplot(aes(x=A, y=V1, label=pop, color=V2)) + 
-    mutate(A = ifelse(pop %in% c(idx, idy), NA, A)) %>%
-    ggplot(aes(x=V1, y=V2, label=pop, color=A)) + 
+    mutate(V2 = ifelse(pop %in% c(idx, idy), NA, V2)) %>%
+    ggplot(aes(x=A, y=V1, label=pop, color=V2)) + 
+    #mutate(A = ifelse(pop %in% c(idx, idy), NA, A)) %>%
+    #ggplot(aes(x=V1, y=V2, label=pop, color=A)) + 
     geom_hline(yintercept=X$V1[X$pop == idx], color='lightgray') +
     geom_text_repel() + 
     geom_point() +
