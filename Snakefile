@@ -23,6 +23,7 @@ rule allpdf:
         'figures/fstats_admixture_pca.pdf',
         'figures/fstats_pca_vs_tree.pdf',
         'figures/fig_f4_ratio.pdf',
+        'figures/fig_proj.pdf',
 
 rule tables:
     input:
