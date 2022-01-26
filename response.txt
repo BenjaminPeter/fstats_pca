@@ -1,0 +1,197 @@
+pdf:
+
+1: fixed
+2: fixed
+3: changed reconciled to compared on first occurence. Kept second occurance
+(p15) since there I explicitly talk about apparent contradictions
+4: fixed
+5: I agree with this point and delete the sentence
+6: I changed this to: "Crucially, this means that $F_4$ will be zero for pairs
+of populations from non-overlapping clades."
+7: I was not thinking about computing here, but about interpretation. 
+High-dimensional spaces are hard to interpret and analyze, which is why PCA is
+useful. I rephrased this to make it hopefully more clear:
+The geometric approach of \cite{oteo-garcia2021} assumes a very high-dimensional space, as each SNP in a data set adds a dimension, and data sets have commonly a million or more SNPs. Such high-dimensional spaces are hard to visualize and analyze, however, it has been commonly observed that population structure is quite low-dimensional, and that the first few PCs provide a good approximation of the covariance structure in the data
+8: Removed due to change in response to (7)
+9: I added the sentence:
+"It turns out that decomposing this matrix is equivalent to  calculating the PCA
+from the original data, as long as we make the same choices about normalization
+and units of analysis."
+10: Changed to "Subsequent drift will change the allele frequencies of $X_x$ (to
+say, $X_y$),"
+11: I increased the size of alpha and added it to the caption
+12: I added labels, as suggested
+13: changed to "project almost orthogonally"
+14: changed to "internal branch"
+15: fixed
+16: fixed
+17: fixed as suggested
+18: fixed
+19: fixed
+20: changed to but, (...)
+21: fixed
+22: fixed
+23: revised
+24: fixed
+25: fixed
+
+
+Noah:
+1. The title sounds a bit more like that of a review article. Consider something more precise, e.g. “A geometric interpretation of the relationship between F2, F3, and F4 statistics and principal components analysis,” or “On the relationship between F2, F3, and F4 statistics and principal components analysis.”
+TODO
+ 
+2. At 1.46-1.70, the introduction seems to set up the F statistics as a preferred alternative to methods such as PCA and structure. However, this reasoning is unconvincing, as the various methods are all useful methods that can contribute in different ways. You could simply say that PCA is used to accomplish task X, and F statistics are used to accomplish task Y. It is motivation enough that one wants to understand how these different methods relate to each other.
+This section seems to also comment on the use of F statistics to build models with large numbers of populations from calculations with 3 and 4 populations, as a contrast to (and possibly preferable to?) coalescent-style models. However, the paper does not really have much to say about these topics, and if anything, it is negative about them in the final paragraph. That makes the introduction strange in setting up F statistics as preferred to other methods but then deciding that they are problematic. I would suggest deferring any mention of the models of large numbers of populations to the Discussion. As in the previous paragraph, it’s enough to just want to understand the methods better.
+RESPONSE:
+I can see your point. My intention here was to simply give a brief overview of
+the different methods used, and explain why one typically combines multiple
+approaches by giving their main benefits and drawbacks. I can see how this is
+not entirely relevant, and shortened this paragraph to remove the
+benefits/drawback part.
+ 
+3. In Fig 1 caption, please comment on the case in which the true relationship for four populations is ((X1,X2),(X3,X4)). Is it always assumed that species must have a relationship (((X1,X2),X3),X4) so that the symmetric case is never considered? 
+RESPONSE:
+Since F-statistics are distances, they correspond to unrooted trees, i.e. the
+rooting is arbitrary. I changed the caption to "using an (arbitrarily rooted)
+tree". 
+ 
+4. The paper is somewhat missing a grand summary that clarifies its main contributions. It seems that F3 and F4 computations are sometimes interpreted, problematically, as definitive tests of admixture. The paper shows that they may be redundant with PCA, or they may represent tests of particular hypotheses about placement of points in a PCA plot. I would be interested to see a table that describes two columns e.g. “ways F tests are interpreted in the literature” and “ways the geometric relationship to PCA suggests F tests should be interpreted.” We need some clarity on the meaning and appropriate use of these methods, and this paper has potential to provide a nice summary.
+Some reviewers of empirical papers in human genomics reflexively expect authors to augment studies that interpret population relationships using PCA, MDS, Structure, Admixture, etc. with F tests. I gather from this paper that F tests are accomplishing the same kind of post-processing of a PCA plot as, say, the so-called average linkage distance (e.g. Kopelman et al. 2009 BMC Genetics for an example). It would be great if the paper could clarify.
+TODO 
+
+5. In Section 5.3, the first three paragraphs seem to be setting up a significant and strong conclusion, but the last two paragraphs do not really deliver one. Move the discussion of technical consequences of complexities in human population structure for the qp methods earlier. The two paragraphs about Lewontin’s paper are not really used to make the subsequent points; authors for the special issue should not feel obligated to extensively discuss Lewontin 1972 if the relationships to their papers are tenuous.
+ 
+
+
+Specific comments (author’s line numbers rather than journal’s)
+8 “to understand this method” – unclear
+changed to "tools to understand this variation"
+9 Second consecutive sentence beginning with “Here”
+Removed both Here
+10 Clarify that these are F2, F3, and F4 statistics and not Wright’s F
+statistics 
+added "sensu patterson"
+13 “good population structure is sparse” – phrase is unclear, as is the meaning of “good”
+14 “most statistics” – what is meant?
+changed to:
+"In both examples, I find that the first few PCs are sufficient to approximate
+most $F$-statistics, and thus PCA-plots are effective to predict
+$F$-statistics."
+
+17 “less biased” in what sense? Note that there is a “bias” in the paper in that a systematic underestimation occurs from summing only some of the PCs.
+REVISE
+
+37 There is a mismatch of the citations in this line and the examples cited. Consider citing specific papers for each topic rather than in a block of citations.
+
+41 Boca et al. 2020 J Math Biol is possibly appropriate where you cite Gopalan et al.
+46 Cite T Jombart et al. 2009 Heredity.
+51 “not designed to answer specific research questions” – clarify this overly vague statement, which is not supportable.
+changed to "These methods are limited in their ability to estimate biologically
+meaningful parameters, but provide useful summaries and visualizations"
+
+106 Clarify assumptions. SNPs are assumed to be biallelic? One allele is chosen arbitrarily to be the allele at which the frequency is measured? All populations are assumed to be typed at all loci? Are SNPs monomorphic in a set of 3 or 4 populations considered? Are all SNPs used irrespective of whether they are monomorphic?
+I added that SNPs are biallelic and we use an arbitrary allele. Missing data is
+explicitly treated later.
+
+115 Give an example of what is meant by “branches that do not exist in the tree.”
+Clarified to: 
+Crucially, this means that $F_4$ will be zero for pairs of populations from non-overlapping clades, which means that the tree lacks the branch corresponding to this statistic 
+
+129 “F4-statistics that are non-zero” – which F4 statistics?
+Clarified to
+In this case, all $F_4$-statistics involving $X_y$ and both admixture sources will be non-zero, and, in some cases, $F_3(X_y; X_2, X_3)$ will be negative
+
+131 The journal will likely insist that any section that has subsections needs to have two subsections. At present, 2.1 has only one.
+
+138 Clarify that each SNP contributes a dimension. I do not see the high dimensionality as a drawback. The geometric framework is very intuitive, even if it involves many dimensions. Rather than framing the high dimension as a weakness, frame the dimensionality reduction as a way to make the interpretations more intuitive.
+See response to reviewer 1, comment 7 who had an analogous comment
+
+148 Sentence needs some references. These subtle details are important to anyone who wants to run a PCA, and it would be helpful to list the main places where the differences are discussed.
+Added references to Cavalli-Sforza/Patterson et al. 2006. I am not sure I can
+exhaustively list references, since many packages exist, and many packages have
+multiple options for normalizations or dealing with missing data.
+178 This connection between PCA and MDS is not understandable enough unless one already knows it – please clarify.
+I decided not to re-derive this result (see also response to reviewer 1 in
+previous review), and merely state the result. I rewrote this section to better
+reflect that I state a known result
+Page 7 Second line of eq. 10 is an approximation.
+Changed the typesetting to better reflect that this is the definition of the
+approximation
+237 By “supposed” do you mean “assumed”? Clarify.
+changed to "expected"
+238 Explain why being estimates may make the values negative.
+changed to "sampling noise might make some of them slightly negative"
+
+273-282 How about a schematic figure here.
+TODO
+
+Fig 3 caption – refer to specific equations that are referenced.
+I am not quite sure what you mean with "specific equations here
+
+Typo in denominator of equation 14: X3-X4 not X3-X3.
+Fixed
+
+355 Explain the significance of this holding for any orthonormal projection.
+This is done in the follow-up section: This is useful in particular (...)
+
+362-366 This text seems to be arguing for a non-identifiability of the admixture proportion from the position of the points if not collinear.
+The point here is more that collinearity is an implicit assumption in admixture
+proportion inference 
+
+394-397 Explain. Why are these concerns rendered unimportant?
+TODO
+
+404 I don’t quite follow – why is this the expectation?
+Changed to: Thus, I would also expect individual-based analyses and $F_4$-statistics between closely related populations to require substantially more PCs as there local differentiation, which is typically reflected on higher PCs, becomes important.
+
+430 What might this PCA-based F statistics framework look like?
+
+
+472 These is an odd group of citations; I would use Cavalli et al. 1994 and the Jobling et al. book detailed discussions of population history. Since classic apportionment does not give us a way to think about ancient DNA, you’d want to refer to Witt et al. in the special issue if you are wanting to connect Lewontin’s paper to ancient DNA such as in Reich 2018.
+482 Cite Novembre 2022 here.
+TODO
+ 
+
+Doc:
+-Throughout the document, the distinction between the expectations of the statistics (F2, F3, F4 in Patterson notation) and the statistics themselves (f2, f3, f4 in Patterson notation) is mostly avoided. Overall, I think it is the right decision given the manuscript's focus, but in some places it could lead to confusion. As one example, in line 71-73, the claim about F3 being restricted to be non-negative under a tree structure applies to F3 but not necessarily f3. Please address this distinction somewhere (presumably in the intro or theory sections, up to your discretion) and explain it in relation to the manuscript's setting in allele-frequency space.
+Added a paragraph after the definition of F-statistics:
+Commonly, a distinction is made between statistics estimated from data (denoted with lowercase-$f$), and theoretical quantities (defined in eq. 1). I do not make this distinction, but will explicitly mention when I analyze statistics calculated from data.
+
+
+-lines 259-260 - this point is phrased somewhat vaguely. Please consider a more precise phrasing.
+TODO
+
+-lines 273-277 - The globe analogy is useful, but it needs to be explicitly connected to the problem. (For example, state that in the example, the north and south poles represent population allele frequencies, the globe represents the space in which F3<=0, etc.) Another schematic of this scenario, though perhaps challenging to draw, would be useful, for example with two points in 3D space defining a ball, two orthogonal slices representing projections, and the circles (in 2d) defined by the positions of the points in the projections.
+TODO
+
+-In the same section about F3 on a 2D PCA plot, please explain how to compute the true (light gray in figure 3) and apparent (dark gray in figure 3) circles. The intuition for the dark gray circle comes across via figure 2, but it will not be obvious to many readers how to think of the light circle. A rigorous calculation may not be necessary. One intuitive explanation (if the following is a correct reading!) might be that one computes the distance between the populations in the full space, then draws a circle with that diameter centered on the midpoint between the positions of the points in the projection. It would be helpful to contrast this with an explanation of the dark grey circle as centered in the same spot, but with a diameter defined by the distance between the points in the current 2D projection, which is guaranteed to be no greater than the full distance.
+TODO
+
+-In your eq A4, plus lines 278-282, you note that there is a strict interpretation that if the point lies outside the circle in any one projection, then it is guaranteed to be outside the n-ball. You also state that it is possible for it to lie inside the circle on any one biplot yet still have positive F3. I think it is also true that it can lie inside the (light gray) circle on all biplots and still have positive F3. (e.g. in 3D, the volume contained in the intersection of the cylinders defined by the circles from the 2D projections will be a bicylinder that completely contains the ball and has a bit of extra volume too.) Please address this.
+TODO
+
+-I am confused by the qualifier "i.e. it is a test statistic" in lines 328-329. Isn't it just an F4 computed for a set of populations for which no corresponding branch exists in the tree? How does testing relate?
+This uses the notation I introduced in my previous F-stats paper. I agree it's
+not particularly useful and I removed it.
+
+Figure 3D: I am intrigued by the apparently big change from 2 to 3 PCs---can we learn anything worth a comment from that?
+It simply means that the 3rd PC is relevant for this data set. I added this
+sentence: "Both results indicate that adding a third PC would give a much better
+description of the data, and the relationship between within-European variation
+to Saudis in particular."
+
+Lines 476-478: Please change the phrasing to make it broader, for example changing to something like "However, understanding, conceptualizing, and modeling this variation is far from trivial, particularly in a historical context in which mistaken ideas about human variation have been used to justify racist, eugenic, and even genocidal policies." I am suggesting the change because in the previous phrasing "models of human genetic differentation", one could read it as though e.g. Madison Grant was misinterpreting the meaning of an admixture graph, rather than working in a totally bankrupt framework.
+I appreciate this comment, and changed the MS accordingly.
+
+-lines 478-480: This phrasing seems to emphasize the ratio of (among continent) / (total - among population), as opposed to the typical headline of (among population) / total. That may be intentional; I just want to flag it for your notice.
+This is intentional, in part because I think it is an important part, but
+mainly because I actually do not discuss within-population variation either.
+
+Typos and other minor points
+
+-line 162: "data is" -> "data are"
+-title of section 2.3, "F-statsitics" -> "F-statistics"
+-line 219, "which" -> "that"
+-line 220, "represents" -> "represent"
+-line 508, "I do" -> "it does"
+fixed

@@ -39,7 +39,8 @@ rule all:
     input:
         rules.allpdf.input,
         rules.tables.output,
-        tex='fstats_pca_lewontin.tex'
+        tex='fstats_pca_lewontin.tex',
+        bib='main.bib',
     output:
         'fstats_pca_lewontin.pdf'
     shell:
