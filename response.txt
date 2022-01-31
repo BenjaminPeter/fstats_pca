@@ -57,10 +57,17 @@ tree".
  
 4. The paper is somewhat missing a grand summary that clarifies its main contributions. It seems that F3 and F4 computations are sometimes interpreted, problematically, as definitive tests of admixture. The paper shows that they may be redundant with PCA, or they may represent tests of particular hypotheses about placement of points in a PCA plot. I would be interested to see a table that describes two columns e.g. “ways F tests are interpreted in the literature” and “ways the geometric relationship to PCA suggests F tests should be interpreted.” We need some clarity on the meaning and appropriate use of these methods, and this paper has potential to provide a nice summary.
 Some reviewers of empirical papers in human genomics reflexively expect authors to augment studies that interpret population relationships using PCA, MDS, Structure, Admixture, etc. with F tests. I gather from this paper that F tests are accomplishing the same kind of post-processing of a PCA plot as, say, the so-called average linkage distance (e.g. Kopelman et al. 2009 BMC Genetics for an example). It would be great if the paper could clarify.
-TODO 
+I added a short conclusion where I summarize the main points I think the paper
+contributes. I agree that it would be nice (and practical) to have a table
+describing further applications, but an issue is that I still don't fully understand
+some of the more complex of Nicks tools (such as qpgraph and qpwave), and so I do not think I can critisize
+them in a constructive way.
 
 5. In Section 5.3, the first three paragraphs seem to be setting up a significant and strong conclusion, but the last two paragraphs do not really deliver one. Move the discussion of technical consequences of complexities in human population structure for the qp methods earlier. The two paragraphs about Lewontin’s paper are not really used to make the subsequent points; authors for the special issue should not feel obligated to extensively discuss Lewontin 1972 if the relationships to their papers are tenuous.
- 
+I did rephrase this a little bit, since I agree that the criticism of qpXXX is
+not warranted. I think the point would really be that F-stats and PCA could
+allow us to study population structure by setting up orthogonality tests without
+making treeness assumptions.
 
 
 Specific comments (author’s line numbers rather than journal’s)
@@ -79,7 +86,7 @@ most $F$-statistics, and thus PCA-plots are effective to predict
 $F$-statistics."
 
 17 “less biased” in what sense? Note that there is a “bias” in the paper in that a systematic underestimation occurs from summing only some of the PCs.
-REVISE
+TODO
 
 37 There is a mismatch of the citations in this line and the examples cited. Consider citing specific papers for each topic rather than in a block of citations.
 
@@ -123,7 +130,8 @@ changed to "expected"
 changed to "sampling noise might make some of them slightly negative"
 
 273-282 How about a schematic figure here.
-TODO
+I did add a small figure (now Figure 3). Due to the difficulty of visualizing in
+3D, I opted to only do a 2D plot (the logic transfers)
 
 Fig 3 caption – refer to specific equations that are referenced.
 I am not quite sure what you mean with "specific equations here
@@ -139,17 +147,20 @@ The point here is more that collinearity is an implicit assumption in admixture
 proportion inference 
 
 394-397 Explain. Why are these concerns rendered unimportant?
-TODO
+Changed this section to explain that this is because I just aim at simplifying
+the geometry, rather than interpret it in terms of biological processes
 
 404 I don’t quite follow – why is this the expectation?
 Changed to: Thus, I would also expect individual-based analyses and $F_4$-statistics between closely related populations to require substantially more PCs as there local differentiation, which is typically reflected on higher PCs, becomes important.
 
 430 What might this PCA-based F statistics framework look like?
+TODO
 
 
 472 These is an odd group of citations; I would use Cavalli et al. 1994 and the Jobling et al. book detailed discussions of population history. Since classic apportionment does not give us a way to think about ancient DNA, you’d want to refer to Witt et al. in the special issue if you are wanting to connect Lewontin’s paper to ancient DNA such as in Reich 2018.
 482 Cite Novembre 2022 here.
-TODO
+I added a tentative entry, that I will supplement as soon as I have full
+bibliographic info.
  
 
 Doc:
@@ -159,16 +170,19 @@ Commonly, a distinction is made between statistics estimated from data (denoted 
 
 
 -lines 259-260 - this point is phrased somewhat vaguely. Please consider a more precise phrasing.
-TODO
+changed to: "In converse, populations that are distant on the first few PCs are
+guaranteed to also have a large $F_2$-distance, since the distance contributed
+from the omitted PCs cannot be negative."
 
 -lines 273-277 - The globe analogy is useful, but it needs to be explicitly connected to the problem. (For example, state that in the example, the north and south poles represent population allele frequencies, the globe represents the space in which F3<=0, etc.) Another schematic of this scenario, though perhaps challenging to draw, would be useful, for example with two points in 3D space defining a ball, two orthogonal slices representing projections, and the circles (in 2d) defined by the positions of the points in the projections.
-TODO
 
 -In the same section about F3 on a 2D PCA plot, please explain how to compute the true (light gray in figure 3) and apparent (dark gray in figure 3) circles. The intuition for the dark gray circle comes across via figure 2, but it will not be obvious to many readers how to think of the light circle. A rigorous calculation may not be necessary. One intuitive explanation (if the following is a correct reading!) might be that one computes the distance between the populations in the full space, then draws a circle with that diameter centered on the midpoint between the positions of the points in the projection. It would be helpful to contrast this with an explanation of the dark grey circle as centered in the same spot, but with a diameter defined by the distance between the points in the current 2D projection, which is guaranteed to be no greater than the full distance.
-TODO
 
 -In your eq A4, plus lines 278-282, you note that there is a strict interpretation that if the point lies outside the circle in any one projection, then it is guaranteed to be outside the n-ball. You also state that it is possible for it to lie inside the circle on any one biplot yet still have positive F3. I think it is also true that it can lie inside the (light gray) circle on all biplots and still have positive F3. (e.g. in 3D, the volume contained in the intersection of the cylinders defined by the circles from the 2D projections will be a bicylinder that completely contains the ball and has a bit of extra volume too.) Please address this.
-TODO
+(Response to last three comments): I agree that this is an important issue, and
+now explicitly addressed in Figure 3. Unfortunately, I could not make this work
+in 3D, but I think the 2D->1D Figure also works well, as the intuition
+translates.
 
 -I am confused by the qualifier "i.e. it is a test statistic" in lines 328-329. Isn't it just an F4 computed for a set of populations for which no corresponding branch exists in the tree? How does testing relate?
 This uses the notation I introduced in my previous F-stats paper. I agree it's
