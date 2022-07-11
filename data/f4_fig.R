@@ -25,9 +25,9 @@ f4pc = f4_from_pc_matrix2(pcmat, idx, idy) %>%
     left_join(f4, .) %>% 
     filter(! pop1 %in% ids, ! pop2 %in% ids) %>%
     mutate(PC1_2=rowSums(across(PC1:PC2)), PC1_10=rowSums(across(PC1:PC10)))
-v = pcmat[ids,] %>% diff
-pmat = t(v) %*% v / (v %*% t(v))[1,1]
-qmat = diag(length(v)) - pmat
+v0 = pcmat[ids,] %>% diff
+pmat = t(v0) %*% v0 / (v0 %*% t(v0))[1,1]
+qmat = diag(length(v0)) - pmat
 a = pcmat %*% pmat
 b = pcmat %*% qmat
 A = t(t(a) - a[idz,])
@@ -144,7 +144,7 @@ ggsvg(P5, "f4_world3.svg", width = R * 1.3, height=1 *R)
 
 ggsvg(P6,  "f4_world4.svg", width = R * 2.6, height=1.3 *R)
 }
-if(T){
+if(F){
 f2s = admixtools::read_f2("westeurasian1/")
 pcmat = pca_from_f2s(f2s)
 pcs = pca_from_pcmat(pcmat)
