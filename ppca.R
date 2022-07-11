@@ -43,31 +43,52 @@ ppca <- function(data, n_pcs=4, n_iter=1000, tol=1e-4, verbose=T){
     }
 
     e = eigen(W %*% t(W))
-    return(list(W=W, sigma=sigma, eval=e$values, evec=e$vectors))
+    pcs = t(sqrt(abs(e$values)) * t(e$vectors))
+    return(list(W=W, sigma=sigma, pcs=pcs, eval=e$values, evec=e$vectors))
 }
 
 
 test_ppca <- function(){
+    N_SNPS = 5000
+    N_SAMPLES = 100
+    TRUE_RANK = 2 
+    S1 = 1; S2 = 19
+    NOISE = 0.1
+
+
     require(MASS)
     set.seed(10)
-    v1 = runif(100)
-    v2 = runif(100)
-    test_cov = v1 %*% t(v1) + v2 %*% t(v2) #rank 2
-    data = mvrnorm(1000, mu=rep(0, nrow(test_cov)), Sigma=test_cov); 
-    d2=data + mvrnorm(1000, mu=rep(0, nrow(test_cov)), Sigma=diag(nrow(test_cov))/10)
+    points = matrix(runif(N_SAMPLES * TRUE_RANK), nrow=N_SAMPLES)
+    test_cov = points %*% t(points)
+    data = mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=test_cov); 
+    d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=diag(NOISE, N_SAMPLES))
 
     x = ppca(d2, verbose=F, n_pcs=2)
     y = ppca(d2, verbose=F, n_pcs=10)
     z = prcomp(d2)
+    z$pcs = unname(t(t(z$rotation) * z$sdev))
 
     print("PPCA 2 PCs")
     print(x$eval[1:10]) 
-    print("PPCA 10 PCs")
+    print("PPCA 20 PCs")
     print(y$eval[1:10]) 
     print("PCA first 10 PCs")
     print(z$sdev[1:10]) 
     
+
+    f2_true = as.matrix(dist(points))[S1,S2]^2
+    f2_data = sum((d2[,S1] - d2[,S2])^2) / N_SNPS
+
         
+    print("-------------------")
+    print(sprintf("f2 from true points: %f", f2_true))
+    print(sprintf("f2 from data: %f", f2_data))
+    print("f2 from PPCA 2 PCs")
+    print(cumsum((x$pcs[S1,] - x$pcs[S2,])^2)[c(1:10, N_SAMPLES)])
+    print("f2 from PPCA 10 PCs")
+    print(cumsum((y$pcs[S1,] - y$pcs[S2,])^2)[c(1:10, N_SAMPLES)])
+    print("f2 from PCA first 10 PCs")
+    print(cumsum((z$pcs[S1,] - z$pcs[S2,])^2)[c(1:10, N_SAMPLES)])
     
 }
 
