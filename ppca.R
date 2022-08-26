@@ -88,23 +88,25 @@ ppca <- function(data, n_pcs=4, n_iter=1000, tol=1e-4, verbose=T){
 
 test_ppca <- function(){
     require(glue)
-    N_SNPS = 20000
-    N_SAMPLES = 400
-    TRUE_RANK = 3
-    S1 = 1; S2 = 19
-    S3 = 3; S4 = 75
+    N_SNPS = 100000
+    N_SAMPLES = 600
+    TRUE_RANK = 5
+    S1 = 1; S2 = 456
+    S3 = 132; S4 = 561
     NOISE = 0.05
 
-    N_PCS1 = 3
+    N_PCS1 = 5
     N_PCS2 = 20
 
 
     require(MASS)
     set.seed(10)
-    points = matrix(runif(N_SAMPLES * TRUE_RANK), nrow=N_SAMPLES)
+    points = matrix(runif(N_SAMPLES * TRUE_RANK), nrow=N_SAMPLES) / 10
     test_cov = points %*% t(points)
-    data = mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=test_cov); 
-    d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=diag(NOISE, N_SAMPLES))
+    data = mvrnorm(N_SNPS, mu=rep(0.5, N_SAMPLES), Sigma=test_cov); 
+    dceil = pmax(pmin(data, 1), 0)
+    #d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=diag(NOISE, N_SAMPLES))
+    d2 = t(apply(dceil, 1, function(p)rbinom(ncol(dceil), 2, p))) / 2
 
     x = ppca(d2, verbose=F, n_pcs=N_PCS1)
     y = ppca(d2, verbose=F, n_pcs=N_PCS2)
@@ -210,3 +212,8 @@ ppca2 = function(Y){
     X = solve(t(C) %*% C) %*% t(C) %*% t(Y)
     C = t(Y) %*% t(X) %*% solve(X %*% t(X))
 }
+
+test_ppca2 <- function(){
+    require(admixtools)
+}
+

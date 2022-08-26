@@ -7,7 +7,7 @@ library(ggpubr)
 BTHEME = theme_classic() + theme(legend.position="none")
 
 
-anno = read_tsv("v44.3_HO_public.anno") %>%
+anno = read_tsv("v52.2_HO_public.anno") %>%
     select(iid=2,
            age=6,
            pop=8,

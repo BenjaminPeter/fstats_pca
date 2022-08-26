@@ -25,6 +25,14 @@ rule allpdf:
         'figures/fig_f4_ratio.pdf',
         'figures/fig_proj.pdf',
 
+rule talkpdf:
+    input:
+        'figures/fig_proj_talk_0.pdf',
+        'figures/fig_proj_talk_1.pdf',
+        'figures/fig_proj_talk_2.pdf',
+        'figures/fig_proj_talk_3.pdf',
+        'figures/fig_proj_talk_4.pdf',
+
 rule tables:
     input:
         'data/subdata/worldfoci2.ind',
