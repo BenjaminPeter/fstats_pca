@@ -63,7 +63,7 @@ ppca <- function(data, n_pcs=4, n_iter=1000, tol=1e-4, verbose=T){
                 data=approx_data, est_data=posterior_mean + mu))
 }
 
-ppca <- function(data, n_pcs=4, n_iter=1000, tol=1e-4, verbose=T){
+ppca_ml <- function(data, n_pcs=4, n_iter=1000, tol=1e-4, verbose=T){
     n_dims = ncol(data)
     #eq 31
     mu = rowMeans(data)
@@ -213,7 +213,4 @@ ppca2 = function(Y){
     C = t(Y) %*% t(X) %*% solve(X %*% t(X))
 }
 
-test_ppca2 <- function(){
-    require(admixtools)
-}
 
