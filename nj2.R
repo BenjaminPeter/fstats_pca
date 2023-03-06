@@ -1,6 +1,6 @@
 require(ape)
 
-ptext <- function(..., label){
+tplot <- function(..., label){
     plot(..., type='n')
     text(..., label=label)
 }
@@ -18,8 +18,6 @@ u_center <- function(dist){
 }
 uc = u_center
 
-rdist <- function(n, dist){
-}
 
 #helper function for display
 csf <- function(...)cumsum(...)[c(1:10, length(...))]
@@ -39,21 +37,29 @@ NOISE = 0.15
 
 
 require(MASS)
-set.seed(12)
-points = matrix(runif(N_SAMPLES * TRUE_RANK), nrow=N_SAMPLES)
-points <- rbind(points)
-test_cov = points %*% t(points)
-data = mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=test_cov); 
-d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), 
-                  Sigma=diag(NOISE, N_SAMPLES))
+set.seed(1)
+#points = matrix(runif(N_SAMPLES * TRUE_RANK), nrow=N_SAMPLES)
+#points <- rbind(points)
+#dist = as.matrix(dist((points)))^2
+#test_cov = points %*% t(points)
+#data = mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), Sigma=test_cov); 
+#d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES), 
+#                  Sigma=diag(NOISE, N_SAMPLES))
 
 
-dist = as.matrix(dist((points)))^2
-TREE = rtree(N_SAMPLES, rooted=F)
-TREE$tip.label = 1:N_SAMPLES
-dist = cophenetic.phylo(TREE)
-U = uc(dist)
-C = dc(dist)
+random_tree <- function(N_SAMPLES=10, seed=1){
+    TREE = rtree(N_SAMPLES, rooted=F)
+    TREE$tip.label = 1:N_SAMPLES
+    return(TREE)
+}
+TREE = random_tree(N_SAMPLES, seed=1)
+
+dist = cophenetic(TREE)
+U = -uc(dist)
+D = -dc(dist)
+eU = eigen(U)
+vU = eU$vectors
+eU = eU$values
 
 
 require(phangorn)
@@ -68,6 +74,27 @@ q_mat = function(dist){
     M = (nrow(dist)-2) * dist - outer(rowSums(dist), colSums(dist), `+`) 
     diag(M) = 0
     return (M)
+}
+
+
+umerge <- function(U, x, y){
+    U_new = (U[x,] + U[y,] - U[x,y]) / 2
+}
+
+unext <- function(U, x, y){
+    xy = c(x, y)
+    u_new = umerge(U, x, y)
+    u2 = rbind(cbind(U[-xy, -xy], u_new[-xy]), c(u_new[-xy], 0))
+    return(u2)
+}
+
+
+q_mat1 = function(dist){
+    n = nrow(dist)
+    mv = rowMeans(dist)
+    #M = n * (dist - outer(mv, mv, `+`) ) - 2 * dist
+    M =  dc(dist) - 2/n * dist - sum(dist) / n / n
+    return (M * n)
 }
 
 #! get next pair to merge
