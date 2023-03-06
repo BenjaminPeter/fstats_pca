@@ -1,5 +1,10 @@
 require(ape)
 
+ptext <- function(..., label){
+    plot(..., type='n')
+    text(..., label=label)
+}
+
 double_center <- function(dist)
     t(dist - rowMeans(dist)) - rowMeans(dist) + mean(dist)
 dc <- double_center
@@ -26,8 +31,8 @@ f4 <- function(data, S1, S2, S3, S4){(data[S1,] - data[S2,]) * (data[S3,] - data
 
 require(glue)
 N_SNPS = 1000
-N_SAMPLES = 10
-TRUE_RANK = 2
+N_SAMPLES = 12
+TRUE_RANK = 1
 S1 = 1; S2 = 2
 S3 = 4; S4 = 3
 NOISE = 0.15
@@ -44,11 +49,11 @@ d2=data + mvrnorm(N_SNPS, mu=rep(0, N_SAMPLES),
 
 
 dist = as.matrix(dist((points)))^2
-#dist = dc(dist)
-
-#d1 = cophenetic.phylo(rtree(10))
-#d2 = cophenetic.phylo(rtree(10))
-#dist = d1 + d2
+TREE = rtree(N_SAMPLES, rooted=F)
+TREE$tip.label = 1:N_SAMPLES
+dist = cophenetic.phylo(TREE)
+U = uc(dist)
+C = dc(dist)
 
 
 require(phangorn)
@@ -59,23 +64,42 @@ calc_q_ij <- function(dist, i, j){
     (m-2)*dist[i, j] - sum(dist[,i]) - sum(dist[,j])
 }
 q_mat = function(dist){
+    #minimum Q is best fit
     M = (nrow(dist)-2) * dist - outer(rowSums(dist), colSums(dist), `+`) 
+    diag(M) = 0
     return (M)
-}
-q_mat1 = function(dist){
-    n = nrow(dist)
-    mv = rowMeans(dist)
-    #M = n * (dist - outer(mv, mv, `+`) ) - 2 * dist
-    M =  dc(dist) - 2/n * dist - sum(dist) / n / n
-    return (M * n)
 }
 
 #! get next pair to merge
-get_next_pair <- function(dist){
+get_next_pair <- function(dist, tol=1e-8){
     Q = q_mat(dist)
-    diag(Q) <- Inf
+    diag(Q) <- NA
+    Q[abs(Q) < tol] <- NA
+
     pair = c(arrayInd(which.min(Q), dim(Q)))
     return(pair)
+}
+
+get_next_pair_u <- function(dist, tol=1e-8){
+    Q = dist 
+    diag(Q) <- NA
+    Q[abs(Q) < tol] <- NA
+
+    pair = c(arrayInd(which.max(abs(Q)), dim(Q)))
+    return(pair)
+}
+
+
+givens <- function(M, i, j){
+    theta = atan( 2 * M[i,j] / (M[i,i] - M[j,j])) / 2
+    ij = c(i,j)
+    G = diag(nrow(M))
+    G[i,i] = cos(theta) 
+    G[j,j] = cos(theta) 
+    G[i, j]= sin(theta) 
+    G[j, i]= -sin(theta) 
+    return(G)
+
 }
     
 
@@ -89,8 +113,19 @@ nj_dist_update <- function(dist, ij){
     dist[,i]/2 + dist[,j]/2 - dist[i, j] / 2
 }
 
-local_pca <- function(dist, ij){
-    
+
+test_jacobi <- function(U){
+    n = nrow(dist)
+    V = diag(n)
+    for(i in 1:100){
+        pair = get_next_pair_u(U)
+        print(sprintf('[%d]: %d -> %d: %e', i, pair[1], pair[2], U[pair[1], pair[2]]))
+        G = givens(U, pair[1], pair[2])
+        U = G %*% U %*% t(G)
+        V = V %*% G
+    }
+    return(list(U=U, V=V))
+
 }
 
 mynj <- function(dist, labels=NULL){
