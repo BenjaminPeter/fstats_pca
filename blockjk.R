@@ -1,9 +1,9 @@
 require(MASS)
 set.seed(2)
 
-N_SNPS = 100000
-N_SAMPLES = 7
-TRUE_RANK = 4
+N_SNPS = 20000
+N_SAMPLES = 120
+TRUE_RANK = 3
 REP_SIZE = 10
 BLOCK_SIZE = 21
 
@@ -135,6 +135,24 @@ pcw_0 = weighted.mean(i0_2, D0)
 Ne0_w = N0 / pcw_0^2
 Ne_w = N / pcw^2
 
+require(readr)
+require(dplyr)
+require(tibble)
+colnames(P0) = sprintf("Sample %d", 1:ncol(P0))
+rownames(P0) = sprintf("PC%d", 1:nrow(P0))
+
+df_P0 = P0 %>% t %>% 
+    as.data.frame %>% 
+    rownames_to_column('sample')  %>%
+    mutate(pop = sprintf("Pop %d", round(1:ncol(P0)/4)))
+
+df_P0 %>%  write_csv('P0.csv')                             
+seL = apply(L0, 2, se)
+df_seL = seL %>% as_tibble %>% 
+    rename(sdL=value) %>% 
+    mutate(PC = sprintf("PC%d", 1:ncol(P0))) 
+df_seL %>%
+    write_csv('seL.csv')
 
 
 

@@ -55,9 +55,9 @@ random_tree <- function(N_SAMPLES=10, seed=1){
 TREE = random_tree(N_SAMPLES, seed=1)
 
 dist = cophenetic(TREE)
-U = -uc(dist)
+U = uc(dist)
 D = -dc(dist)
-eU = eigen(U)
+eU = eigen(-U)
 vU = eU$vectors
 eU = eU$values
 
