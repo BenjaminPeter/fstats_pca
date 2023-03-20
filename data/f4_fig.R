@@ -30,15 +30,13 @@ pmat = t(v0) %*% v0 / (v0 %*% t(v0))[1,1]
 qmat = diag(length(v0)) - pmat
 a = pcmat %*% pmat
 b = pcmat %*% qmat
-A = t(t(a) - a[idz,])
-B = t(t(b) - b[idz,])
 E = eigen(b %*% t(b))
 K = t(t(E$vectors) * sqrt(pmax(E$values, 0)))
-K = K %>% as.data.frame %>% mutate(pop = rownames(B))
+K = K %>% as.data.frame %>% mutate(pop = rownames(pcmat))
 
 EA = eigen(a %*% t(a))
 KA = t(t(EA$vectors) * sqrt(pmax(EA$values, 0)))
-KA = KA %>% as.data.frame %>% mutate(pop = rownames(B))
+KA = KA %>% as.data.frame %>% mutate(pop = rownames(pcmat))
 X = KA %>% select(pop, A=V1) %>% left_join(K)
 
 P3 = X %>% 
@@ -53,6 +51,8 @@ P3 = X %>%
     scale_color_viridis_c(na.value='red') + 
     xlab(glue("⟨X; {idx}, {idy}⟩")) + 
     ylab("Residual PC1")
+
+stop()
 
 f42 = f4(f2s, pop3=idx, pop4 = idy, pop1=sample_list, pop2=idz) %>% arrange(pop1, pop2)
 f4pc2 = f4_from_pc_matrix(pcmat, idz, idx, idy) %>%

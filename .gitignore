@@ -13,3 +13,5 @@
 *snm
 *.fls
 *_latexmk
+figures/
+data/

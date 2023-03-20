@@ -12,11 +12,22 @@ import logging
 
 
 
+
 logger = logging.getLogger("")
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler("spam.log")
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
+
+def norm2(v):
+    return np.sum(v ** 2)
+
+def proj(A, v):
+    Av = np.dot(A, v)
+    norm = norm2(v)
+    proj = np.outer(Av, v) / norm
+    return proj
+
 
 
 def load_data():
@@ -35,6 +46,12 @@ def load_data():
 
 df, df2, pcs, pops, inds, meta_cols, pcte, df_pop = load_data()
 dfi = df_pop.set_index('pop')
+dfi = dfi.iloc[:10, :2]
+dfv = dfi.values
+proj_axis = np.diff(dfi.loc[['Pop 0', 'Pop 1']],axis=0).T
+proj0 = dfi @ proj_axis / norm2(proj_axis)
+r0 = dfi - (proj0 @ proj_axis.T).values
+
 
 
 cols = px.colors.qualitative.Alphabet
@@ -43,8 +60,9 @@ col_dict = dict( (pop, cols[i % len(cols)]) for i, pop in enumerate(pops))
 
 dash.register_page(__name__, name="Pca Viz1", top_nav=True)
 
-breakpoint()
-def proj(df, proj_axis):
+#breakpoint()
+def proj(dfi, proj_pops=['Pop 0', 'Pop 1']):
+    proj_axis = np.diff(dfi.loc[proj_pops],axis=0)
     pass
 
 
@@ -81,7 +99,6 @@ def layout():
         ]
     )
     return layout
-
 
 def layout_selector():
     return [
